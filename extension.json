@@ -56,6 +56,23 @@
 			"styles": "ext.aknRenderer.styles.css"
 		}
 	},
+	"HookHandlers": {
+		"main": {
+			"class": "MediaWiki\\Extension\\AknRenderer\\HookHandler",
+			"services": [
+				"ConnectionProvider",
+				"WikiPageFactory"
+			]
+		},
+		"schema": {
+			"class": "MediaWiki\\Extension\\AknRenderer\\SchemaHooks"
+		}
+	},
+	"Hooks": {
+		"InfoAction": "main",
+		"PageSaveComplete": "main",
+		"LoadExtensionSchemaUpdates": "schema"
+	},
 	"callback": "MediaWiki\\Extension\\AknRenderer\\Hooks::onRegistration",
 	"manifest_version": 2
 }
