@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dimitrys"
+		]
+	},
+	"aknrenderer-extensionname": "The name of the extension, shown on [[Special:Version]] and in the extension credits.",
+	"aknrenderer-desc": "{{desc|name=Akoma Ntoso Renderer|url=https://www.mediawiki.org/wiki/Extension:AknRenderer}}\nShort description of the extension, shown on [[Special:Version]].",
+	"content-model-akn-xml": "Human-readable name of the 'akn-xml' content model. Shown on [[Special:Version]], page information ({{int:pageinfo-content-model}}), and [[Special:ChangeContentModel]].",
+	"aknrenderer-render-invalidxml": "Error box shown on a Law page whose stored content is not well-formed XML and therefore cannot be parsed for rendering.",
+	"aknrenderer-render-nobody": "Warning box shown when an otherwise valid Akoma Ntoso document contains no body element to render."
+}

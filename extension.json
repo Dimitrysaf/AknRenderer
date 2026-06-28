@@ -1,0 +1,61 @@
+{
+	"name": "AknRenderer",
+	"namemsg": "aknrenderer-extensionname",
+	"version": "0.1.0",
+	"author": [
+		"Dimitrys"
+	],
+	"url": "https://www.mediawiki.org/wiki/Extension:AknRenderer",
+	"descriptionmsg": "aknrenderer-desc",
+	"license-name": "GPL-2.0-or-later",
+	"type": "other",
+	"requires": {
+		"MediaWiki": ">= 1.43.0",
+		"platform": {
+			"php": ">= 8.1"
+		}
+	},
+	"namespaces": [
+		{
+			"id": 3000,
+			"constant": "NS_LAW",
+			"name": "Law",
+			"subpages": false,
+			"content": true,
+			"defaultcontentmodel": "akn-xml"
+		},
+		{
+			"id": 3001,
+			"constant": "NS_LAW_TALK",
+			"name": "Law_talk",
+			"subpages": true,
+			"content": false,
+			"defaultcontentmodel": "wikitext"
+		}
+	],
+	"ContentHandlers": {
+		"akn-xml": "MediaWiki\\Extension\\AknRenderer\\AknContentHandler"
+	},
+	"AutoloadNamespaces": {
+		"MediaWiki\\Extension\\AknRenderer\\": "includes/"
+	},
+	"MessagesDirs": {
+		"AknRenderer": [
+			"i18n"
+		]
+	},
+	"ExtensionMessagesFiles": {
+		"AknRendererNamespaces": "AknRenderer.namespaces.php"
+	},
+	"ResourceFileModulePaths": {
+		"localBasePath": "resources",
+		"remoteExtPath": "AknRenderer/resources"
+	},
+	"ResourceModules": {
+		"ext.aknRenderer.styles": {
+			"styles": "ext.aknRenderer.styles.css"
+		}
+	},
+	"callback": "MediaWiki\\Extension\\AknRenderer\\Hooks::onRegistration",
+	"manifest_version": 2
+}

@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dimitrys"
+		]
+	},
+	"aknrenderer-extensionname": "Akoma Ntoso Renderer",
+	"aknrenderer-desc": "Stores and renders Akoma Ntoso (AKN) legislative XML as browsable wiki pages.",
+	"content-model-akn-xml": "Akoma Ntoso XML",
+	"aknrenderer-render-invalidxml": "This page does not contain well-formed XML and cannot be rendered.",
+	"aknrenderer-render-nobody": "No body element was found in this Akoma Ntoso document."
+}

@@ -1,0 +1,12 @@
+{
+	"@metadata": {
+		"authors": [
+			"Dimitrys"
+		]
+	},
+	"aknrenderer-extensionname": "Απόδοση Akoma Ntoso",
+	"aknrenderer-desc": "Αποθηκεύει και αποδίδει νομοθετικά έγγραφα Akoma Ntoso (AKN) σε μορφή XML ως σελίδες wiki με δυνατότητα περιήγησης.",
+	"content-model-akn-xml": "XML Akoma Ntoso",
+	"aknrenderer-render-invalidxml": "Αυτή η σελίδα δεν περιέχει έγκυρη XML και δεν είναι δυνατή η απόδοσή της.",
+	"aknrenderer-render-nobody": "Δεν βρέθηκε στοιχείο body σε αυτό το έγγραφο Akoma Ntoso."
+}

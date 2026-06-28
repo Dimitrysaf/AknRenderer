@@ -1,0 +1,127 @@
+/*
+ * AknRenderer — structural styling.
+ */
+
+.akn-document {
+	line-height: 1.55;
+}
+
+/* ---- Titled containers ---- */
+.akn-block {
+	margin: 0;
+}
+
+/* Designation heading — sized by level, sits just above its rubric. */
+.akn-designation {
+	margin: 0.5rem 0 0 0 !important;
+	padding: 0;
+	border: 0;
+}
+
+/* Rubric — bold line, touching the heading above (no top margin). */
+.akn-rubric {
+	font-weight: 700;
+	margin: 0;
+}
+
+/* ---- Numbered provisions: bold number, no paragraph gaps ---- */
+.akn-prov {
+	margin: 0;
+}
+
+.akn-prov .akn-num {
+	font-weight: 700;
+	margin-right: 0;
+}
+
+/* No gap between paragraphs. */
+.akn-p {
+	margin: 0 !important;
+}
+
+/* Nested provisions indent slightly. */
+.akn-prov .akn-prov {
+	margin-left: 0;
+}
+
+/* ---- Tables ---- */
+.akn-table {
+	margin: 0;
+}
+
+.akn-table td .akn-p,
+.akn-table th .akn-p {
+	margin: 0;
+}
+
+.akn-table caption {
+	font-weight: 700;
+	margin-bottom: 0.3em;
+	text-align: start;
+}
+
+/* ---- Inline semantics ---- */
+.akn-ref {
+	color: #36c;
+	cursor: help;
+	border-bottom: 1px dotted #36c;
+}
+
+.akn-ins {
+	color: #14866d;
+	text-decoration: none;
+	background: rgba(20, 134, 109, 0.08);
+}
+
+.akn-del {
+	color: #b32424;
+	text-decoration: line-through;
+}
+
+.akn-def {
+	font-style: italic;
+}
+
+.akn-quotedText {
+	font-style: italic;
+}
+
+/* Inserted/quoted block of law: offset like a blockquote. */
+.akn-quotedStructure {
+	margin: 0;
+	padding-left: 0.8em;
+	border-left: 3px solid #c8ccd1;
+}
+
+.akn-listintro,
+.akn-listwrap {
+	margin: 0;
+}
+
+/* ---- Footnotes ---- */
+.akn-noteref {
+	line-height: 0;
+}
+
+.akn-notes {
+	margin-top: 0;
+	font-size: 0.9em;
+}
+
+.akn-notes hr {
+	width: 30%;
+	margin: 0;
+}
+
+.akn-note {
+	margin: 0;
+}
+
+.akn-note-backref {
+	font-weight: 700;
+}
+
+/* ---- foreign passthrough ---- */
+.akn-foreign {
+	margin: 0;
+}
