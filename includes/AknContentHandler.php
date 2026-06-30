@@ -44,26 +44,6 @@ class AknContentHandler extends TextContentHandler
 		'level',
 	];
 
-	/** Heading level per division type. */
-	private const HEADING_LEVELS = [
-		'book' => 2,
-		'part' => 2,
-		'title' => 3,
-		'chapter' => 3,
-		'section' => 4,
-		'subsection' => 4,
-		'article' => 4,
-	];
-
-	/** Greek hcontainer @name → division type, for heading levelling. */
-	private const HCONTAINER_DIVISION = [
-		'vivlio' => 'book',
-		'meros' => 'part',
-		'kefalaio' => 'chapter',
-		'tmima' => 'section',
-		'enotita' => 'section',
-	];
-
 	/** Inline elements rendered as a semantic span with class akn-{name}. */
 	private const INLINE_SPANS = [
 		'def',
@@ -171,17 +151,35 @@ class AknContentHandler extends TextContentHandler
 		return $nodes->length > 0 ? $nodes->item(0) : null;
 	}
 
+	/**
+	 * @param \DOMElement $el
+	 * @return int
+	 */
 	private function headingLevelFor(\DOMElement $el): int
 	{
-		$type = $el->localName;
-		if ($type === 'hcontainer') {
-			$name = strtolower($el->getAttribute('name'));
-			if (!isset(self::HCONTAINER_DIVISION[$name])) {
-				return 3;
+		$depth = 0;
+		for ($node = $el->parentNode; $node instanceof \DOMElement; $node = $node->parentNode) {
+			if ($this->isHeadingContainer($node)) {
+				$depth++;
 			}
-			$type = self::HCONTAINER_DIVISION[$name];
 		}
-		return self::HEADING_LEVELS[$type] ?? 4;
+		return min(2 + $depth, 6);
+	}
+
+	/** Whether $el renders as a titled container (Shape A: has a heading or showAs). */
+	private function isHeadingContainer(\DOMElement $el): bool
+	{
+		if ($this->firstChild($el, 'heading') !== null) {
+			return true;
+		}
+		if ($el->localName === 'hcontainer') {
+			$showAs = $el->getAttribute('showAs');
+			if ($showAs === '') {
+				$showAs = $el->getAttribute('name');
+			}
+			return $showAs !== '';
+		}
+		return false;
 	}
 
 	private function isTitledOrNumbered(\DOMElement $el): bool
