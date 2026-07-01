@@ -37,7 +37,8 @@
 		"akn-xml": "MediaWiki\\Extension\\AknRenderer\\AknContentHandler"
 	},
 	"AutoloadNamespaces": {
-		"MediaWiki\\Extension\\AknRenderer\\": "includes/"
+		"MediaWiki\\Extension\\AknRenderer\\": "includes/",
+		"MediaWiki\\Extension\\AknRenderer\\Maintenance\\": "maintenance/"
 	},
 	"MessagesDirs": {
 		"AknRenderer": [

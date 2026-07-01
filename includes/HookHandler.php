@@ -1,7 +1,7 @@
 <?php
 /**
- * Runtime hooks: show AKN metadata on action=info, and keep the akn_meta
- * table in sync on every save.
+ * Runtime hooks: show AKN metadata on action=info, and keep the index
+ * tables (akn_meta, akn_structure) in sync on every save.
  *
  * @file
  * @license GPL-2.0-or-later
@@ -61,7 +61,7 @@ class HookHandler implements InfoActionHook, PageSaveCompleteHook
 	}
 
 	/**
-	 * Refresh akn_meta for the saved page.
+	 * Refresh the index tables for the saved page.
 	 *
 	 * @param \WikiPage $wikiPage
 	 * @param mixed $user
@@ -77,44 +77,10 @@ class HookHandler implements InfoActionHook, PageSaveCompleteHook
 			return;
 		}
 
-		$pageId = $wikiPage->getId();
-		$dbw = $this->dbProvider->getPrimaryDatabase();
-		$xml = $content->getText();
-
-		$data = MetaExtractor::fromXml($xml);
-		if ($data === null) {
-			// No parseable metadata: drop any stale row.
-			$dbw->newDeleteQueryBuilder()
-				->deleteFrom('akn_meta')
-				->where(['am_page' => $pageId])
-				->caller(__METHOD__)
-				->execute();
-		} else {
-			$row = MetaExtractor::dbRow($data, $pageId);
-			$row['am_updated'] = $dbw->timestamp();
-
-			$dbw->newReplaceQueryBuilder()
-				->replaceInto('akn_meta')
-				->uniqueIndexFields(['am_page'])
-				->row($row)
-				->caller(__METHOD__)
-				->execute();
-		}
-
-		// --- akn_structure: the eId tree (rebuild wholesale) ---
-		$dbw->newDeleteQueryBuilder()
-			->deleteFrom('akn_structure')
-			->where(['ast_page' => $pageId])
-			->caller(__METHOD__)
-			->execute();
-
-		$rows = StructureExtractor::fromXml($xml, $pageId);
-		if ($rows !== []) {
-			$dbw->newInsertQueryBuilder()
-				->insertInto('akn_structure')
-				->rows($rows)
-				->caller(__METHOD__)
-				->execute();
-		}
+		Indexer::indexPage(
+			$this->dbProvider->getPrimaryDatabase(),
+			$wikiPage->getId(),
+			$content->getText()
+		);
 	}
 }

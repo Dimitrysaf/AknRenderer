@@ -25,6 +25,7 @@ class MetaExtractor
 		'ya' => 'Υπουργική Απόφαση',
 		'kya' => 'Κοινή Υπουργική Απόφαση',
 		'nomosplaisio' => 'Νόμος-Πλαίσιο',
+		'constitution' => 'Σύνταγμα',
 	];
 
 	/** Country labels, keyed by lowercased ISO code. */
