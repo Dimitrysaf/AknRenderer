@@ -20,5 +20,6 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook
 	public function onLoadExtensionSchemaUpdates($updater)
 	{
 		$updater->addExtensionTable('akn_meta', __DIR__ . '/../sql/tables.sql');
+		$updater->addExtensionTable('akn_structure', __DIR__ . '/../sql/structure.sql');
 	}
 }

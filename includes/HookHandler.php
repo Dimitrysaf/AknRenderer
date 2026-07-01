@@ -79,8 +79,9 @@ class HookHandler implements InfoActionHook, PageSaveCompleteHook
 
 		$pageId = $wikiPage->getId();
 		$dbw = $this->dbProvider->getPrimaryDatabase();
-		$data = MetaExtractor::fromXml($content->getText());
+		$xml = $content->getText();
 
+		$data = MetaExtractor::fromXml($xml);
 		if ($data === null) {
 			// No parseable metadata: drop any stale row.
 			$dbw->newDeleteQueryBuilder()
@@ -88,17 +89,32 @@ class HookHandler implements InfoActionHook, PageSaveCompleteHook
 				->where(['am_page' => $pageId])
 				->caller(__METHOD__)
 				->execute();
-			return;
+		} else {
+			$row = MetaExtractor::dbRow($data, $pageId);
+			$row['am_updated'] = $dbw->timestamp();
+
+			$dbw->newReplaceQueryBuilder()
+				->replaceInto('akn_meta')
+				->uniqueIndexFields(['am_page'])
+				->row($row)
+				->caller(__METHOD__)
+				->execute();
 		}
 
-		$row = MetaExtractor::dbRow($data, $pageId);
-		$row['am_updated'] = $dbw->timestamp();
-
-		$dbw->newReplaceQueryBuilder()
-			->replaceInto('akn_meta')
-			->uniqueIndexFields(['am_page'])
-			->row($row)
+		// --- akn_structure: the eId tree (rebuild wholesale) ---
+		$dbw->newDeleteQueryBuilder()
+			->deleteFrom('akn_structure')
+			->where(['ast_page' => $pageId])
 			->caller(__METHOD__)
 			->execute();
+
+		$rows = StructureExtractor::fromXml($xml, $pageId);
+		if ($rows !== []) {
+			$dbw->newInsertQueryBuilder()
+				->insertInto('akn_structure')
+				->rows($rows)
+				->caller(__METHOD__)
+				->execute();
+		}
 	}
 }
