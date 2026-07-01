@@ -153,3 +153,24 @@
 	cursor: pointer;
 	border-bottom-style: solid;
 }
+
+.akn-ref-noanchor {
+	cursor: pointer;
+	color: #b32424;
+	border-bottom: 1px dashed #b32424;
+}
+
+.akn-document :target {
+	scroll-margin-top: 0.6em;
+	animation: akn-target-flash 8s ease-out 1;
+}
+
+@keyframes akn-target-flash {
+	0% {
+		background-color: #ffec6e9c;
+	}
+
+	100% {
+		background-color: transparent;
+	}
+}

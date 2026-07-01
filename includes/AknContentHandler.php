@@ -89,8 +89,11 @@ class AknContentHandler extends TextContentHandler
 	/** @var int */
 	private int $tocIndex = 0;
 
-	/** @var array<string,\MediaWiki\Title\Title|false> Per-render work-URI → target Title cache. */
+	/** @var array<string,array{0:\MediaWiki\Title\Title,1:int}|false> Per-render work-URI → [Title, pageId] cache. */
 	private array $refCache = [];
+
+	/** @var array<int,array<string,true>> Per-render pageId → set of its eIds, for anchor validation. */
+	private array $eidSetCache = [];
 
 	/** @var array<string,\MediaWiki\Title\Title> Internal links to register on the ParserOutput. */
 	private array $pageLinks = [];
@@ -124,6 +127,7 @@ class AknContentHandler extends TextContentHandler
 		$this->tocStack = [];
 		$this->tocIndex = 0;
 		$this->refCache = [];
+		$this->eidSetCache = [];
 		$this->pageLinks = [];
 
 		$dom = new \DOMDocument();
@@ -660,17 +664,27 @@ class AknContentHandler extends TextContentHandler
 			return Html::rawElement('a', ['class' => 'akn-ref', 'href' => '#' . $fragment], $inner);
 		}
 
-		$title = $this->resolveWorkUri($this->normalizeWorkUri($uriPart));
-		if ($title === null) {
+		$resolved = $this->resolveWorkUri($this->normalizeWorkUri($uriPart));
+		if ($resolved === null) {
 			// Target not in the wiki (yet): visible but non-linking.
 			return Html::rawElement('span', ['class' => 'akn-ref', 'title' => $href], $inner);
+		}
+		[$title, $pageId] = $resolved;
+
+		$this->pageLinks[$title->getPrefixedDBkey()] = $title;
+
+		if ($fragment !== '' && !$this->eIdExists($pageId, $fragment)) {
+			return Html::rawElement('a', [
+				'class' => 'akn-ref akn-ref-noanchor',
+				'href' => $title->getLocalURL(),
+				'title' => $title->getPrefixedText() . ' — η διάταξη «' . $fragment . '» δεν βρέθηκε',
+			], $inner);
 		}
 
 		$url = $title->getLocalURL();
 		if ($fragment !== '') {
 			$url .= '#' . $fragment;
 		}
-		$this->pageLinks[$title->getPrefixedDBkey()] = $title;
 
 		return Html::rawElement('a', [
 			'class' => 'akn-ref akn-ref-resolved',
@@ -698,12 +712,10 @@ class AknContentHandler extends TextContentHandler
 	}
 
 	/**
-	 * Resolve a work URI to its wiki page via akn_meta, cached per render.
-	 *
 	 * @param string $workUri
-	 * @return \MediaWiki\Title\Title|null
+	 * @return array{0:\MediaWiki\Title\Title,1:int}|null
 	 */
-	private function resolveWorkUri(string $workUri): ?\MediaWiki\Title\Title
+	private function resolveWorkUri(string $workUri): ?array
 	{
 		if ($workUri === '' || $workUri === '/') {
 			return null;
@@ -716,22 +728,56 @@ class AknContentHandler extends TextContentHandler
 		$services = MediaWikiServices::getInstance();
 		$dbr = $services->getConnectionProvider()->getReplicaDatabase();
 		$row = $dbr->newSelectQueryBuilder()
-			->select(['page_namespace', 'page_title'])
+			->select(['am_page', 'page_namespace', 'page_title'])
 			->from('akn_meta')
 			->join('page', null, 'am_page = page_id')
 			->where(['am_work_uri' => $workUri])
 			->caller(__METHOD__)
 			->fetchRow();
 
-		$title = null;
+		$resolved = false;
 		if ($row) {
 			$title = $services->getTitleFactory()->makeTitle(
 				(int) $row->page_namespace,
 				$row->page_title
 			);
+			$resolved = [$title, (int) $row->am_page];
 		}
-		$this->refCache[$workUri] = $title ?? false;
-		return $title;
+		$this->refCache[$workUri] = $resolved;
+		return $resolved === false ? null : $resolved;
+	}
+
+	/**
+	 * @param int $pageId
+	 * @param string $eId
+	 * @return bool
+	 */
+	private function eIdExists(int $pageId, string $eId): bool
+	{
+		if (!array_key_exists($pageId, $this->eidSetCache)) {
+			$dbr = MediaWikiServices::getInstance()
+				->getConnectionProvider()
+				->getReplicaDatabase();
+			$eids = $dbr->newSelectQueryBuilder()
+				->select('ast_eid')
+				->from('akn_structure')
+				->where(['ast_page' => $pageId])
+				->caller(__METHOD__)
+				->fetchFieldValues();
+
+			$set = [];
+			foreach ($eids as $e) {
+				$set[$e] = true;
+			}
+			$this->eidSetCache[$pageId] = $set;
+		}
+
+		$set = $this->eidSetCache[$pageId];
+		// No structure indexed for this page → cannot validate; assume valid.
+		if ($set === []) {
+			return true;
+		}
+		return isset($set[$eId]);
 	}
 
 	private function renderNoteRef(\DOMElement $note): string
