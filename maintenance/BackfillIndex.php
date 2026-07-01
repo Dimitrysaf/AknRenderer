@@ -68,7 +68,12 @@ class BackfillIndex extends Maintenance
 					continue;
 				}
 
-				Indexer::indexPage($dbw, $id, $content->getText());
+				$xml = $content->getText();
+				Indexer::indexPage($dbw, $id, $xml);
+				$latest = (int) $page->getLatest();
+				if ($latest > 0) {
+					Indexer::indexRevision($dbw, $latest, $id, $xml);
+				}
 				$indexed++;
 			}
 

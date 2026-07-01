@@ -1,13 +1,25 @@
 {
-  "@metadata": {
-    "authors": [
-      "Dimitrys"
-    ]
-  },
-  "aknrenderer-extensionname": "Απόδοση Akoma Ntoso",
-  "aknrenderer-desc": "Αποθηκεύει και αποδίδει νομοθετικά έγγραφα Akoma Ntoso (AKN) σε μορφή XML ως σελίδες wiki με δυνατότητα περιήγησης.",
-  "content-model-akn-xml": "XML Akoma Ntoso",
-  "aknrenderer-render-invalidxml": "Αυτή η σελίδα δεν περιέχει έγκυρη XML και δεν είναι δυνατή η απόδοσή της.",
-  "aknrenderer-render-nobody": "Δεν βρέθηκε στοιχείο body σε αυτό το έγγραφο Akoma Ntoso.",
-  "pageinfo-aknrenderer": "Μεταδεδομένα Akoma Ntoso"
+	"@metadata": {
+		"authors": [
+			"Dimitrys"
+		]
+	},
+	"aknrenderer-extensionname": "Απόδοση Akoma Ntoso",
+	"aknrenderer-desc": "Αποθηκεύει και αποδίδει νομοθετικά έγγραφα Akoma Ntoso (AKN) σε μορφή XML ως σελίδες wiki με δυνατότητα περιήγησης.",
+	"content-model-akn-xml": "XML Akoma Ntoso",
+	"aknrenderer-render-invalidxml": "Αυτή η σελίδα δεν περιέχει έγκυρη XML και δεν είναι δυνατή η απόδοσή της.",
+	"aknrenderer-render-nobody": "Δεν βρέθηκε στοιχείο body σε αυτό το έγγραφο Akoma Ntoso.",
+	"pageinfo-aknrenderer": "Μεταδεδομένα Akoma Ntoso",
+	"aknrenderer-revisions-tab": "Εκδόσεις",
+	"aknrenderer-revisions-title": "Εκδόσεις: $1",
+	"aknrenderer-revisions-intro": "Κάθε γραμμή είναι μια κωδικοποιημένη έκδοση του νόμου. Κάντε κλικ στην ημερομηνία για να δείτε τον νόμο όπως ίσχυε τότε.",
+	"aknrenderer-revisions-empty": "Δεν υπάρχουν καταγεγραμμένες εκδόσεις ακόμη.",
+	"aknrenderer-revisions-notakn": "Η σελίδα αυτή δεν είναι έγγραφο Akoma Ntoso.",
+	"aknrenderer-revisions-col-effective": "Ισχύς από",
+	"aknrenderer-revisions-col-fek": "ΦΕΚ",
+	"aknrenderer-revisions-col-status": "Κατάσταση",
+	"aknrenderer-revisions-status-active": "Σε ισχύ",
+	"aknrenderer-revisions-status-expired": "Έληξε",
+	"aknrenderer-revisions-status-future": "Δεν ισχύει ακόμη",
+	"aknrenderer-revisions-version": "έκδοση #$1"
 }

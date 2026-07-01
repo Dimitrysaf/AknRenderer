@@ -1,13 +1,25 @@
 {
-  "@metadata": {
-    "authors": [
-      "Dimitrys"
-    ]
-  },
-  "aknrenderer-extensionname": "Akoma Ntoso Renderer",
-  "aknrenderer-desc": "Stores and renders Akoma Ntoso (AKN) legislative XML as browsable wiki pages.",
-  "content-model-akn-xml": "Akoma Ntoso XML",
-  "aknrenderer-render-invalidxml": "This page does not contain well-formed XML and cannot be rendered.",
-  "aknrenderer-render-nobody": "No body element was found in this Akoma Ntoso document.",
-  "pageinfo-aknrenderer": "Akoma Ntoso metadata"
+	"@metadata": {
+		"authors": [
+			"Dimitrys"
+		]
+	},
+	"aknrenderer-extensionname": "Akoma Ntoso Renderer",
+	"aknrenderer-desc": "Stores and renders Akoma Ntoso (AKN) legislative XML as browsable wiki pages.",
+	"content-model-akn-xml": "Akoma Ntoso XML",
+	"aknrenderer-render-invalidxml": "This page does not contain well-formed XML and cannot be rendered.",
+	"aknrenderer-render-nobody": "No body element was found in this Akoma Ntoso document.",
+	"pageinfo-aknrenderer": "Akoma Ntoso metadata",
+	"aknrenderer-revisions-tab": "Versions",
+	"aknrenderer-revisions-title": "Versions: $1",
+	"aknrenderer-revisions-intro": "Each row is a codified version of the law. Click a date to view the law as it stood then.",
+	"aknrenderer-revisions-empty": "No versions recorded yet.",
+	"aknrenderer-revisions-notakn": "This page is not an Akoma Ntoso document.",
+	"aknrenderer-revisions-col-effective": "In force from",
+	"aknrenderer-revisions-col-fek": "Gazette",
+	"aknrenderer-revisions-col-status": "Status",
+	"aknrenderer-revisions-status-active": "In force",
+	"aknrenderer-revisions-status-expired": "Superseded",
+	"aknrenderer-revisions-status-future": "Not yet in force",
+	"aknrenderer-revisions-version": "version #$1"
 }

@@ -10,12 +10,13 @@
 namespace MediaWiki\Extension\AknRenderer;
 
 use MediaWiki\Actions\Hook\InfoActionHook;
+use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\Hook\PageSaveCompleteHook;
 use Wikimedia\Rdbms\IConnectionProvider;
 
-class HookHandler implements InfoActionHook, PageSaveCompleteHook
+class HookHandler implements InfoActionHook, PageSaveCompleteHook, SkinTemplateNavigation__UniversalHook
 {
 
 	private IConnectionProvider $dbProvider;
@@ -77,10 +78,32 @@ class HookHandler implements InfoActionHook, PageSaveCompleteHook
 			return;
 		}
 
-		Indexer::indexPage(
-			$this->dbProvider->getPrimaryDatabase(),
-			$wikiPage->getId(),
-			$content->getText()
-		);
+		$dbw = $this->dbProvider->getPrimaryDatabase();
+		$pageId = $wikiPage->getId();
+		$xml = $content->getText();
+
+		Indexer::indexPage($dbw, $pageId, $xml);
+		Indexer::indexRevision($dbw, $revisionRecord->getId(), $pageId, $xml);
+	}
+
+	/**
+	 * @param \MediaWiki\Skin\SkinTemplate $sktemplate
+	 * @param array &$links
+	 */
+	public function onSkinTemplateNavigation__Universal($sktemplate, &$links): void
+	{
+		$title = $sktemplate->getTitle();
+		if ($title === null || $title->getContentModel() !== CONTENT_MODEL_AKN) {
+			return;
+		}
+
+		unset($links['views']['history'], $links['actions']['history']);
+
+		$action = $sktemplate->getRequest()->getVal('action');
+		$links['views']['revisions'] = [
+			'text' => $sktemplate->msg('aknrenderer-revisions-tab')->text(),
+			'href' => $title->getLocalURL(['action' => 'revisions']),
+			'class' => $action === 'revisions' ? 'selected' : '',
+		];
 	}
 }

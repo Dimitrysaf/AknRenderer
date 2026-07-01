@@ -91,6 +91,7 @@ class MetaExtractor
 			'author' => $authorHref,
 			'authorLabel' => self::resolveRef($refs, $authorHref),
 			'exprUri' => self::attr($expr, 'FRBRuri', 'value'),
+			'exprDate' => self::attr($expr, 'FRBRdate', 'date'),
 			'language' => self::attr($expr, 'FRBRlanguage', 'language'),
 			'manifUri' => self::attr($manif, 'FRBRuri', 'value'),
 			'pubShowAs' => $pub ? $pub->getAttribute('showAs') : '',

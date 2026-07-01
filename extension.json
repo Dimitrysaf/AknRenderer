@@ -36,6 +36,9 @@
 	"ContentHandlers": {
 		"akn-xml": "MediaWiki\\Extension\\AknRenderer\\AknContentHandler"
 	},
+	"Actions": {
+		"revisions": "MediaWiki\\Extension\\AknRenderer\\AknRevisionsAction"
+	},
 	"AutoloadNamespaces": {
 		"MediaWiki\\Extension\\AknRenderer\\": "includes/",
 		"MediaWiki\\Extension\\AknRenderer\\Maintenance\\": "maintenance/"
@@ -71,6 +74,7 @@
 	},
 	"Hooks": {
 		"InfoAction": "main",
+		"SkinTemplateNavigation::Universal": "main",
 		"PageSaveComplete": "main",
 		"LoadExtensionSchemaUpdates": "schema"
 	},

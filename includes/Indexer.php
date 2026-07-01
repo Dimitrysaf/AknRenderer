@@ -61,4 +61,42 @@ class Indexer
 				->execute();
 		}
 	}
+
+	/**
+	 * @param IDatabase $dbw Primary connection.
+	 * @param int $revId
+	 * @param int $pageId
+	 * @param string $xml
+	 */
+	public static function indexRevision(IDatabase $dbw, int $revId, int $pageId, string $xml): void
+	{
+		$data = MetaExtractor::fromXml($xml);
+		if ($data === null) {
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom('akn_revision')
+				->where(['ar_rev' => $revId])
+				->caller(__METHOD__)
+				->execute();
+			return;
+		}
+
+		$effective = $data['exprDate'] !== '' ? $data['exprDate'] : $data['enacted'];
+		$dbw->newReplaceQueryBuilder()
+			->replaceInto('akn_revision')
+			->uniqueIndexFields(['ar_rev'])
+			->row([
+				'ar_rev' => $revId,
+				'ar_page' => $pageId,
+				'ar_effective' => self::cut((string) $effective, 32),
+				'ar_fek' => self::cut((string) $data['pubShowAs'], 255),
+				'ar_fek_number' => self::cut((string) $data['pubNumber'], 64),
+			])
+			->caller(__METHOD__)
+			->execute();
+	}
+
+	private static function cut(string $s, int $bytes): string
+	{
+		return mb_strcut($s, 0, $bytes, 'UTF-8');
+	}
 }

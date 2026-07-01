@@ -174,3 +174,25 @@
 		background-color: transparent;
 	}
 }
+
+/* ---- Version table (action=revisions) ---- */
+.akn-revisions {
+	margin: 0.5em 0;
+}
+
+.akn-revisions .akn-rev-active {
+	color: #14866d;
+	font-weight: 700;
+}
+
+.akn-revisions .akn-rev-expired {
+	color: #72777d;
+}
+
+.akn-revisions .akn-rev-future {
+	color: #b32424;
+}
+
+.akn-revisions .akn-rev-active-row {
+	background: rgba(20, 134, 109, 0.07);
+}
