@@ -44,6 +44,17 @@ class AknContentHandler extends TextContentHandler
 		'level',
 	];
 
+	/**
+	 * Named hcontainers that are enacted blocks set apart inside a provision
+	 * (not navigational divisions, not annotations), keyed by English @name →
+	 * Greek label.
+	 *
+	 * @var array<string,string>
+	 */
+	private const HCONTAINER_LABELS = [
+		'interpretiveClause' => 'Ερμηνευτική δήλωση',
+	];
+
 	/** Inline elements rendered as a semantic span with class akn-{name}. */
 	private const INLINE_SPANS = [
 		'def',
@@ -298,6 +309,36 @@ class AknContentHandler extends TextContentHandler
 		}
 	}
 
+	/**
+	 * Render a named hcontainer with a canonical Greek label — e.g. an
+	 * interpretive clause (Ερμηνευτική δήλωση). Enacted text set apart inside
+	 * a provision: distinct, but NOT annotation-greyed (it has legal force).
+	 * An explicit <heading> wins over the default label. Body content, so it
+	 * is not added to the TOC.
+	 *
+	 * @param \DOMElement $el
+	 * @return string HTML
+	 */
+	private function renderLabelledBlock(\DOMElement $el): string
+	{
+		$name = $el->getAttribute('name');
+		$attrs = ['class' => 'akn-clause akn-' . $name];
+		$eId = $el->getAttribute('eId');
+		if ($eId !== '') {
+			$attrs['id'] = $eId;
+		}
+
+		$heading = $this->firstChild($el, 'heading');
+		$label = $heading !== null
+			? trim($this->renderInline($heading))
+			: htmlspecialchars(self::HCONTAINER_LABELS[$name], ENT_QUOTES);
+
+		$out = Html::rawElement('div', ['class' => 'akn-clause-label'], $label)
+			. $this->renderChildrenExcept($el, ['heading']);
+
+		return Html::rawElement('section', $attrs, $out);
+	}
+
 	private function renderContainer(\DOMElement $el): string
 	{
 		$local = $el->localName;
@@ -309,6 +350,15 @@ class AknContentHandler extends TextContentHandler
 
 		$num = $this->firstChild($el, 'num');
 		$heading = $this->firstChild($el, 'heading');
+
+		// Named enacted blocks (e.g. interpretive clause): canonical Greek label,
+		// distinct style, rendered inside the article — not added to the TOC.
+		if (
+			$local === 'hcontainer'
+			&& isset(self::HCONTAINER_LABELS[$el->getAttribute('name')])
+		) {
+			return $this->renderLabelledBlock($el);
+		}
 
 		$showAs = '';
 		if ($local === 'hcontainer') {

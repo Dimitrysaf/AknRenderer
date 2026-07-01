@@ -135,3 +135,16 @@
 .akn-foreign {
 	margin: 0;
 }
+
+.akn-clause {
+	margin: 0.4em 0;
+	padding: 0.4em 0.8em;
+	border-left: 3px solid #36c;
+	background: rgba(51, 102, 204, 0.06);
+}
+
+.akn-clause-label {
+	font-weight: 700;
+	font-variant: small-caps;
+	margin-bottom: 0.2em;
+}
