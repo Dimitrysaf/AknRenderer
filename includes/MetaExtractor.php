@@ -14,39 +14,6 @@ namespace MediaWiki\Extension\AknRenderer;
 class MetaExtractor
 {
 
-	/** Greek document-type labels, keyed by lowercased AKN @name/@subtype. */
-	private const DOC_TYPES = [
-		'nomos' => 'Νόμος',
-		'νόμος' => 'Νόμος',
-		'act' => 'Νομοθετική πράξη',
-		'pd' => 'Προεδρικό Διάταγμα',
-		'proedrikodiatagma' => 'Προεδρικό Διάταγμα',
-		'pnp' => 'Πράξη Νομοθετικού Περιεχομένου',
-		'ya' => 'Υπουργική Απόφαση',
-		'kya' => 'Κοινή Υπουργική Απόφαση',
-		'nomosplaisio' => 'Νόμος-Πλαίσιο',
-		'constitution' => 'Σύνταγμα',
-	];
-
-	/** Country labels, keyed by lowercased ISO code. */
-	private const COUNTRIES = [
-		'gr' => 'Ελλάδα',
-		'cy' => 'Κύπρος',
-		'eu' => 'Ευρωπαϊκή Ένωση',
-	];
-
-	/** Language labels, keyed by lowercased ISO 639 code. */
-	private const LANGUAGES = [
-		'ell' => 'Ελληνικά',
-		'el' => 'Ελληνικά',
-		'eng' => 'Αγγλικά',
-		'en' => 'Αγγλικά',
-		'fra' => 'Γαλλικά',
-		'fre' => 'Γαλλικά',
-		'deu' => 'Γερμανικά',
-		'ger' => 'Γερμανικά',
-	];
-
 	/**
 	 * Parse the document's <meta> into a flat data array, namespace-tolerant.
 	 *
@@ -149,15 +116,15 @@ class MetaExtractor
 			}
 		};
 		$add('Τίτλος', (string) $d['alias']);
-		$add('Τύπος εγγράφου', self::humanize(self::DOC_TYPES, (string) $d['docType']));
+		$add('Τύπος εγγράφου', self::humanize(AknVocabulary::DOC_TYPES, (string) $d['docType']));
 		$add('Αριθμός', (string) $d['number']);
 		$add('Ημερομηνία θέσπισης', (string) $d['enacted']);
 		$add('ΦΕΚ', (string) $d['pubShowAs']);
 		$add('Αριθμός ΦΕΚ', (string) $d['pubNumber']);
 		$add('Ημερομηνία δημοσίευσης', (string) $d['pubDate']);
-		$add('Χώρα', self::humanize(self::COUNTRIES, (string) $d['country']));
-		$add('Γλώσσα', self::humanize(self::LANGUAGES, (string) $d['language']));
-		$add('Υποτύπος', self::humanize(self::DOC_TYPES, (string) $d['subtype']));
+		$add('Χώρα', self::humanize(AknVocabulary::COUNTRIES, (string) $d['country']));
+		$add('Γλώσσα', self::humanize(AknVocabulary::LANGUAGES, (string) $d['language']));
+		$add('Υποτύπος', self::humanize(AknVocabulary::DOC_TYPES, (string) $d['subtype']));
 		$add('Εκδούσα αρχή', (string) $d['authorLabel']);
 		$add('URI έργου (Work)', (string) $d['workUri']);
 		$add('URI έκφρασης (Expression)', (string) $d['exprUri']);

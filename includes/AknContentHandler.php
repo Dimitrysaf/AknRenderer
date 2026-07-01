@@ -26,50 +26,7 @@ use Wikimedia\Parsoid\Core\TOCData;
 class AknContentHandler extends TextContentHandler
 {
 
-	/** AKN 3.0 namespace URI. */
-	private const AKN_NS = 'http://docs.oasis-open.org/legaldocml/ns/akn/3.0';
-
-	/** Hierarchical containers rendered as <section> wrappers. */
-	private const CONTAINERS = [
-		'part',
-		'chapter',
-		'section',
-		'subsection',
-		'article',
-		'paragraph',
-		'subparagraph',
-		'list',
-		'point',
-		'indent',
-		'alinea',
-		'level',
-	];
-
-	/**
-	 * Named hcontainers that are enacted blocks set apart inside a provision
-	 * (not navigational divisions, not annotations), keyed by English @name →
-	 * Greek label.
-	 *
-	 * @var array<string,string>
-	 */
-	private const HCONTAINER_LABELS = [
-		'interpretiveClause' => 'Ερμηνευτική δήλωση',
-	];
-
-	/** Inline elements rendered as a semantic span with class akn-{name}. */
-	private const INLINE_SPANS = [
-		'def',
-		'term',
-		'entity',
-		'organization',
-		'person',
-		'role',
-		'location',
-		'quantity',
-		'quotedText',
-		'concept',
-		'object',
-	];
+	// Shared AKN vocabulary (element lists, labels, namespace): see AknVocabulary.
 
 	/** @var string|null One-shot provision number awaiting the next <p>. */
 	private ?string $pendingNum = null;
@@ -172,22 +129,13 @@ class AknContentHandler extends TextContentHandler
 
 	private function findBody(\DOMDocument $dom): ?\DOMElement
 	{
-		$nodes = $dom->getElementsByTagNameNS(self::AKN_NS, 'body');
+		$nodes = $dom->getElementsByTagNameNS(AknVocabulary::NS, 'body');
 		if ($nodes->length > 0) {
 			return $nodes->item(0);
 		}
 		$nodes = $dom->getElementsByTagName('body');
 		return $nodes->length > 0 ? $nodes->item(0) : null;
 	}
-
-	private const HEADING_LEVELS = [
-		'part' => 1,
-		'section' => 2,
-		'subsection' => 3,
-		'chapter' => 4,
-		'subchapter' => 5,
-		'article' => 6,
-	];
 
 	/**
 	 * @param \DOMElement $el
@@ -201,9 +149,9 @@ class AknContentHandler extends TextContentHandler
 			if ($name === '') {
 				$name = strtolower($el->getAttribute('showAs'));
 			}
-			return self::HEADING_LEVELS[$name] ?? 6;
+			return AknVocabulary::HEADING_LEVELS[$name] ?? 6;
 		}
-		return self::HEADING_LEVELS[$local] ?? 6;
+		return AknVocabulary::HEADING_LEVELS[$local] ?? 6;
 	}
 
 	private function isTitledOrNumbered(\DOMElement $el): bool
@@ -284,7 +232,7 @@ class AknContentHandler extends TextContentHandler
 		/** @var \DOMElement $node */
 		$local = $node->localName;
 
-		if (in_array($local, self::CONTAINERS, true) || $local === 'hcontainer') {
+		if (in_array($local, AknVocabulary::STRUCTURE_TYPES, true) || $local === 'hcontainer') {
 			if ($this->isTitledOrNumbered($node)) {
 				$saved = $this->pendingNum;
 				$this->pendingNum = null;
@@ -349,7 +297,7 @@ class AknContentHandler extends TextContentHandler
 		$heading = $this->firstChild($el, 'heading');
 		$label = $heading !== null
 			? trim($this->renderInline($heading))
-			: htmlspecialchars(self::HCONTAINER_LABELS[$name], ENT_QUOTES);
+			: htmlspecialchars(AknVocabulary::HCONTAINER_LABELS[$name], ENT_QUOTES);
 
 		$out = Html::rawElement('div', ['class' => 'akn-clause-label'], $label)
 			. $this->renderChildrenExcept($el, ['heading']);
@@ -373,7 +321,7 @@ class AknContentHandler extends TextContentHandler
 		// distinct style, rendered inside the article — not added to the TOC.
 		if (
 			$local === 'hcontainer'
-			&& isset(self::HCONTAINER_LABELS[$el->getAttribute('name')])
+			&& isset(AknVocabulary::HCONTAINER_LABELS[$el->getAttribute('name')])
 		) {
 			return $this->renderLabelledBlock($el);
 		}
@@ -627,7 +575,7 @@ class AknContentHandler extends TextContentHandler
 				return '';
 
 			default:
-				if (in_array($local, self::INLINE_SPANS, true)) {
+				if (in_array($local, AknVocabulary::INLINE_SPANS, true)) {
 					return Html::rawElement('span', ['class' => 'akn-' . $local], $this->renderInline($node));
 				}
 				// Unknown inline: keep its text.
