@@ -2,6 +2,15 @@
  * AknRenderer — structural styling.
  */
 
+.akn-note-declaration {
+	font-style: italic;
+	font-size: 0.9em;
+	margin: 0;
+	border-top: 1px solid currentColor;
+	padding-top: 0.3em;
+	opacity: 0.85;
+}
+
 .akn-document {
 	line-height: 1.55;
 }
@@ -16,6 +25,7 @@
 	margin: 0.5rem 0 0 0 !important;
 	padding: 0;
 	border: 0;
+	font-weight: 700 !important;
 }
 
 /* Rubric — bold line, touching the heading above (no top margin). */

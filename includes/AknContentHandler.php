@@ -151,35 +151,30 @@ class AknContentHandler extends TextContentHandler
 		return $nodes->length > 0 ? $nodes->item(0) : null;
 	}
 
+	private const HEADING_LEVELS = [
+		'part' => 1,
+		'section' => 2,
+		'subsection' => 3,
+		'chapter' => 4,
+		'subchapter' => 5,
+		'article' => 6,
+	];
+
 	/**
 	 * @param \DOMElement $el
 	 * @return int
 	 */
 	private function headingLevelFor(\DOMElement $el): int
 	{
-		$depth = 0;
-		for ($node = $el->parentNode; $node instanceof \DOMElement; $node = $node->parentNode) {
-			if ($this->isHeadingContainer($node)) {
-				$depth++;
+		$local = $el->localName;
+		if ($local === 'hcontainer') {
+			$name = strtolower($el->getAttribute('name'));
+			if ($name === '') {
+				$name = strtolower($el->getAttribute('showAs'));
 			}
+			return self::HEADING_LEVELS[$name] ?? 6;
 		}
-		return min(2 + $depth, 6);
-	}
-
-	/** Whether $el renders as a titled container (Shape A: has a heading or showAs). */
-	private function isHeadingContainer(\DOMElement $el): bool
-	{
-		if ($this->firstChild($el, 'heading') !== null) {
-			return true;
-		}
-		if ($el->localName === 'hcontainer') {
-			$showAs = $el->getAttribute('showAs');
-			if ($showAs === '') {
-				$showAs = $el->getAttribute('name');
-			}
-			return $showAs !== '';
-		}
-		return false;
+		return self::HEADING_LEVELS[$local] ?? 6;
 	}
 
 	private function isTitledOrNumbered(\DOMElement $el): bool
@@ -282,6 +277,8 @@ class AknContentHandler extends TextContentHandler
 				return Html::rawElement('div', ['class' => 'akn-quotedStructure'], $this->renderChildren($node));
 			case 'authorialNote':
 				return $this->renderNoteRef($node);
+			case 'note':
+				return Html::rawElement('div', ['class' => 'akn-note-declaration'], $this->renderChildren($node));
 			case 'content':
 				return $this->renderChildren($node);
 			case 'p':
@@ -555,6 +552,10 @@ class AknContentHandler extends TextContentHandler
 			// footnote: pull out of the flow
 			case 'authorialNote':
 				return $this->renderNoteRef($node);
+
+			// interpretive declaration: keep in place, smaller italic text
+			case 'note':
+				return Html::rawElement('span', ['class' => 'akn-note-declaration'], $this->renderInline($node));
 
 			// editorial markers: drop
 			case 'eol':
