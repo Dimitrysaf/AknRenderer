@@ -16,6 +16,7 @@ use MediaWiki\Content\Content;
 use MediaWiki\Content\Renderer\ContentParseParams;
 use MediaWiki\Content\TextContentHandler;
 use MediaWiki\Html\Html;
+use MediaWiki\MediaWikiServices;
 use MediaWiki\Parser\Parser;
 use MediaWiki\Parser\ParserOutput;
 use MediaWiki\Parser\ParserOutputFlags;
@@ -88,6 +89,12 @@ class AknContentHandler extends TextContentHandler
 	/** @var int */
 	private int $tocIndex = 0;
 
+	/** @var array<string,\MediaWiki\Title\Title|false> Per-render work-URI → target Title cache. */
+	private array $refCache = [];
+
+	/** @var array<string,\MediaWiki\Title\Title> Internal links to register on the ParserOutput. */
+	private array $pageLinks = [];
+
 	public function __construct(string $modelId = CONTENT_MODEL_AKN)
 	{
 		parent::__construct($modelId, [CONTENT_FORMAT_XML, CONTENT_FORMAT_TEXT]);
@@ -116,6 +123,8 @@ class AknContentHandler extends TextContentHandler
 		$this->tocData = new TOCData();
 		$this->tocStack = [];
 		$this->tocIndex = 0;
+		$this->refCache = [];
+		$this->pageLinks = [];
 
 		$dom = new \DOMDocument();
 		$dom->preserveWhiteSpace = false;
@@ -146,6 +155,11 @@ class AknContentHandler extends TextContentHandler
 
 		$parserOutput->setContentHolderText($html);
 		$parserOutput->addModuleStyles(['ext.aknRenderer.styles']);
+
+		// Register resolved cross-references as page links (feeds WhatLinksHere).
+		foreach ($this->pageLinks as $linkTarget) {
+			$parserOutput->addLink($linkTarget);
+		}
 		if ($this->tocIndex > 0) {
 			$parserOutput->setTOCData($this->tocData);
 			$parserOutput->setOutputFlag(ParserOutputFlags::SHOW_TOC);
@@ -567,15 +581,11 @@ class AknContentHandler extends TextContentHandler
 			case 'del':
 				return Html::rawElement('del', ['class' => 'akn-del'], $this->renderInline($node));
 
-			// references / mentions (real links arrive with the index step)
+			// references / mentions — resolve to a real internal link when the
+			// target law is in the wiki; otherwise a styled (non-link) span.
 			case 'ref':
 			case 'rref':
-				$attrs = ['class' => 'akn-ref'];
-				$href = $node->getAttribute('href');
-				if ($href !== '') {
-					$attrs['title'] = $href;
-				}
-				return Html::rawElement('span', $attrs, $this->renderInline($node));
+				return $this->renderRef($node);
 			case 'mref':
 			case 'mod':
 				return Html::rawElement('span', ['class' => 'akn-' . $local], $this->renderInline($node));
@@ -622,6 +632,107 @@ class AknContentHandler extends TextContentHandler
 	}
 
 	// ------------------------------------------------------------ footnotes
+
+	/**
+	 * Render a <ref>/<rref>. A same-document target becomes a plain #anchor.
+	 * A cross-document target is resolved through akn_meta (work URI → page):
+	 * if the law exists in the wiki a real internal link is emitted and
+	 * registered for WhatLinksHere; otherwise a styled, non-linking span.
+	 *
+	 * @param \DOMElement $node
+	 * @return string HTML
+	 */
+	private function renderRef(\DOMElement $node): string
+	{
+		$inner = $this->renderInline($node);
+		$href = trim($node->getAttribute('href'));
+
+		if ($href === '') {
+			return Html::rawElement('span', ['class' => 'akn-ref'], $inner);
+		}
+
+		$hash = strpos($href, '#');
+		$uriPart = $hash === false ? $href : substr($href, 0, $hash);
+		$fragment = $hash === false ? '' : substr($href, $hash + 1);
+
+		// Same-document reference: a bare #anchor, handled by the browser.
+		if ($uriPart === '') {
+			return Html::rawElement('a', ['class' => 'akn-ref', 'href' => '#' . $fragment], $inner);
+		}
+
+		$title = $this->resolveWorkUri($this->normalizeWorkUri($uriPart));
+		if ($title === null) {
+			// Target not in the wiki (yet): visible but non-linking.
+			return Html::rawElement('span', ['class' => 'akn-ref', 'title' => $href], $inner);
+		}
+
+		$url = $title->getLocalURL();
+		if ($fragment !== '') {
+			$url .= '#' . $fragment;
+		}
+		$this->pageLinks[$title->getPrefixedDBkey()] = $title;
+
+		return Html::rawElement('a', [
+			'class' => 'akn-ref akn-ref-resolved',
+			'href' => $url,
+			'title' => $title->getPrefixedText(),
+		], $inner);
+	}
+
+	/**
+	 * Reduce an AKN reference URI to the bare FRBR Work URI held in am_work_uri:
+	 * drop any /akn prefix and keep the first four path segments
+	 * (/{country}/{type}/{year}/{number}).
+	 *
+	 * @param string $uri
+	 * @return string
+	 */
+	private function normalizeWorkUri(string $uri): string
+	{
+		$uri = preg_replace('#^/akn/#', '/', $uri) ?? $uri;
+		$parts = array_values(array_filter(explode('/', $uri), static fn($p) => $p !== ''));
+		if (count($parts) >= 4) {
+			$parts = array_slice($parts, 0, 4);
+		}
+		return '/' . implode('/', $parts);
+	}
+
+	/**
+	 * Resolve a work URI to its wiki page via akn_meta, cached per render.
+	 *
+	 * @param string $workUri
+	 * @return \MediaWiki\Title\Title|null
+	 */
+	private function resolveWorkUri(string $workUri): ?\MediaWiki\Title\Title
+	{
+		if ($workUri === '' || $workUri === '/') {
+			return null;
+		}
+		if (array_key_exists($workUri, $this->refCache)) {
+			$hit = $this->refCache[$workUri];
+			return $hit === false ? null : $hit;
+		}
+
+		$services = MediaWikiServices::getInstance();
+		$dbr = $services->getConnectionProvider()->getReplicaDatabase();
+		$row = $dbr->newSelectQueryBuilder()
+			->select(['page_namespace', 'page_title'])
+			->from('akn_meta')
+			->join('page', null, 'am_page = page_id')
+			->where(['am_work_uri' => $workUri])
+			->caller(__METHOD__)
+			->fetchRow();
+
+		$title = null;
+		if ($row) {
+			$title = $services->getTitleFactory()->makeTitle(
+				(int) $row->page_namespace,
+				$row->page_title
+			);
+		}
+		$this->refCache[$workUri] = $title ?? false;
+		return $title;
+	}
 
 	private function renderNoteRef(\DOMElement $note): string
 	{

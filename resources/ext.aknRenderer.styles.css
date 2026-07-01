@@ -148,3 +148,8 @@
 	font-variant: small-caps;
 	margin-bottom: 0.2em;
 }
+
+.akn-ref-resolved {
+	cursor: pointer;
+	border-bottom-style: solid;
+}
