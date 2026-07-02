@@ -21,5 +21,6 @@
 	"aknrenderer-revisions-status-active": "Status value: this version is currently in force.",
 	"aknrenderer-revisions-status-expired": "Status value: this version has been superseded by a later one.",
 	"aknrenderer-revisions-status-future": "Status value: this version's effective date is in the future.",
+	"aknrenderer-revisions-status-unknown": "Status value: this version's XML declares no FRBRExpression or FRBRWork date, so its place in the timeline can't be determined.",
 	"aknrenderer-revisions-version": "Fallback link label when a version has no effective date. $1 is the revision id."
 }

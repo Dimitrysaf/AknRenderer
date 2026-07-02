@@ -40,7 +40,7 @@ class AknRevisionsAction extends FormlessAction
 
 		$dbr = MediaWikiServices::getInstance()->getConnectionProvider()->getReplicaDatabase();
 		$res = $dbr->newSelectQueryBuilder()
-			->select(['ar_rev', 'ar_effective', 'ar_fek'])
+			->select(['ar_rev', 'ar_effective', 'ar_fek', 'ar_fek_series', 'ar_fek_number', 'ar_fek_date'])
 			->from('akn_revision')
 			->where(['ar_page' => $title->getArticleID()])
 			->orderBy('ar_effective', 'DESC')
@@ -56,13 +56,15 @@ class AknRevisionsAction extends FormlessAction
 		}
 
 		$today = date('Y-m-d');
+		// $records is one row per distinct effective date (akn_revision's PK is
+		// now (page, effective)), ordered DESC — so the first dated row that
+		// isn't in the future is unambiguously the active one.
 		$activeRev = 0;
-		$best = '';
 		foreach ($records as $r) {
 			$eff = (string) $r->ar_effective;
-			if ($eff !== '' && $eff <= $today && $eff >= $best) {
-				$best = $eff;
+			if ($eff !== '' && $eff <= $today) {
 				$activeRev = (int) $r->ar_rev;
+				break;
 			}
 		}
 
@@ -71,8 +73,27 @@ class AknRevisionsAction extends FormlessAction
 			$rev = (int) $r->ar_rev;
 			$eff = (string) $r->ar_effective;
 			$fek = (string) $r->ar_fek;
+			$fekSeries = (string) $r->ar_fek_series;
+			$fekNumber = (string) $r->ar_fek_number;
+			$fekDate = (string) $r->ar_fek_date;
+			// ar_fek alone (the gazette's generic showAs, e.g. "Εφημερίδα της
+			// Κυβερνήσεως") identifies nothing — every law shares the same
+			// name. Build the standard Greek citation (ΦΕΚ <number><series>/
+			// <date>, e.g. "ΦΕΚ 91Α/2025-06-13") from the structured fields,
+			// falling back to the generic name only when none of them exist.
+			if ($fekNumber !== '') {
+				$fekLabel = 'ΦΕΚ ' . $fekNumber . $fekSeries;
+				if ($fekDate !== '') {
+					$fekLabel .= '/' . $fekDate;
+				}
+			} else {
+				$fekLabel = $fek;
+			}
 
-			if ($eff !== '' && $eff > $today) {
+			if ($eff === '') {
+				$status = $this->msg('aknrenderer-revisions-status-unknown')->text();
+				$cls = 'akn-rev-unknown';
+			} elseif ($eff > $today) {
 				$status = $this->msg('aknrenderer-revisions-status-future')->text();
 				$cls = 'akn-rev-future';
 			} elseif ($rev === $activeRev) {
@@ -90,7 +111,7 @@ class AknRevisionsAction extends FormlessAction
 				'tr',
 				$rev === $activeRev ? ['class' => 'akn-rev-active-row'] : [],
 				Html::rawElement('td', [], $dateLink)
-				. Html::element('td', [], $fek !== '' ? $fek : '—')
+				. Html::element('td', [], $fekLabel !== '' ? $fekLabel : '—')
 				. Html::rawElement('td', ['class' => $cls], Html::element('span', [], $status))
 			);
 		}

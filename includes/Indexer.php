@@ -63,6 +63,15 @@ class Indexer
 	}
 
 	/**
+	 * A codified "version" is identified by its (page, effective date), not by
+	 * the MediaWiki revision that produced it. A save whose XML declares the
+	 * same effective date as an already-indexed version (e.g. a typo fix that
+	 * doesn't touch FRBRExpression/FRBRWork's date) updates that version's
+	 * ar_rev in place instead of adding a row, so the version table reflects
+	 * genuinely new codified texts, not every wiki save. If the XML is
+	 * unparseable, the save is simply not indexed — prior, still-valid
+	 * versions for the page are left untouched.
+	 *
 	 * @param IDatabase $dbw Primary connection.
 	 * @param int $revId
 	 * @param int $pageId
@@ -72,24 +81,21 @@ class Indexer
 	{
 		$data = MetaExtractor::fromXml($xml);
 		if ($data === null) {
-			$dbw->newDeleteQueryBuilder()
-				->deleteFrom('akn_revision')
-				->where(['ar_rev' => $revId])
-				->caller(__METHOD__)
-				->execute();
 			return;
 		}
 
 		$effective = $data['exprDate'] !== '' ? $data['exprDate'] : $data['enacted'];
 		$dbw->newReplaceQueryBuilder()
 			->replaceInto('akn_revision')
-			->uniqueIndexFields(['ar_rev'])
+			->uniqueIndexFields(['ar_page', 'ar_effective'])
 			->row([
-				'ar_rev' => $revId,
 				'ar_page' => $pageId,
 				'ar_effective' => self::cut((string) $effective, 32),
+				'ar_rev' => $revId,
 				'ar_fek' => self::cut((string) $data['pubShowAs'], 255),
+				'ar_fek_series' => self::cut((string) $data['pubSeries'], 16),
 				'ar_fek_number' => self::cut((string) $data['pubNumber'], 64),
+				'ar_fek_date' => self::cut((string) $data['pubDate'], 32),
 			])
 			->caller(__METHOD__)
 			->execute();

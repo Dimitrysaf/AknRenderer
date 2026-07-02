@@ -13,6 +13,7 @@ CREATE TABLE /*_*/akn_meta (
   am_subtype VARBINARY(64) DEFAULT NULL,
   am_enacted VARBINARY(32) DEFAULT NULL,
   am_fek VARBINARY(255) DEFAULT NULL,
+  am_fek_series VARBINARY(16) DEFAULT NULL,
   am_fek_number VARBINARY(64) DEFAULT NULL,
   am_pub_date VARBINARY(32) DEFAULT NULL,
   am_keywords VARBINARY(255) DEFAULT NULL,

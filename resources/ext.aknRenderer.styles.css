@@ -193,6 +193,11 @@
 	color: #b32424;
 }
 
+.akn-revisions .akn-rev-unknown {
+	color: #72777d;
+	font-style: italic;
+}
+
 .akn-revisions .akn-rev-active-row {
 	background: rgba(20, 134, 109, 0.07);
 }

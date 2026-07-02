@@ -21,5 +21,6 @@
 	"aknrenderer-revisions-status-active": "In force",
 	"aknrenderer-revisions-status-expired": "Superseded",
 	"aknrenderer-revisions-status-future": "Not yet in force",
+	"aknrenderer-revisions-status-unknown": "Effective date unknown",
 	"aknrenderer-revisions-version": "version #$1"
 }

@@ -95,6 +95,12 @@ class MetaExtractor
 			'language' => self::attr($expr, 'FRBRlanguage', 'language'),
 			'manifUri' => self::attr($manif, 'FRBRuri', 'value'),
 			'pubShowAs' => $pub ? $pub->getAttribute('showAs') : '',
+			// The ΦΕΚ τεύχος (Α, Β, Γ, Δ, ΑΑΠ, ΥΟΔΔ, ...) has no dedicated
+			// attribute in the Akoma Ntoso <publication> element — by
+			// convention @name carries it (machine-readable), mirroring
+			// @showAs for the display label, e.g.
+			// <publication name="Α" showAs="Εφημερίδα της Κυβερνήσεως" .../>.
+			'pubSeries' => $pub ? $pub->getAttribute('name') : '',
 			'pubNumber' => $pub ? $pub->getAttribute('number') : '',
 			'pubDate' => $pub ? $pub->getAttribute('date') : '',
 			'keywords' => $keywords,
@@ -121,6 +127,7 @@ class MetaExtractor
 		$add('Αριθμός', (string) $d['number']);
 		$add('Ημερομηνία θέσπισης', (string) $d['enacted']);
 		$add('ΦΕΚ', (string) $d['pubShowAs']);
+		$add('Τεύχος ΦΕΚ', (string) $d['pubSeries']);
 		$add('Αριθμός ΦΕΚ', (string) $d['pubNumber']);
 		$add('Ημερομηνία δημοσίευσης', (string) $d['pubDate']);
 		$add('Χώρα', self::humanize(AknVocabulary::COUNTRIES, (string) $d['country']));
@@ -160,6 +167,7 @@ class MetaExtractor
 			'am_subtype' => self::cut((string) $d['subtype'], 64),
 			'am_enacted' => self::cut((string) $d['enacted'], 32),
 			'am_fek' => self::cut((string) $d['pubShowAs'], 255),
+			'am_fek_series' => self::cut((string) $d['pubSeries'], 16),
 			'am_fek_number' => self::cut((string) $d['pubNumber'], 64),
 			'am_pub_date' => self::cut((string) $d['pubDate'], 32),
 			'am_keywords' => self::cut(implode(', ', $d['keywords']), 255),

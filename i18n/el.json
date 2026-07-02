@@ -21,5 +21,6 @@
 	"aknrenderer-revisions-status-active": "Σε ισχύ",
 	"aknrenderer-revisions-status-expired": "Έληξε",
 	"aknrenderer-revisions-status-future": "Δεν ισχύει ακόμη",
+	"aknrenderer-revisions-status-unknown": "Άγνωστη ημερομηνία ισχύος",
 	"aknrenderer-revisions-version": "έκδοση #$1"
 }
