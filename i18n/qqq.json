@@ -22,5 +22,12 @@
 	"aknrenderer-revisions-status-expired": "Status value: this version has been superseded by a later one.",
 	"aknrenderer-revisions-status-future": "Status value: this version's effective date is in the future.",
 	"aknrenderer-revisions-status-unknown": "Status value: this version's XML declares no FRBRExpression or FRBRWork date, so its place in the timeline can't be determined.",
-	"aknrenderer-revisions-version": "Fallback link label when a version has no effective date. $1 is the revision id."
+	"aknrenderer-revisions-version": "Fallback link label when a version has no effective date. $1 is the revision id.",
+	"aknrenderer-amendments-received": "Heading above the table of amendments this document's <passiveModifications> record it received from other acts.",
+	"aknrenderer-amendments-made": "Heading above the table of amendments this document's <activeModifications> record it made to other acts.",
+	"aknrenderer-amendments-col-provision": "Column header: the eId within this document affected by the amendment (linked).",
+	"aknrenderer-amendments-col-source": "Column header, 'amendments received' table: the IRI of the amending provision in the other act.",
+	"aknrenderer-amendments-col-target": "Column header, 'amendments made' table: the IRI of the amended provision in the other act.",
+	"aknrenderer-amendments-col-type": "Column header: the kind of textual modification (repeal, substitution, etc.).",
+	"aknrenderer-amendments-col-date": "Column header: the date the modification took force, when recorded."
 }

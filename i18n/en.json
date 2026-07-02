@@ -22,5 +22,12 @@
 	"aknrenderer-revisions-status-expired": "Superseded",
 	"aknrenderer-revisions-status-future": "Not yet in force",
 	"aknrenderer-revisions-status-unknown": "Effective date unknown",
-	"aknrenderer-revisions-version": "version #$1"
+	"aknrenderer-revisions-version": "version #$1",
+	"aknrenderer-amendments-received": "Amendments received",
+	"aknrenderer-amendments-made": "Amendments made",
+	"aknrenderer-amendments-col-provision": "Provision",
+	"aknrenderer-amendments-col-source": "Source",
+	"aknrenderer-amendments-col-target": "Target",
+	"aknrenderer-amendments-col-type": "Type",
+	"aknrenderer-amendments-col-date": "Date"
 }

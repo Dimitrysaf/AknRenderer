@@ -81,6 +81,17 @@ class AknVocabulary
         'eu' => 'Ευρωπαϊκή Ένωση',
     ];
 
+    /** Greek labels for Akoma Ntoso <textualMod @type> values. */
+    public const TEXTUAL_MOD_TYPES = [
+        'repeal' => 'Κατάργηση',
+        'substitution' => 'Αντικατάσταση',
+        'insertion' => 'Εισαγωγή',
+        'replacement' => 'Αντικατάσταση',
+        'renumbering' => 'Αναρίθμηση',
+        'split' => 'Διάσπαση',
+        'join' => 'Συνένωση',
+    ];
+
     /** Language labels, keyed by lowercased ISO 639 code. */
     public const LANGUAGES = [
         'ell' => 'Ελληνικά',

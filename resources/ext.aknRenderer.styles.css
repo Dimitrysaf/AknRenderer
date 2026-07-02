@@ -2,7 +2,11 @@
  * AknRenderer — structural styling.
  */
 
-.akn-note-declaration {
+/* Interpretive text set apart from a provision — an informal note (<note>)
+ * or a clause with legal force (<hcontainer name="interpretiveClause">) —
+ * reads the same way regardless of source: plain italic, no border/background box. */
+.akn-note-declaration,
+.akn-clause {
 	font-style: italic;
 	font-size: 0.9em;
 	margin: 0;
@@ -123,8 +127,23 @@
 	margin: 0;
 }
 
+/* The document's own @marker (rendered by .akn-note-backref below) is the
+ * visible numbering — suppress the browser's separate ordinal, or markers
+ * that aren't sequential integers (e.g. "*") show up as "2. *". */
+.akn-notes-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
 .akn-note {
 	margin: 0;
+}
+
+/* The note's own content is typically wrapped in a block-level <p>, which
+ * would otherwise force it onto a new line after the inline marker link. */
+.akn-note .akn-p {
+	display: inline;
 }
 
 .akn-note-backref {
@@ -134,19 +153,6 @@
 /* ---- foreign passthrough ---- */
 .akn-foreign {
 	margin: 0;
-}
-
-.akn-clause {
-	margin: 0.4em 0;
-	padding: 0.4em 0.8em;
-	border-left: 3px solid #36c;
-	background: rgba(51, 102, 204, 0.06);
-}
-
-.akn-clause-label {
-	font-weight: 700;
-	font-variant: small-caps;
-	margin-bottom: 0.2em;
 }
 
 .akn-ref-resolved {
@@ -196,6 +202,10 @@
 .akn-revisions .akn-rev-unknown {
 	color: #72777d;
 	font-style: italic;
+}
+
+.akn-amendments {
+	margin: 0.5em 0 1.5em;
 }
 
 .akn-revisions .akn-rev-active-row {

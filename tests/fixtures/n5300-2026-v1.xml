@@ -1,0 +1,305 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <act name="nomos" contains="singleVersion">
+    <meta>
+      <identification source="#claude">
+        <FRBRWork>
+          <FRBRthis value="/gr/act/2026/5300/!main"/>
+          <FRBRuri value="/gr/act/2026/5300"/>
+          <FRBRalias value="Κώδικας Ψηφιακής Διακυβέρνησης και Τεχνητής Νοημοσύνης" name="ΚΨΔΤΝ"/>
+          <FRBRdate date="2026-01-10" name="enacted"/>
+          <FRBRauthor href="#vouli"/>
+          <FRBRcountry value="gr"/>
+          <FRBRnumber value="5300"/>
+          <FRBRname value="ν. 5300/2026"/>
+          <FRBRsubtype value="nomos"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/gr/act/2026/5300/ell@2026-01-10/!main"/>
+          <FRBRuri value="/gr/act/2026/5300/ell@2026-01-10"/>
+          <FRBRdate date="2026-01-10" name="enacted"/>
+          <FRBRauthor href="#vouli"/>
+          <FRBRlanguage language="ell"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/gr/act/2026/5300/ell@2026-01-10/!main.xml"/>
+          <FRBRuri value="/gr/act/2026/5300/ell@2026-01-10.akn.xml"/>
+          <FRBRdate date="2026-01-10" name="generated"/>
+          <FRBRauthor href="#claude"/>
+          <FRBRformat value="application/akn+xml"/>
+        </FRBRManifestation>
+      </identification>
+
+      <publication name="Α" showAs="Εφημερίδα της Κυβερνήσεως" number="15" date="2026-01-10"/>
+
+      <references source="#claude">
+        <TLCOrganization eId="vouli" href="/ontology/organization/gr/vouli" showAs="Βουλή των Ελλήνων"/>
+        <TLCOrganization eId="claude" href="/ontology/organization/ai/claude" showAs="Claude (AI Assistant)"/>
+        <TLCOrganization eId="ada" href="/ontology/organization/gr/ada" showAs="Αρχή Δεδομένων Ψηφιακής Διακυβέρνησης"/>
+        <TLCPerson eId="ypourgos-psd" href="/ontology/person/gr/ypourgos-psifiakis-diakyvernisis" showAs="Υπουργός Ψηφιακής Διακυβέρνησης"/>
+      </references>
+
+      <lifecycle source="#vouli">
+        <eventRef eId="ev-enact" date="2026-01-10" type="generation" source="#vouli"/>
+      </lifecycle>
+
+      <analysis source="#vouli">
+        <!-- v1: original enactment — no modifications received or made yet. -->
+      </analysis>
+
+      <classification source="#vouli">
+        <keyword showAs="Ψηφιακή Διακυβέρνηση" value="digital-governance"/>
+        <keyword showAs="Τεχνητή Νοημοσύνη" value="artificial-intelligence"/>
+        <keyword showAs="Προστασία Δεδομένων" value="data-protection"/>
+        <keyword showAs="Ηλεκτρονική Υπογραφή" value="electronic-signature"/>
+      </classification>
+    </meta>
+
+    <body>
+      <part eId="part_a">
+        <num>ΜΕΡΟΣ Α΄</num>
+        <heading>ΓΕΝΙΚΕΣ ΔΙΑΤΑΞΕΙΣ</heading>
+
+        Το παρόν Μέρος θεσπίζει τις γενικές αρχές, τους ορισμούς και το πεδίο εφαρμογής του παρόντος Κώδικα.
+
+        <chapter eId="chap_a1">
+          <num>ΚΕΦΑΛΑΙΟ Α΄</num>
+          <heading>Σκοπός, Ορισμοί και Πεδίο Εφαρμογής</heading>
+
+          <article eId="art_1">
+            <num>Άρθρο 1</num>
+            <heading>Σκοπός</heading>
+            <content>
+              <p>Σκοπός του παρόντος <term refersTo="#kodikas">Κώδικα</term> είναι η θέσπιση ενιαίου
+              κανονιστικού πλαισίου για την <b>ανάπτυξη</b>, τη <i>διάθεση</i> και τη <u>χρήση</u> συστημάτων
+              <def refersTo="#tn">τεχνητής νοημοσύνης</def> από φορείς του δημοσίου και του ιδιωτικού τομέα,
+              σύμφωνα με την παρ. 1<sup>η</sup> του άρθρου 5<sub>Α</sub> της Συνθήκης.</p>
+              <p>Ο Κώδικας τίθεται σε ισχύ από την <date date="2026-01-10">10η Ιανουαρίου 2026</date> και
+              εφαρμόζεται σε όλη την Επικράτεια, όπως ορίζεται στο <quotedText>άρθρο 3 παρ. 2</quotedText>.</p>
+            </content>
+          </article>
+
+          <article eId="art_2">
+            <num>Άρθρο 2</num>
+            <heading>Ορισμοί</heading>
+            <content>
+              <blockList eId="art_2__list_1">
+                <listIntroduction>Για τους σκοπούς του παρόντος Κώδικα, νοούνται ως:</listIntroduction>
+                <item eId="art_2__list_1__item_1">
+                  <num>α)</num>
+                  <p><term refersTo="#tn">«Σύστημα Τεχνητής Νοημοσύνης»</term>: κάθε
+                  <entity refersTo="#software">λογισμικό</entity> που αναπτύσσεται με μία ή περισσότερες από
+                  τις τεχνικές που ορίζονται στο Παράρτημα Ι.</p>
+                </item>
+                <item eId="art_2__list_1__item_2">
+                  <num>β)</num>
+                  <p><term refersTo="#pary">«Πάροχος»</term>: κάθε
+                  <organization refersTo="#claude">φυσικό ή νομικό πρόσωπο</organization> που αναπτύσσει
+                  σύστημα τεχνητής νοημοσύνης με σκοπό τη διάθεσή του στην αγορά.</p>
+                </item>
+                <item eId="art_2__list_1__item_3">
+                  <num>γ)</num>
+                  <p><term refersTo="#xristis">«Χρήστης»</term>: κάθε
+                  <person refersTo="#ypourgos-psd">φυσικό πρόσωπο</person> που χρησιμοποιεί σύστημα τεχνητής
+                  νοημοσύνης υπό την ευθύνη του, εξαιρουμένης της προσωπικής, μη επαγγελματικής χρήσης, η οποία
+                  αφορά ποσότητα έως <quantity unit="cases">100 περιπτώσεις</quantity> ετησίως.</p>
+                </item>
+                <listWrapUp>Οι ανωτέρω ορισμοί ισχύουν με την επιφύλαξη ειδικότερων διατάξεων.</listWrapUp>
+              </blockList>
+            </content>
+          </article>
+
+          <article eId="art_3">
+            <num>Άρθρο 3</num>
+            <heading>Πεδίο εφαρμογής</heading>
+            <paragraph eId="art_3__para_1">
+              <num>1.</num>
+              <content>
+                <p>Ο παρών Κώδικας εφαρμόζεται σε παρόχους και χρήστες συστημάτων τεχνητής νοημοσύνης που
+                δραστηριοποιούνται εντός της ελληνικής επικράτειας, ανεξαρτήτως του τόπου εγκατάστασής τους.</p>
+              </content>
+            </paragraph>
+            <paragraph eId="art_3__para_2">
+              <num>2.</num>
+              <content>
+                <p>Εξαιρούνται από το πεδίο εφαρμογής του παρόντος Κώδικα:</p>
+              </content>
+              <point eId="art_3__para_2__pnt_a">
+                <num>α)</num>
+                <content><p>συστήματα που αναπτύσσονται αποκλειστικά για σκοπούς εθνικής άμυνας·</p></content>
+              </point>
+              <point eId="art_3__para_2__pnt_b">
+                <num>β)</num>
+                <content><p>συστήματα ανοικτού κώδικα που διατίθενται χωρίς αντάλλαγμα, με την επιφύλαξη
+                του <ref href="#art_7">άρθρου 7</ref>·</p></content>
+              </point>
+              <point eId="art_3__para_2__pnt_c">
+                <num>γ)</num>
+                <content><p>ερευνητικές δραστηριότητες πανεπιστημιακών ιδρυμάτων, υπό τους όρους του
+                <mref>άρθρου 12 του ν. 4957/2022</mref>.</p></content>
+              </point>
+            </paragraph>
+          </article>
+        </chapter>
+      </part>
+
+      <part eId="part_b">
+        <num>ΜΕΡΟΣ Β΄</num>
+        <heading>ΟΥΣΙΑΣΤΙΚΕΣ ΔΙΑΤΑΞΕΙΣ</heading>
+
+        <section eId="sec_b1">
+          <num>ΤΜΗΜΑ Α΄</num>
+          <heading>Συστήματα Τεχνητής Νοημοσύνης</heading>
+
+          <subsection eId="sub_b1a">
+            <num>Υποτμήμα Α΄</num>
+            <heading>Ταξινόμηση Κινδύνου</heading>
+
+            <article eId="art_4">
+              <num>Άρθρο 4</num>
+              <heading>Κατηγορίες κινδύνου</heading>
+              <content>
+                <table eId="art_4__table_1">
+                  <caption>Πίνακας 1 — Κατηγορίες κινδύνου συστημάτων τεχνητής νοημοσύνης</caption>
+                  <tr>
+                    <th>Κατηγορία</th>
+                    <th>Περιγραφή</th>
+                    <th colspan="2">Υποχρεώσεις</th>
+                  </tr>
+                  <tr>
+                    <td>Απαράδεκτος κίνδυνος</td>
+                    <td>Απαγορευμένα συστήματα</td>
+                    <td colspan="2">Πλήρης απαγόρευση διάθεσης στην αγορά</td>
+                  </tr>
+                  <tr>
+                    <td>Υψηλός κίνδυνος</td>
+                    <td>Συστήματα υποκείμενα σε αξιολόγηση συμμόρφωσης</td>
+                    <td>Καταχώριση στο μητρώο</td>
+                    <td>Τεχνική τεκμηρίωση</td>
+                  </tr>
+                  <tr>
+                    <td>Περιορισμένος κίνδυνος</td>
+                    <td>Συστήματα με υποχρεώσεις διαφάνειας</td>
+                    <td colspan="2">Ενημέρωση χρήστη</td>
+                  </tr>
+                </table>
+              </content>
+            </article>
+
+            <article eId="art_5">
+              <num>Άρθρο 5</num>
+              <heading>Απαγορευμένες πρακτικές</heading>
+              <content>
+                <p>Απαγορεύεται η διάθεση στην αγορά συστημάτων τεχνητής νοημοσύνης που:</p>
+                <quotedStructure eId="art_5__qs_1">
+                  <point eId="art_5__qs_1__pnt_a">
+                    <num>α)</num>
+                    <content><p>χρησιμοποιούν τεχνικές υποσυνείδητης χειραγώγησης με σκοπό τη στρέβλωση της συμπεριφοράς προσώπου κατά τρόπο που
+                    του προκαλεί ή είναι πιθανό να του προκαλέσει σημαντική βλάβη·<authorialNote marker="1"
+                    eId="art_5__note_1"><p>Βλ. αιτιολογική έκθεση, σελ. 12, όπου αναλύεται η έννοια της
+                    «σημαντικής βλάβης».</p></authorialNote></p></content>
+                  </point>
+                  <point eId="art_5__qs_1__pnt_b">
+                    <num>β)</num>
+                    <content><p>πραγματοποιούν κοινωνική βαθμολόγηση φυσικών προσώπων από δημόσιες αρχές, βάσει
+                    της κοινωνικής συμπεριφοράς ή γνωστών ή προβλεπόμενων προσωπικών χαρακτηριστικών.</p>
+                    <note eId="art_5__note_decl_1"><p>Ερμηνευτική σημείωση: η απαγόρευση καταλαμβάνει και τα
+                    συστήματα που λειτουργούν εξ ονόματος δημόσιας αρχής κατόπιν ανάθεσης.</p></note>
+                    </content>
+                  </point>
+                </quotedStructure>
+              </content>
+            </article>
+          </subsection>
+
+          <subsection eId="sub_b1b">
+            <num>Υποτμήμα Β΄</num>
+            <heading>Υποχρεώσεις Παρόχων</heading>
+
+            <article eId="art_6">
+              <num>Άρθρο 6</num>
+              <heading>Τεχνική τεκμηρίωση</heading>
+              <content>
+                <p>Η τεχνική τεκμηρίωση περιλαμβάνει, μεταξύ άλλων, το ακόλουθο σχήμα περιγραφής
+                μοντέλου, το οποίο παρατίθεται αυτούσιο:</p>
+                <foreign eId="art_6__foreign_1">
+                  <math xmlns="http://www.w3.org/1998/Math/MathML">
+                    <mrow><mi>Risk</mi><mo>=</mo><mi>P</mi><mo>(</mo><mi>harm</mi><mo>)</mo>
+                    <mo>&#215;</mo><mi>Severity</mi><mo>(</mo><mi>harm</mi><mo>)</mo></mrow>
+                  </math>
+                </foreign>
+              </content>
+            </article>
+
+            <article eId="art_7">
+              <num>Άρθρο 7</num>
+              <heading>Υποχρεώσεις διαφάνειας παρόχων ανοικτού κώδικα</heading>
+              <content>
+                <p>Οι πάροχοι συστημάτων ανοικτού κώδικα της παρ. 2 περ. β΄ του
+                <ref href="#art_3">άρθρου 3</ref> υποχρεούνται σε δημοσίευση των παραμέτρων εκπαίδευσης του
+                συστήματος εντός τριάντα (30) ημερών από τη διάθεσή του στην αγορά.</p>
+              </content>
+            </article>
+          </subsection>
+        </section>
+
+        <section eId="sec_b2">
+          <num>ΤΜΗΜΑ Β΄</num>
+          <heading>Προστασία Δεδομένων</heading>
+
+          <article eId="art_8">
+            <num>Άρθρο 8</num>
+            <heading>Σχέση με λοιπή νομοθεσία</heading>
+            <content>
+              <p>Ο παρών Κώδικας εφαρμόζεται με την επιφύλαξη των διατάξεων περί προστασίας δεδομένων
+              προσωπικού χαρακτήρα, ιδίως δε των <ref href="#art_2">ορισμών του άρθρου 2</ref> του παρόντος,
+              καθώς και του <ref href="/gr/act/2019/4624#art_10">άρθρου 10 του ν. 4624/2019</ref> (μη
+              καταχωρισμένου ακόμη στο παρόν wiki), και του
+              <ref href="/gr/act/2026/5301#art_99">άρθρου 99 του ν. 5301/2026</ref> (ανύπαρκτη διάταξη, για
+              δοκιμή μη έγκυρης αγκύρωσης).</p>
+            </content>
+          </article>
+
+          <hcontainer eId="hc_interp_1" name="interpretiveClause">
+            <p>Για τους σκοπούς του παρόντος Τμήματος, ο όρος «δεδομένα προσωπικού χαρακτήρα» ερμηνεύεται
+            σύμφωνα με τον Γενικό Κανονισμό Προστασίας Δεδομένων (ΕΕ) 2016/679, όπως εκάστοτε ισχύει.</p>
+          </hcontainer>
+
+          <hcontainer eId="hc_annex_1" showAs="Παράρτημα Ι — Τεχνικές Ανάπτυξης Συστημάτων ΤΝ">
+            <p>Τεχνικές μηχανικής μάθησης, συμπεριλαμβανομένης της επιβλεπόμενης, μη επιβλεπόμενης και
+            ενισχυτικής μάθησης, με χρήση ποικίλων μεθόδων, συμπεριλαμβανομένης της βαθιάς μάθησης·
+            προσεγγίσεις βασισμένες σε λογική και γνώση· και στατιστικές προσεγγίσεις, μέθοδοι εκτίμησης
+            Bayes, μέθοδοι αναζήτησης και βελτιστοποίησης.</p>
+          </hcontainer>
+        </section>
+      </part>
+
+      <part eId="part_c">
+        <num>ΜΕΡΟΣ Γ΄</num>
+        <heading>ΜΕΤΑΒΑΤΙΚΕΣ ΚΑΙ ΤΕΛΙΚΕΣ ΔΙΑΤΑΞΕΙΣ</heading>
+
+        <article eId="art_9">
+          <num>Άρθρο 9</num>
+          <heading>Μεταβατικές διατάξεις</heading>
+          <content>
+            <p>Πάροχοι που έχουν ήδη διαθέσει στην αγορά συστήματα τεχνητής νοημοσύνης πριν από την έναρξη
+            ισχύος του παρόντος οφείλουν να συμμορφωθούν εντός έξι (6) μηνών<authorialNote marker="*"
+            eId="art_9__note_1"><p>Η προθεσμία δύναται να παραταθεί με απόφαση του
+            <rref href="#ypourgos-psd">Υπουργού Ψηφιακής Διακυβέρνησης</rref>.</p></authorialNote>, με την
+            επιφύλαξη του <mod>άρθρου 45 παρ. 3 του ν. 4727/2020, όπως αντικαθίσταται</mod>.</p>
+          </content>
+        </article>
+
+        <article eId="art_10">
+          <num>Άρθρο 10</num>
+          <heading>Έναρξη ισχύος</heading>
+          <content>
+            <p>Η ισχύς του παρόντος Κώδικα αρχίζει από τη δημοσίευσή του στην Εφημερίδα της Κυβερνήσεως,
+            ήτοι από τις <date date="2026-01-10">10 Ιανουαρίου 2026</date>. Πληροφορίες διατίθενται στον
+            ιστότοπο <a href="https://www.gov.gr/">gov.gr</a>.</p>
+          </content>
+        </article>
+      </part>
+    </body>
+  </act>
+</akomaNtoso>

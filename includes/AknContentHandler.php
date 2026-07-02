@@ -277,10 +277,12 @@ class AknContentHandler extends TextContentHandler
 
 	/**
 	 * Render a named hcontainer with a canonical Greek label — e.g. an
-	 * interpretive clause (Ερμηνευτική δήλωση). Enacted text set apart inside
-	 * a provision: distinct, but NOT annotation-greyed (it has legal force).
-	 * An explicit <heading> wins over the default label. Body content, so it
-	 * is not added to the TOC.
+	 * interpretive clause (Ερμηνευτική δήλωση). The label reads as the lead
+	 * of the first paragraph ("Ερμηνευτική δήλωση: …"), the same way a
+	 * hand-authored <note> carries its own lead text — not a separate
+	 * heading line, so it reads as running legal text rather than a UI
+	 * callout. An explicit <heading> wins over the default label. Body
+	 * content, so it is not added to the TOC.
 	 *
 	 * @param \DOMElement $el
 	 * @return string HTML
@@ -299,8 +301,16 @@ class AknContentHandler extends TextContentHandler
 			? trim($this->renderInline($heading))
 			: htmlspecialchars(AknVocabulary::HCONTAINER_LABELS[$name], ENT_QUOTES);
 
-		$out = Html::rawElement('div', ['class' => 'akn-clause-label'], $label)
-			. $this->renderChildrenExcept($el, ['heading']);
+		// Caller (renderNode, via isTitledOrNumbered) already saved/cleared
+		// pendingNum for this element, so it's ours to use here exactly like
+		// a provision number: it's consumed by whichever <p>/bare-text child
+		// renders first.
+		$this->pendingNum = $label . ':';
+		$out = $this->renderChildrenExcept($el, ['heading']);
+		if ($this->pendingNum !== null) {
+			// Nothing consumed it (e.g. no paragraph content) — emit standalone.
+			$out = Html::rawElement('p', ['class' => 'akn-p'], $this->takePendingNum()) . $out;
+		}
 
 		return Html::rawElement('section', $attrs, $out);
 	}

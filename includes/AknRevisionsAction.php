@@ -132,6 +132,113 @@ class AknRevisionsAction extends FormlessAction
 			) . Html::rawElement('tbody', [], $body)
 		);
 
-		return Html::element('p', [], $this->msg('aknrenderer-revisions-intro')->text()) . $table;
+		return Html::element('p', [], $this->msg('aknrenderer-revisions-intro')->text())
+			. $table
+			. $this->renderAmendments($dbr, $title);
+	}
+
+	/**
+	 * Amendment relationships recorded in the document's own
+	 * <analysis><activeModifications>/<passiveModifications> — not derivable
+	 * from the rendered text or the version table alone.
+	 *
+	 * @param \Wikimedia\Rdbms\IReadableDatabase $dbr
+	 * @param \MediaWiki\Title\Title $title
+	 * @return string HTML, empty if nothing is recorded.
+	 */
+	private function renderAmendments($dbr, $title): string
+	{
+		$res = $dbr->newSelectQueryBuilder()
+			->select(['ama_direction', 'ama_type', 'ama_source_href', 'ama_dest_href', 'ama_date'])
+			->from('akn_amendment')
+			->where(['ama_page' => $title->getArticleID()])
+			->orderBy('ama_order')
+			->caller(__METHOD__)
+			->fetchResultSet();
+
+		$passiveRows = '';
+		$activeRows = '';
+		foreach ($res as $r) {
+			$type = AknVocabulary::TEXTUAL_MOD_TYPES[$r->ama_type] ?? (string) $r->ama_type;
+			$date = (string) $r->ama_date;
+			// Within a direction, one side of the relationship is always a
+			// fragment inside this document (linkable), the other an IRI
+			// pointing elsewhere (shown as-is; resolving it to a wiki page
+			// is a separate concern from just surfacing the relationship).
+			if ($r->ama_direction === 'passive') {
+				$local = $this->localEidLink($title, (string) $r->ama_dest_href);
+				$other = (string) $r->ama_source_href;
+				$passiveRows .= Html::rawElement(
+					'tr',
+					[],
+					Html::rawElement('td', [], $local)
+					. Html::element('td', [], $other)
+					. Html::element('td', [], $type)
+					. Html::element('td', [], $date !== '' ? $date : '—')
+				);
+			} else {
+				$local = $this->localEidLink($title, (string) $r->ama_source_href);
+				$other = (string) $r->ama_dest_href;
+				$activeRows .= Html::rawElement(
+					'tr',
+					[],
+					Html::rawElement('td', [], $local)
+					. Html::element('td', [], $other)
+					. Html::element('td', [], $type)
+					. Html::element('td', [], $date !== '' ? $date : '—')
+				);
+			}
+		}
+
+		if ($passiveRows === '' && $activeRows === '') {
+			return '';
+		}
+
+		$out = '';
+		if ($passiveRows !== '') {
+			$out .= Html::element('h2', [], $this->msg('aknrenderer-amendments-received')->text())
+				. $this->amendmentTable($passiveRows, 'aknrenderer-amendments-col-provision', 'aknrenderer-amendments-col-source');
+		}
+		if ($activeRows !== '') {
+			$out .= Html::element('h2', [], $this->msg('aknrenderer-amendments-made')->text())
+				. $this->amendmentTable($activeRows, 'aknrenderer-amendments-col-provision', 'aknrenderer-amendments-col-target');
+		}
+		return $out;
+	}
+
+	private function amendmentTable(string $rows, string $provisionColMsg, string $otherColMsg): string
+	{
+		return Html::rawElement(
+			'table',
+			['class' => 'wikitable akn-amendments'],
+			Html::rawElement(
+				'thead',
+				[],
+				Html::rawElement(
+					'tr',
+					[],
+					Html::element('th', [], $this->msg($provisionColMsg)->text())
+					. Html::element('th', [], $this->msg($otherColMsg)->text())
+					. Html::element('th', [], $this->msg('aknrenderer-amendments-col-type')->text())
+					. Html::element('th', [], $this->msg('aknrenderer-amendments-col-date')->text())
+				)
+			) . Html::rawElement('tbody', [], $rows)
+		);
+	}
+
+	/** A '#eId' href becomes a link into this page; anything else is shown as plain text. */
+	private function localEidLink($title, string $href): string
+	{
+		if ($href === '') {
+			return '—';
+		}
+		if ($href[0] === '#') {
+			return Html::element(
+				'a',
+				['href' => $title->getLocalURL() . $href],
+				substr($href, 1)
+			);
+		}
+		return htmlspecialchars($href, ENT_QUOTES);
 	}
 }

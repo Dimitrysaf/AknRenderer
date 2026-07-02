@@ -22,5 +22,12 @@
 	"aknrenderer-revisions-status-expired": "Έληξε",
 	"aknrenderer-revisions-status-future": "Δεν ισχύει ακόμη",
 	"aknrenderer-revisions-status-unknown": "Άγνωστη ημερομηνία ισχύος",
-	"aknrenderer-revisions-version": "έκδοση #$1"
+	"aknrenderer-revisions-version": "έκδοση #$1",
+	"aknrenderer-amendments-received": "Τροποποιήσεις που δέχθηκε",
+	"aknrenderer-amendments-made": "Τροποποιήσεις που επέφερε",
+	"aknrenderer-amendments-col-provision": "Διάταξη",
+	"aknrenderer-amendments-col-source": "Πηγή",
+	"aknrenderer-amendments-col-target": "Στόχος",
+	"aknrenderer-amendments-col-type": "Τύπος",
+	"aknrenderer-amendments-col-date": "Ημερομηνία"
 }

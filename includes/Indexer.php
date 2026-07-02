@@ -60,6 +60,22 @@ class Indexer
 				->caller(__METHOD__)
 				->execute();
 		}
+
+		// --- akn_amendment: recorded modification relationships (rebuild wholesale) ---
+		$dbw->newDeleteQueryBuilder()
+			->deleteFrom('akn_amendment')
+			->where(['ama_page' => $pageId])
+			->caller(__METHOD__)
+			->execute();
+
+		$amendments = AmendmentExtractor::fromXml($xml, $pageId);
+		if ($amendments !== []) {
+			$dbw->newInsertQueryBuilder()
+				->insertInto('akn_amendment')
+				->rows($amendments)
+				->caller(__METHOD__)
+				->execute();
+		}
 	}
 
 	/**
