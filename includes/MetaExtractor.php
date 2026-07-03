@@ -22,39 +22,14 @@ class MetaExtractor
 	 */
 	public static function fromXml(string $xml): ?array
 	{
-		if (trim($xml) === '') {
+		$dom = AknDom::parse($xml);
+		if ($dom === null) {
 			return null;
 		}
-		$dom = new \DOMDocument();
-		$prev = libxml_use_internal_errors(true);
-		$ok = $dom->loadXML($xml, LIBXML_NONET);
-		libxml_clear_errors();
-		libxml_use_internal_errors($prev);
-		if (!$ok) {
-			return null;
-		}
-
-		// The document-type element (act/bill/doc/officialGazette) must be a
-		// DIRECT child of <akomaNtoso> — getElementsByTagName() searches the
-		// whole subtree, which would wrongly match a nested <doc>/<act> that
-		// a <component> embeds deep inside a gazette's <collectionBody>.
-		$root = null;
-		$aknRoot = $dom->documentElement;
-		if ($aknRoot instanceof \DOMElement) {
-			foreach ($aknRoot->childNodes as $child) {
-				if (
-					$child instanceof \DOMElement
-					&& in_array($child->localName, ['act', 'bill', 'doc', 'officialGazette'], true)
-				) {
-					$root = $child;
-					break;
-				}
-			}
-		}
+		$root = AknDom::findRoot($dom);
 		if ($root === null) {
 			return null;
 		}
-
 		$meta = self::first($root, 'meta');
 		if ($meta === null) {
 			return null;
@@ -142,26 +117,26 @@ class MetaExtractor
 				$rows[] = [$label, $value];
 			}
 		};
-		$add('Τίτλος', (string) $d['alias']);
-		$add('Τύπος εγγράφου', self::humanize(AknVocabulary::DOC_TYPES, (string) $d['docType']));
-		$add('Αριθμός', (string) $d['number']);
-		$add('Ημερομηνία θέσπισης', (string) $d['enacted']);
-		$add('ΦΕΚ', (string) $d['pubShowAs']);
-		$add('Τεύχος ΦΕΚ', (string) $d['pubSeries']);
-		$add('Αριθμός ΦΕΚ', (string) $d['pubNumber']);
-		$add('Ημερομηνία δημοσίευσης', (string) $d['pubDate']);
-		$add('Χώρα', self::humanize(AknVocabulary::COUNTRIES, (string) $d['country']));
-		$add('Γλώσσα', self::humanize(AknVocabulary::LANGUAGES, (string) $d['language']));
-		$add('Υποτύπος', self::humanize(AknVocabulary::DOC_TYPES, (string) $d['subtype']));
-		$add('Εκδούσα αρχή', (string) $d['authorLabel']);
-		$add('URI έργου (Work)', (string) $d['workUri']);
-		$add('URI έκφρασης (Expression)', (string) $d['exprUri']);
-		$add('URI εκδήλωσης (Manifestation)', (string) $d['manifUri']);
+		$add(wfMessage('aknrenderer-info-title')->text(), (string) $d['alias']);
+		$add(wfMessage('aknrenderer-info-doctype')->text(), self::humanize(AknVocabulary::DOC_TYPES, (string) $d['docType']));
+		$add(wfMessage('aknrenderer-info-number')->text(), (string) $d['number']);
+		$add(wfMessage('aknrenderer-info-enacted')->text(), (string) $d['enacted']);
+		$add(wfMessage('aknrenderer-info-fek')->text(), (string) $d['pubShowAs']);
+		$add(wfMessage('aknrenderer-info-fek-series')->text(), (string) $d['pubSeries']);
+		$add(wfMessage('aknrenderer-info-fek-number')->text(), (string) $d['pubNumber']);
+		$add(wfMessage('aknrenderer-info-pub-date')->text(), (string) $d['pubDate']);
+		$add(wfMessage('aknrenderer-info-country')->text(), self::humanize(AknVocabulary::COUNTRIES, (string) $d['country']));
+		$add(wfMessage('aknrenderer-info-language')->text(), self::humanize(AknVocabulary::LANGUAGES, (string) $d['language']));
+		$add(wfMessage('aknrenderer-info-subtype')->text(), self::humanize(AknVocabulary::DOC_TYPES, (string) $d['subtype']));
+		$add(wfMessage('aknrenderer-info-author')->text(), (string) $d['authorLabel']);
+		$add(wfMessage('aknrenderer-info-work-uri')->text(), (string) $d['workUri']);
+		$add(wfMessage('aknrenderer-info-expr-uri')->text(), (string) $d['exprUri']);
+		$add(wfMessage('aknrenderer-info-manif-uri')->text(), (string) $d['manifUri']);
 		if ($d['keywords']) {
-			$add('Λέξεις-κλειδιά', implode(', ', $d['keywords']));
+			$add(wfMessage('aknrenderer-info-keywords')->text(), implode(', ', $d['keywords']));
 		}
 		if ($d['events']) {
-			$add('Ιστορικό', implode(' · ', $d['events']));
+			$add(wfMessage('aknrenderer-info-history')->text(), implode(' · ', $d['events']));
 		}
 		return $rows;
 	}

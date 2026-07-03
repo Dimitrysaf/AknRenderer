@@ -22,33 +22,12 @@ class GazetteExtractor
 	 */
 	public static function fromXml(string $xml, int $pageId): ?array
 	{
-		if (trim($xml) === '') {
+		$dom = AknDom::parse($xml);
+		if ($dom === null) {
 			return null;
 		}
-		$dom = new \DOMDocument();
-		$prev = libxml_use_internal_errors(true);
-		$ok = $dom->loadXML($xml, LIBXML_NONET);
-		libxml_clear_errors();
-		libxml_use_internal_errors($prev);
-		if (!$ok) {
-			return null;
-		}
-
-		// The document-type element must be a DIRECT child of <akomaNtoso> —
-		// a <component> inside a gazette's <collectionBody> can embed its
-		// own nested document, and a deep tag-name search would wrongly
-		// match that instead of the outer root.
-		$root = null;
-		$aknRoot = $dom->documentElement;
-		if ($aknRoot instanceof \DOMElement) {
-			foreach ($aknRoot->childNodes as $child) {
-				if ($child instanceof \DOMElement && $child->localName === 'officialGazette') {
-					$root = $child;
-					break;
-				}
-			}
-		}
-		if ($root === null) {
+		$root = AknDom::findRoot($dom);
+		if ($root === null || $root->localName !== 'officialGazette') {
 			return null;
 		}
 

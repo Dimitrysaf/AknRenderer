@@ -1,10 +1,19 @@
 <?php
 /**
- * ContentHandler for the akn-xml content model.
+ * ContentHandler for the akn-xml content model — shared by both the Law:
+ * and Gazette: namespaces (see extension.json), since both hold AKN XML.
  *
- * Renders the AKN <body> into structured HTML: division hierarchy, numbered
- * provisions, lists, tables, inline markup, amendments (ins/del), footnotes,
- * and a verbatim passthrough for <foreign>.
+ * Two document shapes, dispatched on at render time by which element the
+ * XML actually has:
+ * - act/bill/doc: a <body> — rendered as structured HTML (division
+ *   hierarchy, numbered provisions, lists, tables, inline markup,
+ *   amendments as ins/del, footnotes, verbatim passthrough for <foreign>).
+ * - officialGazette: a <collectionBody> — rendered as a list of the
+ *   documents published in that issue (linked where they have their own
+ *   page, embedded where they don't).
+ *
+ * Also promotes <meta><classification><keyword> to real wiki Categories on
+ * every page, regardless of shape.
  *
  * @file
  * @license GPL-2.0-or-later
@@ -148,13 +157,18 @@ class AknContentHandler extends TextContentHandler
 		}
 	}
 
+	/** The document's own <body> — see AknDom::findRoot() for why this is scoped, not a whole-document search. */
 	private function findBody(\DOMDocument $dom): ?\DOMElement
 	{
-		$nodes = $dom->getElementsByTagNameNS(AknVocabulary::NS, 'body');
+		$root = AknDom::findRoot($dom);
+		if ($root === null) {
+			return null;
+		}
+		$nodes = $root->getElementsByTagNameNS(AknVocabulary::NS, 'body');
 		if ($nodes->length > 0) {
 			return $nodes->item(0);
 		}
-		$nodes = $dom->getElementsByTagName('body');
+		$nodes = $root->getElementsByTagName('body');
 		return $nodes->length > 0 ? $nodes->item(0) : null;
 	}
 
@@ -167,11 +181,15 @@ class AknContentHandler extends TextContentHandler
 	 */
 	private function findCollectionBody(\DOMDocument $dom): ?\DOMElement
 	{
-		$nodes = $dom->getElementsByTagNameNS(AknVocabulary::NS, 'collectionBody');
+		$root = AknDom::findRoot($dom);
+		if ($root === null) {
+			return null;
+		}
+		$nodes = $root->getElementsByTagNameNS(AknVocabulary::NS, 'collectionBody');
 		if ($nodes->length > 0) {
 			return $nodes->item(0);
 		}
-		$nodes = $dom->getElementsByTagName('collectionBody');
+		$nodes = $root->getElementsByTagName('collectionBody');
 		return $nodes->length > 0 ? $nodes->item(0) : null;
 	}
 
@@ -180,33 +198,15 @@ class AknContentHandler extends TextContentHandler
 	 * falling back to @value. Mirrors ClassificationExtractor's field
 	 * selection (that one indexes the same keywords into akn_classification
 	 * for structured/dictionary-based queries; this one just needs a
-	 * human-readable label per keyword to turn into a wiki Category, so it
-	 * re-walks the already-parsed $dom directly rather than re-parsing the
-	 * XML a second time).
+	 * human-readable label per keyword to turn into a wiki Category).
 	 *
 	 * @param \DOMDocument $dom
 	 * @return list<string>
 	 */
 	private function collectCategoryNames(\DOMDocument $dom): array
 	{
-		$root = null;
-		$aknRoot = $dom->documentElement;
-		if ($aknRoot instanceof \DOMElement) {
-			foreach ($aknRoot->childNodes as $child) {
-				if (
-					$child instanceof \DOMElement
-					&& in_array($child->localName, ['act', 'bill', 'doc', 'officialGazette'], true)
-				) {
-					$root = $child;
-					break;
-				}
-			}
-		}
-		if ($root === null) {
-			return [];
-		}
-		$meta = $root->getElementsByTagName('meta')->item(0);
-		if (!$meta instanceof \DOMElement) {
+		$meta = AknDom::findMeta($dom);
+		if ($meta === null) {
 			return [];
 		}
 

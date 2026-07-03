@@ -26,40 +26,12 @@ class ClassificationExtractor
 	 */
 	public static function fromXml(string $xml, int $pageId): array
 	{
-		if (trim($xml) === '') {
+		$dom = AknDom::parse($xml);
+		if ($dom === null) {
 			return [];
 		}
-		$dom = new \DOMDocument();
-		$prev = libxml_use_internal_errors(true);
-		$ok = $dom->loadXML($xml, LIBXML_NONET);
-		libxml_clear_errors();
-		libxml_use_internal_errors($prev);
-		if (!$ok) {
-			return [];
-		}
-
-		// The document-type element must be a DIRECT child of <akomaNtoso> —
-		// a deep tag-name search would also match a <keyword> nested inside
-		// a <component>'s embedded document in a gazette's <collectionBody>.
-		$root = null;
-		$aknRoot = $dom->documentElement;
-		if ($aknRoot instanceof \DOMElement) {
-			foreach ($aknRoot->childNodes as $child) {
-				if (
-					$child instanceof \DOMElement
-					&& in_array($child->localName, ['act', 'bill', 'doc', 'officialGazette'], true)
-				) {
-					$root = $child;
-					break;
-				}
-			}
-		}
-		if ($root === null) {
-			return [];
-		}
-
-		$meta = $root->getElementsByTagName('meta')->item(0);
-		if (!$meta instanceof \DOMElement) {
+		$meta = AknDom::findMeta($dom);
+		if ($meta === null) {
 			return [];
 		}
 

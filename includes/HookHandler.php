@@ -1,7 +1,9 @@
 <?php
 /**
- * Runtime hooks: show AKN metadata on action=info, and keep the index
- * tables (akn_meta, akn_structure) in sync on every save.
+ * Runtime hooks: show AKN metadata on action=info, keep the index tables
+ * (see Indexer) in sync on every save, and remove them again on delete —
+ * without onPageDeleteComplete, a deleted page's rows would stay in every
+ * akn_* table forever, since nothing else notices the page is gone.
  *
  * @file
  * @license GPL-2.0-or-later
@@ -10,13 +12,18 @@
 namespace MediaWiki\Extension\AknRenderer;
 
 use MediaWiki\Actions\Hook\InfoActionHook;
+use MediaWiki\Page\Hook\PageDeleteCompleteHook;
 use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
 use MediaWiki\Page\WikiPageFactory;
 use MediaWiki\Revision\SlotRecord;
 use MediaWiki\Storage\Hook\PageSaveCompleteHook;
 use Wikimedia\Rdbms\IConnectionProvider;
 
-class HookHandler implements InfoActionHook, PageSaveCompleteHook, SkinTemplateNavigation__UniversalHook
+class HookHandler implements
+	InfoActionHook,
+	PageDeleteCompleteHook,
+	PageSaveCompleteHook,
+	SkinTemplateNavigation__UniversalHook
 {
 
 	private IConnectionProvider $dbProvider;
@@ -84,6 +91,37 @@ class HookHandler implements InfoActionHook, PageSaveCompleteHook, SkinTemplateN
 
 		Indexer::indexPage($dbw, $pageId, $xml);
 		Indexer::indexRevision($dbw, $revisionRecord->getId(), $pageId, $xml);
+	}
+
+	/**
+	 * Remove the deleted page's rows from every akn_* index table. Gated
+	 * on the deleted revision's own content model (not, say, the current
+	 * content model of $page, since the page no longer exists to ask) —
+	 * cheap enough to always attempt for AKN pages, and a no-op elsewhere.
+	 *
+	 * @param \MediaWiki\Page\ProperPageIdentity $page
+	 * @param \MediaWiki\Permissions\Authority $deleter
+	 * @param string $reason
+	 * @param int $pageID
+	 * @param \MediaWiki\Revision\RevisionRecord $deletedRev
+	 * @param \MediaWiki\Logging\ManualLogEntry $logEntry
+	 * @param int $archivedRevisionCount
+	 */
+	public function onPageDeleteComplete(
+		$page,
+		$deleter,
+		$reason,
+		$pageID,
+		$deletedRev,
+		$logEntry,
+		$archivedRevisionCount
+	) {
+		$content = $deletedRev->getContent(SlotRecord::MAIN);
+		if (!$content instanceof AknContent) {
+			return;
+		}
+
+		Indexer::deletePage($this->dbProvider->getPrimaryDatabase(), $pageID);
 	}
 
 	/**

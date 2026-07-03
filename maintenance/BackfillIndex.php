@@ -1,11 +1,13 @@
 <?php
 /**
- * Backfill akn_meta and akn_structure for AKN Law pages saved before indexing
- * existed. The save hook only indexes future edits, so existing pages need this
- * one-off pass (also handy after changing the extractors).
+ * Backfill every akn_* index table (see Indexer) for AKN pages — in any
+ * namespace, Law: or Gazette: — saved before indexing existed. The save
+ * hook only indexes future edits, so existing pages need this one-off pass
+ * (also handy after changing an extractor, to reindex everything under its
+ * new logic).
  *
  * Run:
- *   php maintenance/run.php extensions/AknRenderer/maintenance/BackfillIndex.php
+ *   php maintenance/run.php AknRenderer:BackfillIndex
  *
  * @file
  * @license GPL-2.0-or-later
@@ -26,7 +28,7 @@ class BackfillIndex extends Maintenance
 	{
 		parent::__construct();
 		$this->addDescription(
-			'Rebuild akn_meta and akn_structure for all existing AKN Law pages.'
+			'Rebuild all akn_* index tables for every existing AKN page (Law: and Gazette:).'
 		);
 		$this->requireExtension('AknRenderer');
 		$this->setBatchSize(50);

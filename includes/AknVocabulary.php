@@ -1,9 +1,9 @@
 <?php
 /**
- * Shared AKN vocabulary — the constants used across the renderer, the metadata
- * extractor and the structure extractor. Kept in one place so the lists never
- * drift out of sync (e.g. the renderer and the indexer must agree on what a
- * structural element is).
+ * Shared AKN vocabulary — the constants used across the renderer and every
+ * extractor. Kept in one place so the lists never drift out of sync (e.g.
+ * the renderer and the structure indexer must agree on what counts as a
+ * structural element).
  *
  * @file
  * @license GPL-2.0-or-later
@@ -79,17 +79,6 @@ class AknVocabulary
         'gr' => 'Ελλάδα',
         'cy' => 'Κύπρος',
         'eu' => 'Ευρωπαϊκή Ένωση',
-    ];
-
-    /** Greek labels for Akoma Ntoso <textualMod @type> values. */
-    public const TEXTUAL_MOD_TYPES = [
-        'repeal' => 'Κατάργηση',
-        'substitution' => 'Αντικατάσταση',
-        'insertion' => 'Εισαγωγή',
-        'replacement' => 'Αντικατάσταση',
-        'renumbering' => 'Αναρίθμηση',
-        'split' => 'Διάσπαση',
-        'join' => 'Συνένωση',
     ];
 
     /** Language labels, keyed by lowercased ISO 639 code. */

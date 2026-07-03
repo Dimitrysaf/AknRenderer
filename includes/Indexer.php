@@ -1,8 +1,11 @@
 <?php
 /**
- * Single source of truth for (re)indexing one AKN page into akn_meta and
- * akn_structure. Called both from the save hook and the backfill script, so the
- * two paths never drift.
+ * Single source of truth for (re)indexing one AKN page into akn_meta,
+ * akn_structure, akn_amendment, akn_gazette, akn_classification (all
+ * rebuilt wholesale from the page's current XML, via indexPage) and
+ * akn_revision (one row per distinct codified version, via indexRevision).
+ * Called both from the save hook and the backfill script, so the two paths
+ * never drift.
  *
  * @file
  * @license GPL-2.0-or-later
@@ -14,6 +17,43 @@ use Wikimedia\Rdbms\IDatabase;
 
 class Indexer
 {
+
+	/**
+	 * Every akn_* table indexed per-page, and its page-id column. Single
+	 * source of truth for "what needs cleaning up when a page goes away"
+	 * (deletePage()) and "what to audit for drift" (the CheckIndexIntegrity
+	 * maintenance script) — both need the full table/column list, and it
+	 * must never fall out of sync with indexPage()/indexRevision() below.
+	 *
+	 * @var array<string,string>
+	 */
+	public const PAGE_INDEX_TABLES = [
+		'akn_meta' => 'am_page',
+		'akn_structure' => 'ast_page',
+		'akn_amendment' => 'ama_page',
+		'akn_gazette' => 'agz_page',
+		'akn_classification' => 'acl_page',
+		'akn_revision' => 'ar_page',
+	];
+
+	/**
+	 * Remove every index row for a page — called when the page itself is
+	 * deleted, since none of the akn_* tables otherwise notice and would
+	 * otherwise keep orphaned rows forever.
+	 *
+	 * @param IDatabase $dbw Primary connection.
+	 * @param int $pageId
+	 */
+	public static function deletePage(IDatabase $dbw, int $pageId): void
+	{
+		foreach (self::PAGE_INDEX_TABLES as $table => $column) {
+			$dbw->newDeleteQueryBuilder()
+				->deleteFrom($table)
+				->where([$column => $pageId])
+				->caller(__METHOD__)
+				->execute();
+		}
+	}
 
 	/**
 	 * Rebuild both index tables for a page from its AKN XML.

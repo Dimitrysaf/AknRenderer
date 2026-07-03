@@ -27,19 +27,11 @@ class AmendmentExtractor
 	 */
 	public static function fromXml(string $xml, int $pageId): array
 	{
-		if (trim($xml) === '') {
+		$dom = AknDom::parse($xml);
+		if ($dom === null) {
 			return [];
 		}
-		$dom = new \DOMDocument();
-		$prev = libxml_use_internal_errors(true);
-		$ok = $dom->loadXML($xml, LIBXML_NONET);
-		libxml_clear_errors();
-		libxml_use_internal_errors($prev);
-		if (!$ok) {
-			return [];
-		}
-
-		$meta = self::first($dom, 'meta');
+		$meta = AknDom::findMeta($dom);
 		if ($meta === null) {
 			return [];
 		}

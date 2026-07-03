@@ -164,7 +164,7 @@ class AknRevisionsAction extends FormlessAction
 		$passiveRows = '';
 		$activeRows = '';
 		foreach ($res as $r) {
-			$type = AknVocabulary::TEXTUAL_MOD_TYPES[$r->ama_type] ?? (string) $r->ama_type;
+			$type = $this->modTypeLabel((string) $r->ama_type);
 			$date = (string) $r->ama_date;
 			// Within a direction, one side of the relationship is always a
 			// fragment inside this document (linkable), the other an IRI
@@ -209,6 +209,16 @@ class AknRevisionsAction extends FormlessAction
 				. $this->amendmentTable($activeRows, 'aknrenderer-amendments-col-provision', 'aknrenderer-amendments-col-target');
 		}
 		return $out;
+	}
+
+	/** Human label for a <textualMod @type> value, or the raw value if unrecognised. */
+	private function modTypeLabel(string $type): string
+	{
+		if ($type === '') {
+			return '';
+		}
+		$msg = $this->msg('aknrenderer-modtype-' . $type);
+		return $msg->exists() ? $msg->text() : $type;
 	}
 
 	private function amendmentTable(string $rows, string $provisionColMsg, string $otherColMsg): string

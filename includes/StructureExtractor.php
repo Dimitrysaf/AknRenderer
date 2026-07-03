@@ -18,22 +18,14 @@ class StructureExtractor
 	/**
 	 * @param string $xml
 	 * @param int $pageId
-	 * @return list<array<string,mixed>> Rows ready for akn_structure (no ast_page? — included).
+	 * @return list<array<string,mixed>> Rows ready for akn_structure.
 	 */
 	public static function fromXml(string $xml, int $pageId): array
 	{
-		if (trim($xml) === '') {
+		$dom = AknDom::parse($xml);
+		if ($dom === null) {
 			return [];
 		}
-		$dom = new \DOMDocument();
-		$prev = libxml_use_internal_errors(true);
-		$ok = $dom->loadXML($xml, LIBXML_NONET);
-		libxml_clear_errors();
-		libxml_use_internal_errors($prev);
-		if (!$ok) {
-			return [];
-		}
-
 		$body = self::firstBody($dom);
 		if ($body === null) {
 			return [];
@@ -80,11 +72,19 @@ class StructureExtractor
 		}
 	}
 
-	/** The document body (act, doc/bill, or judgment). */
+	/**
+	 * The document body (act, doc/bill, or judgment) — scoped to the real
+	 * document root (see AknDom::findRoot()) so it can't match a body
+	 * nested inside a gazette component's embedded document instead.
+	 */
 	private static function firstBody(\DOMDocument $dom): ?\DOMElement
 	{
+		$root = AknDom::findRoot($dom);
+		if ($root === null) {
+			return null;
+		}
 		foreach (['body', 'mainBody', 'judgmentBody'] as $tag) {
-			$n = $dom->getElementsByTagName($tag)->item(0);
+			$n = $root->getElementsByTagName($tag)->item(0);
 			if ($n instanceof \DOMElement) {
 				return $n;
 			}

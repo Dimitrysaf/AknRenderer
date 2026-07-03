@@ -59,6 +59,9 @@
 		"MediaWiki\\Extension\\AknRenderer\\": "includes/",
 		"MediaWiki\\Extension\\AknRenderer\\Maintenance\\": "maintenance/"
 	},
+	"TestAutoloadNamespaces": {
+		"MediaWiki\\Extension\\AknRenderer\\Tests\\Unit\\": "tests/phpunit/unit/"
+	},
 	"MessagesDirs": {
 		"AknRenderer": [
 			"i18n"
@@ -95,6 +98,7 @@
 		"InfoAction": "main",
 		"SkinTemplateNavigation::Universal": "main",
 		"PageSaveComplete": "main",
+		"PageDeleteComplete": "main",
 		"LoadExtensionSchemaUpdates": "schema"
 	},
 	"callback": "MediaWiki\\Extension\\AknRenderer\\Hooks::onRegistration",
