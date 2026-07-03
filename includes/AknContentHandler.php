@@ -101,6 +101,14 @@ class AknContentHandler extends TextContentHandler
 			return;
 		}
 
+		// Applies to any document type (act/bill/doc/officialGazette all
+		// have <meta>), so this runs once before branching on body shape.
+		foreach ($this->collectCategoryNames($dom) as $name) {
+			$parserOutput->addCategory(
+				MediaWikiServices::getInstance()->getTitleFactory()->makeTitle(NS_CATEGORY, $name)
+			);
+		}
+
 		$body = $this->findBody($dom);
 		if ($body === null) {
 			$collectionBody = $this->findCollectionBody($dom);
@@ -165,6 +173,57 @@ class AknContentHandler extends TextContentHandler
 		}
 		$nodes = $dom->getElementsByTagName('collectionBody');
 		return $nodes->length > 0 ? $nodes->item(0) : null;
+	}
+
+	/**
+	 * Category names from <meta><classification><keyword> — @showAs,
+	 * falling back to @value. Mirrors ClassificationExtractor's field
+	 * selection (that one indexes the same keywords into akn_classification
+	 * for structured/dictionary-based queries; this one just needs a
+	 * human-readable label per keyword to turn into a wiki Category, so it
+	 * re-walks the already-parsed $dom directly rather than re-parsing the
+	 * XML a second time).
+	 *
+	 * @param \DOMDocument $dom
+	 * @return list<string>
+	 */
+	private function collectCategoryNames(\DOMDocument $dom): array
+	{
+		$root = null;
+		$aknRoot = $dom->documentElement;
+		if ($aknRoot instanceof \DOMElement) {
+			foreach ($aknRoot->childNodes as $child) {
+				if (
+					$child instanceof \DOMElement
+					&& in_array($child->localName, ['act', 'bill', 'doc', 'officialGazette'], true)
+				) {
+					$root = $child;
+					break;
+				}
+			}
+		}
+		if ($root === null) {
+			return [];
+		}
+		$meta = $root->getElementsByTagName('meta')->item(0);
+		if (!$meta instanceof \DOMElement) {
+			return [];
+		}
+
+		$names = [];
+		foreach ($meta->getElementsByTagName('keyword') as $kw) {
+			if (!$kw instanceof \DOMElement) {
+				continue;
+			}
+			$name = $kw->getAttribute('showAs');
+			if ($name === '') {
+				$name = $kw->getAttribute('value');
+			}
+			if ($name !== '') {
+				$names[] = $name;
+			}
+		}
+		return $names;
 	}
 
 	/**
