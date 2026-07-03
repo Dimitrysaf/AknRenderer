@@ -4,15 +4,14 @@
 
 /* Interpretive text set apart from a provision — an informal note (<note>)
  * or a clause with legal force (<hcontainer name="interpretiveClause">) —
- * reads the same way regardless of source: plain italic, no border/background box. */
+ * reads the same way regardless of source: plain italic, smaller. Text
+ * formatting only — no rule, no reduced opacity (that would just lower
+ * contrast/readability for no reason). */
 .akn-note-declaration,
 .akn-clause {
 	font-style: italic;
 	font-size: 0.9em;
 	margin: 0;
-	border-top: 1px solid currentColor;
-	padding-top: 0.3em;
-	opacity: 0.85;
 }
 
 .akn-document {
@@ -75,20 +74,24 @@
 }
 
 /* ---- Inline semantics ---- */
+/* Cross-references: no colour, just an underline (currentColor — inherits
+ * whatever the surrounding text colour already is) to mark them as
+ * cross-references; resolved/unresolved/broken-anchor differ only by line
+ * style, not colour. cursor is a screen-only hint, invisible in
+ * print/copy/OCR, so it's not a "colour" concern. */
 .akn-ref {
-	color: #36c;
 	cursor: help;
-	border-bottom: 1px dotted #36c;
+	border-bottom: 1px dotted currentColor;
 }
 
+/* Standard legislative redline convention: underline = inserted text,
+ * strikethrough = deleted text. No colour, no background — this is how
+ * amendments are marked in printed law, not a web-UI diff view. */
 .akn-ins {
-	color: #14866d;
-	text-decoration: none;
-	background: rgba(20, 134, 109, 0.08);
+	text-decoration: underline;
 }
 
 .akn-del {
-	color: #b32424;
 	text-decoration: line-through;
 }
 
@@ -100,11 +103,11 @@
 	font-style: italic;
 }
 
-/* Inserted/quoted block of law: offset like a blockquote. */
+/* Inserted/quoted block of law: offset like a printed blockquote — the
+ * indentation alone marks it as quoted, no colour rule needed. */
 .akn-quotedStructure {
 	margin: 0;
 	padding-left: 0.8em;
-	border-left: 3px solid #c8ccd1;
 }
 
 .akn-listintro,
@@ -162,45 +165,30 @@
 
 .akn-ref-noanchor {
 	cursor: pointer;
-	color: #b32424;
-	border-bottom: 1px dashed #b32424;
+	border-bottom-style: dashed;
 }
 
 .akn-document :target {
 	scroll-margin-top: 0.6em;
-	animation: akn-target-flash 8s ease-out 1;
 }
 
-@keyframes akn-target-flash {
-	0% {
-		background-color: #ffec6e9c;
-	}
-
-	100% {
-		background-color: transparent;
-	}
-}
+/* The flash highlight itself is driven entirely by
+ * ext.aknRenderer.targetFlash.js via inline style transitions, not
+ * @keyframes — see that file for why. Nothing needed here. */
 
 /* ---- Version table (action=revisions) ---- */
 .akn-revisions {
 	margin: 0.5em 0;
 }
 
+/* Status is already stated in the cell's own text ("Σε ισχύ"/"Έληξε"/…) —
+ * colour would only repeat that, so the distinction here is text-weight/
+ * style only. */
 .akn-revisions .akn-rev-active {
-	color: #14866d;
 	font-weight: 700;
 }
 
-.akn-revisions .akn-rev-expired {
-	color: #72777d;
-}
-
-.akn-revisions .akn-rev-future {
-	color: #b32424;
-}
-
 .akn-revisions .akn-rev-unknown {
-	color: #72777d;
 	font-style: italic;
 }
 
@@ -208,6 +196,17 @@
 	margin: 0.5em 0 1.5em;
 }
 
-.akn-revisions .akn-rev-active-row {
-	background: rgba(20, 134, 109, 0.07);
+/* ---- Gazette issue (officialGazette/collectionBody) ---- */
+.akn-gazette-list {
+	list-style: none;
+	margin: 0;
+	padding: 0;
+}
+
+.akn-gazette-item {
+	margin: 0.6em 0;
+}
+
+.akn-gazette-component {
+	margin-top: 0.2em;
 }

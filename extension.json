@@ -31,6 +31,22 @@
 			"subpages": true,
 			"content": false,
 			"defaultcontentmodel": "wikitext"
+		},
+		{
+			"id": 3002,
+			"constant": "NS_GAZETTE",
+			"name": "Gazette",
+			"subpages": false,
+			"content": true,
+			"defaultcontentmodel": "akn-xml"
+		},
+		{
+			"id": 3003,
+			"constant": "NS_GAZETTE_TALK",
+			"name": "Gazette_talk",
+			"subpages": true,
+			"content": false,
+			"defaultcontentmodel": "wikitext"
 		}
 	],
 	"ContentHandlers": {
@@ -58,6 +74,9 @@
 	"ResourceModules": {
 		"ext.aknRenderer.styles": {
 			"styles": "ext.aknRenderer.styles.css"
+		},
+		"ext.aknRenderer.targetFlash": {
+			"scripts": "ext.aknRenderer.targetFlash.js"
 		}
 	},
 	"HookHandlers": {

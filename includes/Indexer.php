@@ -76,6 +76,22 @@ class Indexer
 				->caller(__METHOD__)
 				->execute();
 		}
+
+		// --- akn_gazette: a gazette issue's own identity (rebuild wholesale) ---
+		$dbw->newDeleteQueryBuilder()
+			->deleteFrom('akn_gazette')
+			->where(['agz_page' => $pageId])
+			->caller(__METHOD__)
+			->execute();
+
+		$gazette = GazetteExtractor::fromXml($xml, $pageId);
+		if ($gazette !== null) {
+			$dbw->newInsertQueryBuilder()
+				->insertInto('akn_gazette')
+				->row($gazette)
+				->caller(__METHOD__)
+				->execute();
+		}
 	}
 
 	/**

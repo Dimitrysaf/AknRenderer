@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+  <officialGazette name="fek" contains="originalVersion">
+    <meta>
+      <identification source="#claude">
+        <FRBRWork>
+          <FRBRthis value="/gr/officialGazette/2026/A/15/!main"/>
+          <FRBRuri value="/gr/officialGazette/2026/A/15"/>
+          <FRBRalias value="Εφημερίδα της Κυβερνήσεως, Τεύχος Α΄, Αρ. Φύλλου 15" name="ΦΕΚ Α 15/2026"/>
+          <FRBRdate date="2026-01-10" name="published"/>
+          <FRBRauthor href="#ethniko-typografeio"/>
+          <FRBRcountry value="gr"/>
+          <FRBRnumber value="15"/>
+          <FRBRname value="ΦΕΚ Α 15/2026"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/gr/officialGazette/2026/A/15/ell@2026-01-10/!main"/>
+          <FRBRuri value="/gr/officialGazette/2026/A/15/ell@2026-01-10"/>
+          <FRBRdate date="2026-01-10" name="published"/>
+          <FRBRauthor href="#ethniko-typografeio"/>
+          <FRBRlanguage language="ell"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/gr/officialGazette/2026/A/15/ell@2026-01-10/!main.xml"/>
+          <FRBRuri value="/gr/officialGazette/2026/A/15/ell@2026-01-10.akn.xml"/>
+          <FRBRdate date="2026-01-10" name="generated"/>
+          <FRBRauthor href="#claude"/>
+          <FRBRformat value="application/akn+xml"/>
+        </FRBRManifestation>
+      </identification>
+
+      <publication name="Α" showAs="Εφημερίδα της Κυβερνήσεως" number="15" date="2026-01-10"/>
+
+      <references source="#claude">
+        <TLCOrganization eId="ethniko-typografeio" href="/ontology/organization/gr/ethniko-typografeio" showAs="Εθνικό Τυπογραφείο"/>
+        <TLCOrganization eId="claude" href="/ontology/organization/ai/claude" showAs="Claude (AI Assistant)"/>
+      </references>
+    </meta>
+
+    <collectionBody>
+      <!-- The full text lives on the Νόμος: page — this ΦΕΚ issue just
+           points at it, it doesn't duplicate it. -->
+      <documentRef href="/gr/act/2026/5300" showAs="Ν. 5300/2026 — Κώδικας Ψηφιακής Διακυβέρνησης και Τεχνητής Νοημοσύνης"/>
+
+      <!-- A one-off appointment decision published in the same issue, with
+           no separate consolidated Law: page of its own — embedded in full. -->
+      <component>
+        <akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+          <doc name="decision" contains="originalVersion">
+            <meta>
+              <identification source="#claude">
+                <FRBRWork>
+                  <FRBRthis value="/gr/decision/2026/442/!main"/>
+                  <FRBRuri value="/gr/decision/2026/442"/>
+                  <FRBRalias value="Απόφαση διορισμού μέλους Αρχής Δεδομένων Ψηφιακής Διακυβέρνησης" name="Απόφαση 442/2026"/>
+                  <FRBRdate date="2026-01-10" name="published"/>
+                  <FRBRauthor href="#ypourgos-psd"/>
+                  <FRBRcountry value="gr"/>
+                  <FRBRnumber value="442"/>
+                </FRBRWork>
+                <FRBRExpression>
+                  <FRBRthis value="/gr/decision/2026/442/ell@2026-01-10/!main"/>
+                  <FRBRuri value="/gr/decision/2026/442/ell@2026-01-10"/>
+                  <FRBRdate date="2026-01-10" name="published"/>
+                  <FRBRauthor href="#ypourgos-psd"/>
+                  <FRBRlanguage language="ell"/>
+                </FRBRExpression>
+              </identification>
+            </meta>
+            <body>
+              <content>
+                <p>Διορίζεται η κ. Ελένη Παπαδοπούλου ως μέλος της
+                <rref href="#ada">Αρχής Δεδομένων Ψηφιακής Διακυβέρνησης</rref>, με θητεία τριών (3) ετών
+                από τη δημοσίευση της παρούσας.</p>
+              </content>
+            </body>
+          </doc>
+        </akomaNtoso>
+      </component>
+
+      <!-- A document that isn't (yet) in this wiki: stays visible but non-linking. -->
+      <documentRef href="/gr/act/2019/4624#art_10" showAs="Ν. 4624/2019, άρθρο 10 (τροποποίηση)"/>
+    </collectionBody>
+  </officialGazette>
+</akomaNtoso>

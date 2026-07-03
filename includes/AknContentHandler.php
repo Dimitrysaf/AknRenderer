@@ -103,6 +103,18 @@ class AknContentHandler extends TextContentHandler
 
 		$body = $this->findBody($dom);
 		if ($body === null) {
+			$collectionBody = $this->findCollectionBody($dom);
+			if ($collectionBody !== null) {
+				$rendered = $this->renderCollectionBody($collectionBody);
+				$html = Html::rawElement('div', ['class' => 'akn-document akn-gazette'], $rendered);
+				$parserOutput->setContentHolderText($html);
+				$parserOutput->addModuleStyles(['ext.aknRenderer.styles']);
+				$parserOutput->addModules(['ext.aknRenderer.targetFlash']);
+				foreach ($this->pageLinks as $linkTarget) {
+					$parserOutput->addLink($linkTarget);
+				}
+				return;
+			}
 			$parserOutput->setContentHolderText(Html::warningBox(
 				wfMessage('aknrenderer-render-nobody')->inContentLanguage()->escaped()
 			));
@@ -116,6 +128,7 @@ class AknContentHandler extends TextContentHandler
 
 		$parserOutput->setContentHolderText($html);
 		$parserOutput->addModuleStyles(['ext.aknRenderer.styles']);
+		$parserOutput->addModules(['ext.aknRenderer.targetFlash']);
 
 		// Register resolved cross-references as page links (feeds WhatLinksHere).
 		foreach ($this->pageLinks as $linkTarget) {
@@ -135,6 +148,112 @@ class AknContentHandler extends TextContentHandler
 		}
 		$nodes = $dom->getElementsByTagName('body');
 		return $nodes->length > 0 ? $nodes->item(0) : null;
+	}
+
+	/**
+	 * A gazette issue (<officialGazette>) has no <body> — it has a
+	 * <collectionBody> listing the documents published in that issue.
+	 *
+	 * @param \DOMDocument $dom
+	 * @return \DOMElement|null
+	 */
+	private function findCollectionBody(\DOMDocument $dom): ?\DOMElement
+	{
+		$nodes = $dom->getElementsByTagNameNS(AknVocabulary::NS, 'collectionBody');
+		if ($nodes->length > 0) {
+			return $nodes->item(0);
+		}
+		$nodes = $dom->getElementsByTagName('collectionBody');
+		return $nodes->length > 0 ? $nodes->item(0) : null;
+	}
+
+	/**
+	 * Render a <collectionBody> as a list of what was published in the
+	 * issue: each entry is either a <documentRef href="..."> pointing at an
+	 * independent document (e.g. a law that has its own consolidated Law:
+	 * page — resolved to a real link the same way <ref> is, so it also
+	 * feeds WhatLinksHere), or a <component> embedding a one-off act's own
+	 * content directly (nothing else in the wiki tracks its consolidated
+	 * text).
+	 *
+	 * @param \DOMElement $collectionBody
+	 * @return string HTML
+	 */
+	private function renderCollectionBody(\DOMElement $collectionBody): string
+	{
+		$items = '';
+		foreach ($collectionBody->childNodes as $child) {
+			if (!$child instanceof \DOMElement) {
+				continue;
+			}
+			if ($child->localName === 'documentRef') {
+				$items .= Html::rawElement('li', ['class' => 'akn-gazette-item'], $this->renderDocumentRef($child));
+			} elseif ($child->localName === 'component') {
+				$items .= Html::rawElement('li', ['class' => 'akn-gazette-item'], $this->renderComponent($child));
+			}
+		}
+		return Html::rawElement('ul', ['class' => 'akn-gazette-list'], $items);
+	}
+
+	/**
+	 * @param \DOMElement $ref <documentRef>
+	 * @return string HTML
+	 */
+	private function renderDocumentRef(\DOMElement $ref): string
+	{
+		$href = trim($ref->getAttribute('href'));
+		$showAs = trim($ref->getAttribute('showAs'));
+		$label = $showAs !== '' ? $showAs : $href;
+		if ($label === '') {
+			return '—';
+		}
+		if ($href === '') {
+			return htmlspecialchars($label, ENT_QUOTES);
+		}
+
+		$resolved = $this->resolveWorkUri($this->normalizeWorkUri($href));
+		if ($resolved === null) {
+			// Not (yet) a page in this wiki: visible but non-linking, like an unresolved <ref>.
+			return Html::rawElement('span', ['class' => 'akn-ref', 'title' => $href], htmlspecialchars($label, ENT_QUOTES));
+		}
+		[$title, ] = $resolved;
+		$this->pageLinks[$title->getPrefixedDBkey()] = $title;
+
+		return Html::rawElement('a', [
+			'class' => 'akn-ref akn-ref-resolved',
+			'href' => $title->getLocalURL(),
+			'title' => $title->getPrefixedText(),
+		], htmlspecialchars($label, ENT_QUOTES));
+	}
+
+	/**
+	 * A <component> embeds a full document (its own <identification>/<body>)
+	 * inline. Render just its <body> through the normal block pipeline,
+	 * prefixed with its FRBRalias if present — its <meta> is metadata, not
+	 * visible text, so it's deliberately not walked like an ordinary node.
+	 *
+	 * @param \DOMElement $component
+	 * @return string HTML
+	 */
+	private function renderComponent(\DOMElement $component): string
+	{
+		$alias = '';
+		$work = $component->getElementsByTagName('FRBRWork')->item(0);
+		if ($work instanceof \DOMElement) {
+			$aliasEl = $work->getElementsByTagName('FRBRalias')->item(0);
+			if ($aliasEl instanceof \DOMElement) {
+				$alias = $aliasEl->getAttribute('value');
+			}
+		}
+
+		$nodes = $component->getElementsByTagNameNS(AknVocabulary::NS, 'body');
+		$body = $nodes->length > 0 ? $nodes->item(0) : $component->getElementsByTagName('body')->item(0);
+
+		$out = $alias !== '' ? Html::element('div', ['class' => 'akn-rubric'], $alias) : '';
+		if ($body instanceof \DOMElement) {
+			$out .= Html::rawElement('div', ['class' => 'akn-gazette-component'], $this->renderChildren($body));
+		}
+		return $out;
 	}
 
 	/**

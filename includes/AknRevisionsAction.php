@@ -82,13 +82,18 @@ class AknRevisionsAction extends FormlessAction
 			// <date>, e.g. "ΦΕΚ 91Α/2025-06-13") from the structured fields,
 			// falling back to the generic name only when none of them exist.
 			if ($fekNumber !== '') {
-				$fekLabel = 'ΦΕΚ ' . $fekNumber . $fekSeries;
+				$fekText = 'ΦΕΚ ' . $fekNumber . $fekSeries;
 				if ($fekDate !== '') {
-					$fekLabel .= '/' . $fekDate;
+					$fekText .= '/' . $fekDate;
 				}
 			} else {
-				$fekLabel = $fek;
+				$fekText = $fek;
 			}
+
+			$gazettePage = $this->resolveGazettePage($dbr, $fekSeries, $fekNumber, $fekDate);
+			$fekLabel = $gazettePage !== null
+				? Html::element('a', ['href' => $gazettePage->getLocalURL()], $fekText)
+				: htmlspecialchars($fekText, ENT_QUOTES);
 
 			if ($eff === '') {
 				$status = $this->msg('aknrenderer-revisions-status-unknown')->text();
@@ -109,9 +114,9 @@ class AknRevisionsAction extends FormlessAction
 
 			$body .= Html::rawElement(
 				'tr',
-				$rev === $activeRev ? ['class' => 'akn-rev-active-row'] : [],
+				[],
 				Html::rawElement('td', [], $dateLink)
-				. Html::element('td', [], $fekLabel !== '' ? $fekLabel : '—')
+				. Html::rawElement('td', [], $fekLabel !== '' ? $fekLabel : '—')
 				. Html::rawElement('td', ['class' => $cls], Html::element('span', [], $status))
 			);
 		}
@@ -223,6 +228,46 @@ class AknRevisionsAction extends FormlessAction
 					. Html::element('th', [], $this->msg('aknrenderer-amendments-col-date')->text())
 				)
 			) . Html::rawElement('tbody', [], $rows)
+		);
+	}
+
+	/**
+	 * Resolve a codified version's ΦΕΚ citation to the Gazette: page that
+	 * documents that issue, if one exists in this wiki. Matched against
+	 * akn_gazette — populated by the Indexer only for pages whose own XML
+	 * root is an <officialGazette> — not akn_meta, which records a LAW's
+	 * citation of the ΦΕΚ that published it; that's a different fact about
+	 * a different kind of page, so it lives in a different table.
+	 *
+	 * @param \Wikimedia\Rdbms\IReadableDatabase $dbr
+	 * @param string $series
+	 * @param string $number
+	 * @param string $date
+	 * @return \MediaWiki\Title\Title|null
+	 */
+	private function resolveGazettePage($dbr, string $series, string $number, string $date)
+	{
+		if ($number === '') {
+			return null;
+		}
+		$row = $dbr->newSelectQueryBuilder()
+			->select(['page_namespace', 'page_title'])
+			->from('akn_gazette')
+			->join('page', null, 'agz_page = page_id')
+			->where([
+				'agz_series' => $series,
+				'agz_number' => $number,
+				'agz_date' => $date,
+			])
+			->caller(__METHOD__)
+			->fetchRow();
+
+		if (!$row) {
+			return null;
+		}
+		return MediaWikiServices::getInstance()->getTitleFactory()->makeTitle(
+			(int) $row->page_namespace,
+			$row->page_title
 		);
 	}
 

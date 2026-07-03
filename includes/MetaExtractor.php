@@ -34,7 +34,28 @@ class MetaExtractor
 			return null;
 		}
 
-		$meta = self::first($dom, 'meta');
+		// The document-type element (act/bill/doc/officialGazette) must be a
+		// DIRECT child of <akomaNtoso> — getElementsByTagName() searches the
+		// whole subtree, which would wrongly match a nested <doc>/<act> that
+		// a <component> embeds deep inside a gazette's <collectionBody>.
+		$root = null;
+		$aknRoot = $dom->documentElement;
+		if ($aknRoot instanceof \DOMElement) {
+			foreach ($aknRoot->childNodes as $child) {
+				if (
+					$child instanceof \DOMElement
+					&& in_array($child->localName, ['act', 'bill', 'doc', 'officialGazette'], true)
+				) {
+					$root = $child;
+					break;
+				}
+			}
+		}
+		if ($root === null) {
+			return null;
+		}
+
+		$meta = self::first($root, 'meta');
 		if ($meta === null) {
 			return null;
 		}
@@ -43,7 +64,6 @@ class MetaExtractor
 		$expr = self::first($meta, 'FRBRExpression');
 		$manif = self::first($meta, 'FRBRManifestation');
 		$pub = self::first($meta, 'publication');
-		$root = self::first($dom, 'act') ?? self::first($dom, 'bill') ?? self::first($dom, 'doc');
 
 		$keywords = [];
 		foreach (self::all($meta, 'keyword') as $kw) {
