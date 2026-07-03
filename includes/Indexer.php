@@ -92,6 +92,22 @@ class Indexer
 				->caller(__METHOD__)
 				->execute();
 		}
+
+		// --- akn_classification: structured subject keywords (rebuild wholesale) ---
+		$dbw->newDeleteQueryBuilder()
+			->deleteFrom('akn_classification')
+			->where(['acl_page' => $pageId])
+			->caller(__METHOD__)
+			->execute();
+
+		$classifications = ClassificationExtractor::fromXml($xml, $pageId);
+		if ($classifications !== []) {
+			$dbw->newInsertQueryBuilder()
+				->insertInto('akn_classification')
+				->rows($classifications)
+				->caller(__METHOD__)
+				->execute();
+		}
 	}
 
 	/**
