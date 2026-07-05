@@ -82,6 +82,14 @@
 			"scripts": "ext.aknRenderer.targetFlash.js"
 		}
 	},
+	"APIModules": {
+		"aknreference": {
+			"class": "MediaWiki\\Extension\\AknRenderer\\ApiAknReference",
+			"services": [
+				"ConnectionProvider"
+			]
+		}
+	},
 	"HookHandlers": {
 		"main": {
 			"class": "MediaWiki\\Extension\\AknRenderer\\HookHandler",
@@ -99,6 +107,7 @@
 		"SkinTemplateNavigation::Universal": "main",
 		"PageSaveComplete": "main",
 		"PageDeleteComplete": "main",
+		"ResourceLoaderGetConfigVars": "main",
 		"LoadExtensionSchemaUpdates": "schema"
 	},
 	"callback": "MediaWiki\\Extension\\AknRenderer\\Hooks::onRegistration",

@@ -53,5 +53,12 @@
 	"aknrenderer-modtype-replacement": "Replacement",
 	"aknrenderer-modtype-renumbering": "Renumbering",
 	"aknrenderer-modtype-split": "Split",
-	"aknrenderer-modtype-join": "Join"
+	"aknrenderer-modtype-join": "Join",
+	"apihelp-aknreference-summary": "Look up Akoma Ntoso documents and their structural eIds, for cross-reference authoring.",
+	"apihelp-aknreference-param-op": "Which lookup to perform.",
+	"apihelp-aknreference-param-query": "Search text, matched against page title, FRBR Work URI, and alias (used with <kbd>op=search</kbd>).",
+	"apihelp-aknreference-param-title": "Page title to list eIds for (used with <kbd>op=eids</kbd>; alternative to <var>pageid</var>).",
+	"apihelp-aknreference-param-pageid": "Page ID to list eIds for (used with <kbd>op=eids</kbd>; alternative to <var>title</var>).",
+	"apihelp-aknreference-example-search": "Search for AKN documents matching \"2024\".",
+	"apihelp-aknreference-example-eids": "List the structural eIds of the page \"Law:Example\"."
 }

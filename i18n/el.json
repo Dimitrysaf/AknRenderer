@@ -53,5 +53,12 @@
 	"aknrenderer-modtype-replacement": "Αντικατάσταση",
 	"aknrenderer-modtype-renumbering": "Αναρίθμηση",
 	"aknrenderer-modtype-split": "Διάσπαση",
-	"aknrenderer-modtype-join": "Συνένωση"
+	"aknrenderer-modtype-join": "Συνένωση",
+	"apihelp-aknreference-summary": "Αναζήτηση εγγράφων Akoma Ntoso και των δομικών eId τους, για συγγραφή παραπομπών.",
+	"apihelp-aknreference-param-op": "Ποια αναζήτηση θα εκτελεστεί.",
+	"apihelp-aknreference-param-query": "Κείμενο αναζήτησης, ελέγχεται έναντι τίτλου σελίδας, FRBR Work URI και ψευδωνύμου (χρησιμοποιείται με <kbd>op=search</kbd>).",
+	"apihelp-aknreference-param-title": "Τίτλος σελίδας για εμφάνιση των eId της (χρησιμοποιείται με <kbd>op=eids</kbd>· εναλλακτικό του <var>pageid</var>).",
+	"apihelp-aknreference-param-pageid": "Αναγνωριστικό σελίδας για εμφάνιση των eId της (χρησιμοποιείται με <kbd>op=eids</kbd>· εναλλακτικό του <var>title</var>).",
+	"apihelp-aknreference-example-search": "Αναζήτηση εγγράφων AKN που ταιριάζουν με «2024».",
+	"apihelp-aknreference-example-eids": "Εμφάνιση των δομικών eId της σελίδας «Law:Example»."
 }

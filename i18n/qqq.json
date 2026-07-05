@@ -53,5 +53,12 @@
 	"aknrenderer-modtype-replacement": "Label for a <textualMod type=\"replacement\">: distinct from substitution in the AKN spec, but frequently rendered with the same word in Greek.",
 	"aknrenderer-modtype-renumbering": "Label for a <textualMod type=\"renumbering\">: a provision's number/label changes without its text changing.",
 	"aknrenderer-modtype-split": "Label for a <textualMod type=\"split\">: one provision becomes several.",
-	"aknrenderer-modtype-join": "Label for a <textualMod type=\"join\">: several provisions become one."
+	"aknrenderer-modtype-join": "Label for a <textualMod type=\"join\">: several provisions become one.",
+	"apihelp-aknreference-summary": "{{doc-apihelp-summary|aknreference}}",
+	"apihelp-aknreference-param-op": "{{doc-apihelp-param|aknreference|op}}",
+	"apihelp-aknreference-param-query": "{{doc-apihelp-param|aknreference|query}}",
+	"apihelp-aknreference-param-title": "{{doc-apihelp-param|aknreference|title}}",
+	"apihelp-aknreference-param-pageid": "{{doc-apihelp-param|aknreference|pageid}}",
+	"apihelp-aknreference-example-search": "{{doc-apihelp-example|aknreference}}",
+	"apihelp-aknreference-example-eids": "{{doc-apihelp-example|aknreference}}"
 }
