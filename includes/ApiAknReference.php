@@ -36,26 +36,26 @@ class ApiAknReference extends ApiBase
 	{
 		$result = $this->getResult();
 		$query = trim($query);
-		if ($query === '') {
-			$result->addValue(null, $this->getModuleName(), ['matches' => []]);
-			return;
-		}
 
 		$dbr = $this->dbProvider->getReplicaDatabase();
-		$like = $dbr->buildLike($dbr->anyString(), $query, $dbr->anyString());
-		$rows = $dbr->newSelectQueryBuilder()
+		$builder = $dbr->newSelectQueryBuilder()
 			->select(['page_id', 'page_namespace', 'page_title', 'am_work_uri', 'am_alias'])
 			->from('akn_meta')
 			->join('page', null, 'am_page = page_id')
-			->where($dbr->makeList([
-				'page_title ' . $like,
+			->orderBy('page_title')
+			->limit(50)
+			->caller(__METHOD__);
+
+		if ($query !== '') {
+			$like = $dbr->buildLike($dbr->anyString(), $query, $dbr->anyString());
+			$titleLike = $dbr->buildLike($dbr->anyString(), str_replace(' ', '_', $query), $dbr->anyString());
+			$builder->where($dbr->makeList([
+				'page_title ' . $titleLike,
 				'am_work_uri ' . $like,
 				'am_alias ' . $like,
-			], LIST_OR))
-			->orderBy('page_title')
-			->limit(20)
-			->caller(__METHOD__)
-			->fetchResultSet();
+			], LIST_OR));
+		}
+		$rows = $builder->fetchResultSet();
 
 		$matches = [];
 		foreach ($rows as $row) {
@@ -88,7 +88,7 @@ class ApiAknReference extends ApiBase
 
 		$dbr = $this->dbProvider->getReplicaDatabase();
 		$rows = $dbr->newSelectQueryBuilder()
-			->select(['ast_eid', 'ast_num', 'ast_heading'])
+			->select(['ast_eid', 'ast_num', 'ast_heading', 'ast_parent', 'ast_type'])
 			->from('akn_structure')
 			->where(['ast_page' => $pageId])
 			->orderBy('ast_order')
@@ -101,6 +101,8 @@ class ApiAknReference extends ApiBase
 				'eid' => $row->ast_eid,
 				'num' => $row->ast_num,
 				'heading' => $row->ast_heading,
+				'parent' => $row->ast_parent,
+				'type' => $row->ast_type,
 			];
 		}
 		$result->addValue(null, $this->getModuleName(), ['eids' => $eids]);
