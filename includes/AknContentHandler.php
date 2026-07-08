@@ -110,6 +110,11 @@ class AknContentHandler extends TextContentHandler
 			return;
 		}
 
+		// The schema (schema/akomantoso30.xsd) is the source of truth for what
+		// a valid AKN document is: surface any discrepancy as a notice above
+		// the content, but still render the content so the page stays readable.
+		$schemaNotice = $this->schemaNotice($xml);
+
 		// Applies to any document type (act/bill/doc/officialGazette all
 		// have <meta>), so this runs once before branching on body shape.
 		foreach ($this->collectCategoryNames($dom) as $name) {
@@ -123,7 +128,7 @@ class AknContentHandler extends TextContentHandler
 			$collectionBody = $this->findCollectionBody($dom);
 			if ($collectionBody !== null) {
 				$rendered = $this->renderCollectionBody($collectionBody);
-				$html = Html::rawElement('div', ['class' => 'akn-document akn-gazette'], $rendered);
+				$html = $schemaNotice . Html::rawElement('div', ['class' => 'akn-document akn-gazette'], $rendered);
 				$parserOutput->setContentHolderText($html);
 				$parserOutput->addModuleStyles(['ext.aknRenderer.styles']);
 				$parserOutput->addModules(['ext.aknRenderer.targetFlash']);
@@ -132,7 +137,7 @@ class AknContentHandler extends TextContentHandler
 				}
 				return;
 			}
-			$parserOutput->setContentHolderText(Html::warningBox(
+			$parserOutput->setContentHolderText($schemaNotice . Html::warningBox(
 				wfMessage('aknrenderer-render-nobody')->inContentLanguage()->escaped()
 			));
 			return;
@@ -141,7 +146,7 @@ class AknContentHandler extends TextContentHandler
 		$rendered = $this->renderChildren($body);
 		$notes = $this->renderFootnotes();
 		$toc = $this->tocIndex > 0 ? Parser::TOC_PLACEHOLDER : '';
-		$html = Html::rawElement('div', ['class' => 'akn-document'], $toc . $rendered . $notes);
+		$html = $schemaNotice . Html::rawElement('div', ['class' => 'akn-document'], $toc . $rendered . $notes);
 
 		$parserOutput->setContentHolderText($html);
 		$parserOutput->addModuleStyles(['ext.aknRenderer.styles']);
@@ -157,24 +162,27 @@ class AknContentHandler extends TextContentHandler
 		}
 	}
 
-	/** The document's own <body> — see AknDom::findRoot() for why this is scoped, not a whole-document search. */
+	/**
+	 * The document's own main-body container. Every schema document structure
+	 * names a different one (act/bill→body, doc/statement/debateReport→
+	 * mainBody, debate→debateBody, judgment→judgmentBody, amendment→
+	 * amendmentBody, portion→portionBody); we return whichever this document
+	 * has. Scoped to the real document root — see AknDom::findRoot() for why
+	 * this is not a whole-document search.
+	 */
 	private function findBody(\DOMDocument $dom): ?\DOMElement
 	{
 		$root = AknDom::findRoot($dom);
 		if ($root === null) {
 			return null;
 		}
-		$nodes = $root->getElementsByTagNameNS(AknVocabulary::NS, 'body');
-		if ($nodes->length > 0) {
-			return $nodes->item(0);
-		}
-		$nodes = $root->getElementsByTagName('body');
-		return $nodes->length > 0 ? $nodes->item(0) : null;
+		return $this->firstChildIn($root, AknVocabulary::MAIN_BODY_CONTAINERS);
 	}
 
 	/**
-	 * A gazette issue (<officialGazette>) has no <body> — it has a
-	 * <collectionBody> listing the documents published in that issue.
+	 * A collection document (<officialGazette>, <amendmentList>,
+	 * <documentCollection>) has no main body — it has a <collectionBody>
+	 * listing the documents it collects.
 	 *
 	 * @param \DOMDocument $dom
 	 * @return \DOMElement|null
@@ -185,12 +193,28 @@ class AknContentHandler extends TextContentHandler
 		if ($root === null) {
 			return null;
 		}
-		$nodes = $root->getElementsByTagNameNS(AknVocabulary::NS, 'collectionBody');
-		if ($nodes->length > 0) {
-			return $nodes->item(0);
+		return $this->firstChildIn($root, [AknVocabulary::COLLECTION_BODY_CONTAINER]);
+	}
+
+	/**
+	 * First DIRECT child element of $el whose local name is in $locals. Body
+	 * containers, <meta> and <preface> are always direct children of their
+	 * document element in the schema, so this must NOT be a subtree search:
+	 * a whole-document search would wrongly match a body/meta nested inside a
+	 * <component>'s embedded document (e.g. a gazette's <collectionBody>).
+	 *
+	 * @param \DOMElement $el
+	 * @param list<string> $locals
+	 * @return \DOMElement|null
+	 */
+	private function firstChildIn(\DOMElement $el, array $locals): ?\DOMElement
+	{
+		foreach ($el->childNodes as $child) {
+			if ($child instanceof \DOMElement && in_array($child->localName, $locals, true)) {
+				return $child;
+			}
 		}
-		$nodes = $root->getElementsByTagName('collectionBody');
-		return $nodes->length > 0 ? $nodes->item(0) : null;
+		return null;
 	}
 
 	/**
@@ -227,13 +251,46 @@ class AknContentHandler extends TextContentHandler
 	}
 
 	/**
-	 * Render a <collectionBody> as a list of what was published in the
-	 * issue: each entry is either a <documentRef href="..."> pointing at an
-	 * independent document (e.g. a law that has its own consolidated Law:
-	 * page — resolved to a real link the same way <ref> is, so it also
-	 * feeds WhatLinksHere), or a <component> embedding a one-off act's own
-	 * content directly (nothing else in the wiki tracks its consolidated
-	 * text).
+	 * A warning box explaining why the document does not conform to
+	 * schema/akomantoso30.xsd, or '' when it validates. The schema is the
+	 * single source of truth for AKN validity (see AknSchema); this makes any
+	 * non-conformance visible on the page itself, even for content that
+	 * predates the save-time gate or arrived by import.
+	 *
+	 * @param string $xml
+	 * @return string HTML
+	 */
+	private function schemaNotice(string $xml): string
+	{
+		$errors = AknSchema::validate($xml);
+		if ($errors === []) {
+			return '';
+		}
+
+		$limit = 10;
+		$items = '';
+		foreach (array_slice($errors, 0, $limit) as $error) {
+			$items .= Html::element('li', [], $error);
+		}
+		if (count($errors) > $limit) {
+			$items .= Html::element('li', [], wfMessage('aknrenderer-schema-more')
+				->numParams(count($errors) - $limit)->inContentLanguage()->text());
+		}
+
+		return Html::warningBox(Html::rawElement('div', ['class' => 'akn-schema-errors'],
+			Html::element('p', [], wfMessage('aknrenderer-render-invalidschema')->inContentLanguage()->text())
+			. Html::rawElement('ul', [], $items)
+		));
+	}
+
+	/**
+	 * Render a <collectionBody> as a list of what the issue collects. Per the
+	 * schema a <collectionBody> is a sequence of <component> elements only;
+	 * each component (docContainerType) in turn holds exactly one of: a
+	 * <documentRef> to an independent document (e.g. a law with its own
+	 * consolidated Law: page — resolved to a real link the same way <ref> is,
+	 * so it feeds WhatLinksHere), a full embedded document, an <interstitial>
+	 * block, or a <toc>.
 	 *
 	 * @param \DOMElement $collectionBody
 	 * @return string HTML
@@ -242,12 +299,7 @@ class AknContentHandler extends TextContentHandler
 	{
 		$items = '';
 		foreach ($collectionBody->childNodes as $child) {
-			if (!$child instanceof \DOMElement) {
-				continue;
-			}
-			if ($child->localName === 'documentRef') {
-				$items .= Html::rawElement('li', ['class' => 'akn-gazette-item'], $this->renderDocumentRef($child));
-			} elseif ($child->localName === 'component') {
+			if ($child instanceof \DOMElement && $child->localName === 'component') {
 				$items .= Html::rawElement('li', ['class' => 'akn-gazette-item'], $this->renderComponent($child));
 			}
 		}
@@ -286,33 +338,124 @@ class AknContentHandler extends TextContentHandler
 	}
 
 	/**
-	 * A <component> embeds a full document (its own <identification>/<body>)
-	 * inline. Render just its <body> through the normal block pipeline,
-	 * prefixed with its FRBRalias if present — its <meta> is metadata, not
-	 * visible text, so it's deliberately not walked like an ordinary node.
+	 * A collection <component> holds an optional heading plus exactly one of:
+	 * a <documentRef> (rendered as a link), a full embedded document
+	 * (rendered as a titled block), an <interstitial>, or a <toc>.
 	 *
 	 * @param \DOMElement $component
 	 * @return string HTML
 	 */
 	private function renderComponent(\DOMElement $component): string
 	{
-		$alias = '';
-		$work = $component->getElementsByTagName('FRBRWork')->item(0);
-		if ($work instanceof \DOMElement) {
-			$aliasEl = $work->getElementsByTagName('FRBRalias')->item(0);
-			if ($aliasEl instanceof \DOMElement) {
-				$alias = $aliasEl->getAttribute('value');
+		$heading = $this->firstChild($component, 'heading');
+		$rubric = $heading !== null
+			? Html::rawElement('div', ['class' => 'akn-rubric'], trim($this->renderInline($heading)))
+			: '';
+
+		foreach ($component->childNodes as $child) {
+			if (!$child instanceof \DOMElement) {
+				continue;
+			}
+			$local = $child->localName;
+			if ($local === 'documentRef') {
+				return $rubric . $this->renderDocumentRef($child);
+			}
+			if ($local === 'interstitial') {
+				return $rubric . Html::rawElement('div', ['class' => 'akn-interstitial'], $this->renderChildren($child));
+			}
+			if ($local === 'toc') {
+				return $rubric . $this->renderToc($child);
+			}
+			if (in_array($local, AknVocabulary::documentTypes(), true)) {
+				return $rubric . $this->renderEmbeddedDocument($child);
 			}
 		}
+		return $rubric;
+	}
 
-		$nodes = $component->getElementsByTagNameNS(AknVocabulary::NS, 'body');
-		$body = $nodes->length > 0 ? $nodes->item(0) : $component->getElementsByTagName('body')->item(0);
+	/**
+	 * An embedded document inside a collection component: a title (its
+	 * FRBRalias, else its preface's docTitle or docType+docNumber) followed by
+	 * its main body. Its <meta> is metadata, not visible text, so it is not
+	 * walked like an ordinary node.
+	 *
+	 * @param \DOMElement $doc A documentType element (act/doc/…).
+	 * @return string HTML
+	 */
+	private function renderEmbeddedDocument(\DOMElement $doc): string
+	{
+		$out = '';
+		$title = $this->embeddedDocTitle($doc);
+		if ($title !== '') {
+			$out .= Html::element('div', ['class' => 'akn-rubric'], $title);
+		}
 
-		$out = $alias !== '' ? Html::element('div', ['class' => 'akn-rubric'], $alias) : '';
+		// The embedded document can be any AKN type, so accept any of the
+		// schema's main-body containers, not just <body>.
+		$body = $this->firstChildIn($doc, AknVocabulary::MAIN_BODY_CONTAINERS);
 		if ($body instanceof \DOMElement) {
 			$out .= Html::rawElement('div', ['class' => 'akn-gazette-component'], $this->renderChildren($body));
 		}
 		return $out;
+	}
+
+	/**
+	 * A human title for an embedded document: its FRBRalias @value if present,
+	 * otherwise its preface's <docTitle>, otherwise <docType> + <docNumber>.
+	 *
+	 * @param \DOMElement $doc
+	 * @return string Plain text
+	 */
+	private function embeddedDocTitle(\DOMElement $doc): string
+	{
+		$meta = $this->firstChildIn($doc, ['meta']);
+		if ($meta !== null) {
+			foreach ($meta->getElementsByTagName('FRBRalias') as $alias) {
+				if ($alias instanceof \DOMElement && $alias->getAttribute('value') !== '') {
+					return $alias->getAttribute('value');
+				}
+			}
+		}
+
+		$preface = $this->firstChildIn($doc, ['preface']);
+		if ($preface !== null) {
+			$docTitle = $preface->getElementsByTagName('docTitle')->item(0);
+			if ($docTitle instanceof \DOMElement && trim($docTitle->textContent) !== '') {
+				return trim($docTitle->textContent);
+			}
+			$parts = [];
+			foreach (['docType', 'docNumber'] as $tag) {
+				$el = $preface->getElementsByTagName($tag)->item(0);
+				if ($el instanceof \DOMElement && trim($el->textContent) !== '') {
+					$parts[] = trim($el->textContent);
+				}
+			}
+			if ($parts !== []) {
+				return implode(' ', $parts);
+			}
+		}
+		return '';
+	}
+
+	/**
+	 * Render a <toc> as a list of its <tocItem> links.
+	 *
+	 * @param \DOMElement $toc
+	 * @return string HTML
+	 */
+	private function renderToc(\DOMElement $toc): string
+	{
+		$items = '';
+		foreach ($toc->getElementsByTagName('tocItem') as $ti) {
+			if (!$ti instanceof \DOMElement) {
+				continue;
+			}
+			$text = trim($this->renderInline($ti));
+			$href = trim($ti->getAttribute('href'));
+			$items .= Html::rawElement('li', ['class' => 'akn-toc-item'],
+				$href !== '' ? Html::rawElement('a', ['href' => $href], $text) : $text);
+		}
+		return Html::rawElement('ul', ['class' => 'akn-toc'], $items);
 	}
 
 	/**
@@ -323,10 +466,9 @@ class AknContentHandler extends TextContentHandler
 	{
 		$local = $el->localName;
 		if ($local === 'hcontainer') {
+			// hcontainer carries its type in @name (the schema allows no
+			// @showAs on content elements).
 			$name = strtolower($el->getAttribute('name'));
-			if ($name === '') {
-				$name = strtolower($el->getAttribute('showAs'));
-			}
 			return AknVocabulary::HEADING_LEVELS[$name] ?? 6;
 		}
 		return AknVocabulary::HEADING_LEVELS[$local] ?? 6;
@@ -340,8 +482,7 @@ class AknContentHandler extends TextContentHandler
 		if ($this->firstChild($el, 'heading') !== null) {
 			return true;
 		}
-		return $el->localName === 'hcontainer'
-			&& ($el->getAttribute('showAs') !== '' || $el->getAttribute('name') !== '');
+		return $el->localName === 'hcontainer' && $el->getAttribute('name') !== '';
 	}
 
 	private function isSoleParagraph(\DOMElement $el): bool
@@ -410,7 +551,7 @@ class AknContentHandler extends TextContentHandler
 		/** @var \DOMElement $node */
 		$local = $node->localName;
 
-		if (in_array($local, AknVocabulary::STRUCTURE_TYPES, true) || $local === 'hcontainer') {
+		if (in_array($local, AknVocabulary::structureTypes(), true) || $local === 'hcontainer') {
 			if ($this->isTitledOrNumbered($node)) {
 				$saved = $this->pendingNum;
 				$this->pendingNum = null;
@@ -426,6 +567,8 @@ class AknContentHandler extends TextContentHandler
 				return $this->isolatingNum(fn() => $this->renderTable($node));
 			case 'blockList':
 				return $this->isolatingNum(fn() => $this->renderBlockList($node));
+			case 'toc':
+				return $this->isolatingNum(fn() => $this->renderToc($node));
 			case 'foreign':
 				return $this->renderForeign($node);
 			case 'quotedStructure':
@@ -514,21 +657,18 @@ class AknContentHandler extends TextContentHandler
 			return $this->renderLabelledBlock($el);
 		}
 
-		$showAs = '';
-		if ($local === 'hcontainer') {
-			$showAs = $el->getAttribute('showAs');
-			if ($showAs === '') {
-				$showAs = $el->getAttribute('name');
-			}
-		}
+		// A generic <hcontainer> names its type in @name (there is no @showAs
+		// on content elements in the schema); use it as the designation when
+		// the container has no <num> of its own.
+		$genericName = $local === 'hcontainer' ? $el->getAttribute('name') : '';
 
 		// Shape A — titled container.
-		if ($heading !== null || $showAs !== '') {
+		if ($heading !== null || $genericName !== '') {
 			$designation = '';
 			if ($num !== null) {
 				$designation = trim($this->renderInline($num));
-			} elseif ($showAs !== '') {
-				$designation = htmlspecialchars(trim($showAs), ENT_QUOTES);
+			} elseif ($genericName !== '') {
+				$designation = htmlspecialchars(trim($genericName), ENT_QUOTES);
 			}
 			$rubric = $heading !== null ? trim($this->renderInline($heading)) : '';
 
@@ -728,6 +868,10 @@ class AknContentHandler extends TextContentHandler
 				return $this->renderRef($node);
 			case 'mref':
 			case 'mod':
+			// quotedText / embeddedText: quoted or embedded fragments carried
+			// inline (e.g. inside a <mod>). Semantic wrapper, class akn-{name}.
+			case 'quotedText':
+			case 'embeddedText':
 				return Html::rawElement('span', ['class' => 'akn-' . $local], $this->renderInline($node));
 			case 'a':
 				$href = $node->getAttribute('href');
@@ -763,7 +907,7 @@ class AknContentHandler extends TextContentHandler
 				return '';
 
 			default:
-				if (in_array($local, AknVocabulary::INLINE_SPANS, true)) {
+				if (in_array($local, AknVocabulary::inlineSpans(), true)) {
 					return Html::rawElement('span', ['class' => 'akn-' . $local], $this->renderInline($node));
 				}
 				// Unknown inline: keep its text.

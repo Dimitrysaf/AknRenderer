@@ -103,6 +103,7 @@
 		}
 	},
 	"Hooks": {
+		"EditFilterMergedContent": "main",
 		"InfoAction": "main",
 		"SkinTemplateNavigation::Universal": "main",
 		"PageSaveComplete": "main",

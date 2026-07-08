@@ -54,7 +54,7 @@ class StructureExtractor
 			$eid = $child->getAttribute('eId');
 			$childParent = $parentEid;
 
-			if ($eid !== '' && in_array($local, AknVocabulary::STRUCTURE_TYPES, true)) {
+			if ($eid !== '' && in_array($local, AknVocabulary::structureTypes(), true)) {
 				$rows[] = [
 					'ast_page' => $pageId,
 					'ast_eid' => self::cut($eid, 255),
@@ -73,9 +73,10 @@ class StructureExtractor
 	}
 
 	/**
-	 * The document body (act, doc/bill, or judgment) — scoped to the real
-	 * document root (see AknDom::findRoot()) so it can't match a body
-	 * nested inside a gazette component's embedded document instead.
+	 * The document's main-body container, whichever the document type uses
+	 * (see AknVocabulary::MAIN_BODY_CONTAINERS) — scoped to the real document
+	 * root (see AknDom::findRoot()) so it can't match a body nested inside a
+	 * gazette component's embedded document instead.
 	 */
 	private static function firstBody(\DOMDocument $dom): ?\DOMElement
 	{
@@ -83,7 +84,7 @@ class StructureExtractor
 		if ($root === null) {
 			return null;
 		}
-		foreach (['body', 'mainBody', 'judgmentBody'] as $tag) {
+		foreach (AknVocabulary::MAIN_BODY_CONTAINERS as $tag) {
 			$n = $root->getElementsByTagName($tag)->item(0);
 			if ($n instanceof \DOMElement) {
 				return $n;

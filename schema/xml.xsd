@@ -1,0 +1,51 @@
+<?xml version='1.0'?>
+<xsd:schema targetNamespace="http://www.w3.org/XML/1998/namespace"
+            xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+            xmlns="http://www.w3.org/1999/xhtml"
+            xml:lang="en">
+
+  <xsd:annotation>
+    <xsd:documentation>
+      This schema defines attributes and an attribute group suitable for use by
+      schemas wishing to allow xml:base, xml:lang, xml:space or xml:id
+      attributes on elements they define.
+
+      It is a local, self-contained copy of the canonical W3C schema published at
+      http://www.w3.org/2001/xml.xsd, vendored so the Akoma Ntoso schema's
+      &lt;xsd:import ... schemaLocation="./xml.xsd"/&gt; resolves offline.
+    </xsd:documentation>
+  </xsd:annotation>
+
+  <xsd:attribute name="lang">
+    <xsd:simpleType>
+      <xsd:union memberTypes="xsd:language">
+        <xsd:simpleType>
+          <xsd:restriction base="xsd:string">
+            <xsd:enumeration value=""/>
+          </xsd:restriction>
+        </xsd:simpleType>
+      </xsd:union>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:attribute name="space">
+    <xsd:simpleType>
+      <xsd:restriction base="xsd:NCName">
+        <xsd:enumeration value="default"/>
+        <xsd:enumeration value="preserve"/>
+      </xsd:restriction>
+    </xsd:simpleType>
+  </xsd:attribute>
+
+  <xsd:attribute name="base" type="xsd:anyURI"/>
+
+  <xsd:attribute name="id" type="xsd:ID"/>
+
+  <xsd:attributeGroup name="specialAttrs">
+    <xsd:attribute ref="xml:base"/>
+    <xsd:attribute ref="xml:lang"/>
+    <xsd:attribute ref="xml:space"/>
+    <xsd:attribute ref="xml:id"/>
+  </xsd:attributeGroup>
+
+</xsd:schema>

@@ -52,7 +52,7 @@ class AmendmentExtractorTest extends MediaWikiUnitTestCase
 	{
 		$xml = <<<'XML'
 <?xml version="1.0" encoding="UTF-8"?>
-<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0">
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17">
   <act name="nomos">
     <meta>
       <analysis>

@@ -18,9 +18,6 @@ namespace MediaWiki\Extension\AknRenderer;
 class AknDom
 {
 
-	/** Document-type root elements a well-formed AKN document can have. */
-	private const ROOT_TYPES = ['act', 'bill', 'doc', 'officialGazette'];
-
 	/**
 	 * Parse $xml into a DOMDocument, or null if it isn't well-formed.
 	 *
@@ -41,7 +38,8 @@ class AknDom
 	}
 
 	/**
-	 * The document-type element (act/bill/doc/officialGazette) — a DIRECT
+	 * The document-type element (any of the schema's documentType roots:
+	 * act, bill, doc, officialGazette, judgment, debate, …) — a DIRECT
 	 * child of <akomaNtoso>. Deliberately not a getElementsByTagName() over
 	 * the whole document: that searches the entire subtree, and would
 	 * wrongly match a nested <doc>/<act> that a <component> embeds deep
@@ -56,8 +54,9 @@ class AknDom
 		if (!$aknRoot instanceof \DOMElement) {
 			return null;
 		}
+		$rootTypes = AknSchema::documentTypes();
 		foreach ($aknRoot->childNodes as $child) {
-			if ($child instanceof \DOMElement && in_array($child->localName, self::ROOT_TYPES, true)) {
+			if ($child instanceof \DOMElement && in_array($child->localName, $rootTypes, true)) {
 				return $child;
 			}
 		}

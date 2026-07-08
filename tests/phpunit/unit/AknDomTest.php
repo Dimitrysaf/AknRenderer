@@ -59,7 +59,7 @@ class AknDomTest extends MediaWikiUnitTestCase
 
 	public function testFindRootReturnsNullWithoutARecognisedRoot(): void
 	{
-		$dom = AknDom::parse('<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0"><nonsense/></akomaNtoso>');
+		$dom = AknDom::parse('<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17"><nonsense/></akomaNtoso>');
 		$this->assertNull(AknDom::findRoot($dom));
 	}
 }

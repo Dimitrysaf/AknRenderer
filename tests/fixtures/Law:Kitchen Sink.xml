@@ -1,0 +1,482 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17">
+  <doc name="kitchenSink" contains="originalVersion">
+    <meta>
+      <identification source="#dimitrys">
+        <FRBRWork>
+          <FRBRthis value="/akn/gr/doc/2026/ks/main"/>
+          <FRBRuri value="/akn/gr/doc/2026/ks"/>
+          <FRBRalias name="short" value="Kitchen Sink"/>
+          <FRBRdate date="2026-01-01" name="generation"/>
+          <FRBRauthor href="#dimitrys" as="#author"/>
+          <componentInfo>
+            <componentData eId="cd_1" name="main" href="/main.xml" showAs="Main"/>
+          </componentInfo>
+          <preservation/>
+          <FRBRcountry value="gr"/>
+          <FRBRsubtype value="kitchenSink"/>
+          <FRBRnumber value="1"/>
+          <FRBRname value="Kitchen Sink Document"/>
+          <FRBRprescriptive value="true"/>
+          <FRBRauthoritative value="true"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/gr/doc/2026/ks/ell@/main"/>
+          <FRBRuri value="/akn/gr/doc/2026/ks/ell@"/>
+          <FRBRdate date="2026-01-01" name="generation"/>
+          <FRBRauthor href="#dimitrys"/>
+          <FRBRversionNumber value="1"/>
+          <FRBRauthoritative value="true"/>
+          <FRBRmasterExpression href="/akn/gr/doc/2026/ks/ell@" showAs="master"/>
+          <FRBRlanguage language="ell"/>
+          <FRBRtranslation href="/akn/gr/doc/2026/ks/eng@" fromLanguage="eng" pivot="eng" authoritative="false" by="#dimitrys"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/gr/doc/2026/ks/ell@/main.xml"/>
+          <FRBRuri value="/akn/gr/doc/2026/ks/ell@.xml"/>
+          <FRBRdate date="2026-01-01" name="generation"/>
+          <FRBRauthor href="#dimitrys"/>
+          <FRBRportion from="#mb_art_1"/>
+          <FRBRformat value="xml"/>
+        </FRBRManifestation>
+        <FRBRItem>
+          <FRBRthis value="/akn/gr/doc/2026/ks/ell@/main.akn"/>
+          <FRBRuri value="/akn/gr/doc/2026/ks/ell@.akn"/>
+          <FRBRdate date="2026-01-01" name="generation"/>
+          <FRBRauthor href="#dimitrys"/>
+        </FRBRItem>
+      </identification>
+      <publication date="2026-01-02" showAs="Government Gazette" name="A" number="1"/>
+      <classification source="#dimitrys">
+        <keyword value="law" showAs="Law" dictionary="#dict" href="#mb_art_1"/>
+      </classification>
+      <lifecycle source="#dimitrys">
+        <eventRef eId="e1" date="2026-01-01" source="#dimitrys" type="generation" originatingExpression="true"/>
+        <eventRef eId="e2" date="2026-06-01" source="#dimitrys" type="amendment"/>
+      </lifecycle>
+      <workflow source="#dimitrys">
+        <step eId="st_1" date="2026-01-01" by="#dimitrys" as="#author" outcome="#approved"/>
+      </workflow>
+      <analysis source="#dimitrys">
+        <activeModifications>
+          <textualMod eId="am_tm_1" type="insertion">
+            <source href="#mb_art_1"/>
+            <destination href="#other-doc"/>
+            <force period="#tg_1"/>
+            <efficacy period="#tg_1"/>
+            <application period="#tg_1"/>
+            <duration period="#tg_1"/>
+            <condition frozen="false"/>
+            <previous href="#mb_art_1"/>
+            <old href="#mb_art_1"/>
+            <new href="#mb_art_1"/>
+          </textualMod>
+          <meaningMod eId="am_mm_1" type="variation">
+            <source href="#mb_art_1"/>
+            <destination href="#other-doc"/>
+            <domain/>
+          </meaningMod>
+          <scopeMod eId="am_sm_1" type="extensionOfScope">
+            <source href="#mb_art_1"/>
+            <destination href="#other-doc"/>
+            <domain/>
+          </scopeMod>
+          <forceMod eId="am_fm_1" type="entryIntoForce">
+            <source href="#mb_art_1"/>
+            <destination href="#other-doc"/>
+          </forceMod>
+          <efficacyMod eId="am_em_1" type="entryIntoEfficacy">
+            <source href="#mb_art_1"/>
+            <destination href="#other-doc"/>
+          </efficacyMod>
+          <legalSystemMod eId="am_lm_1" type="ratification">
+            <source href="#mb_art_1"/>
+            <destination href="#other-doc"/>
+          </legalSystemMod>
+        </activeModifications>
+        <passiveModifications>
+          <textualMod eId="pm_tm_1" type="substitution">
+            <source href="#other-doc"/>
+            <destination href="#mb_art_1"/>
+          </textualMod>
+        </passiveModifications>
+        <restrictions source="#dimitrys">
+          <restriction eId="rs_1" refersTo="#gr" type="jurisdiction"/>
+        </restrictions>
+        <judicial>
+          <result type="approve"/>
+          <supports eId="ja_1"><source href="#mb_art_1"/><destination href="#other-doc"/></supports>
+          <isAnalogTo eId="ja_2"><source href="#mb_art_1"/><destination href="#other-doc"/></isAnalogTo>
+          <applies eId="ja_3"><source href="#mb_art_1"/><destination href="#other-doc"/></applies>
+          <extends eId="ja_4"><source href="#mb_art_1"/><destination href="#other-doc"/></extends>
+          <restricts eId="ja_5"><source href="#mb_art_1"/><destination href="#other-doc"/></restricts>
+          <derogates eId="ja_6"><source href="#mb_art_1"/><destination href="#other-doc"/></derogates>
+          <contrasts eId="ja_7"><source href="#mb_art_1"/><destination href="#other-doc"/></contrasts>
+          <overrules eId="ja_8"><source href="#mb_art_1"/><destination href="#other-doc"/></overrules>
+          <dissentsFrom eId="ja_9"><source href="#mb_art_1"/><destination href="#other-doc"/></dissentsFrom>
+          <putsInQuestion eId="ja_10"><source href="#mb_art_1"/><destination href="#other-doc"/></putsInQuestion>
+          <distinguishes eId="ja_11"><source href="#mb_art_1"/><destination href="#other-doc"/></distinguishes>
+        </judicial>
+        <parliamentary>
+          <quorumVerification eId="pa_1" outcome="#approved"><quorum eId="q_1" value="150"/></quorumVerification>
+          <voting eId="pa_2" outcome="#approved"><count eId="c_1" value="151"/></voting>
+          <recount eId="pa_3" outcome="#approved"><count eId="c_2" value="151"/></recount>
+        </parliamentary>
+        <mappings source="#dimitrys">
+          <mapping eId="mp_1" original="#w1" current="#mb_art_1" start="e1" end="e2"/>
+        </mappings>
+        <otherReferences source="#dimitrys">
+          <implicitReference for="#mb_art_1" refersTo="#concept1" showAs="Implicit"/>
+          <alternativeReference for="#mb_art_1" refersTo="#concept1" showAs="Alternative"/>
+        </otherReferences>
+        <otherAnalysis source="#dimitrys"/>
+      </analysis>
+      <temporalData source="#dimitrys">
+        <temporalGroup eId="tg_1">
+          <timeInterval refersTo="#inForce" start="e1" end="e2"/>
+        </temporalGroup>
+      </temporalData>
+      <references source="#dimitrys">
+        <original eId="ref_orig" href="/akn/gr/doc/2026/ks" showAs="Original"/>
+        <passiveRef eId="ref_pas" href="/akn/gr/act/2026/9" showAs="Passive"/>
+        <activeRef eId="ref_act" href="/akn/gr/act/2026/8" showAs="Active"/>
+        <jurisprudence eId="ref_jur" href="/akn/gr/judgment/2026/1" showAs="Jurisprudence"/>
+        <hasAttachment eId="ref_hasatt" href="/akn/gr/doc/2026/att" showAs="Has Attachment" type="annex"/>
+        <attachmentOf eId="ref_attof" href="/akn/gr/doc/2026/parent" showAs="Attachment Of" type="annex"/>
+        <TLCPerson eId="dimitrys" href="/ontology/person/dimitrys" showAs="Dimitrys"/>
+        <TLCOrganization eId="vouli" href="/ontology/org/vouli" showAs="Vouli"/>
+        <TLCConcept eId="concept1" href="/ontology/concept/law" showAs="Law"/>
+        <TLCObject eId="object1" href="/ontology/object/seal" showAs="Seal"/>
+        <TLCEvent eId="event1" href="/ontology/event/enactment" showAs="Enactment"/>
+        <TLCLocation eId="gr" href="/ontology/location/gr" showAs="Greece"/>
+        <TLCProcess eId="process1" href="/ontology/process/legislation" showAs="Legislation"/>
+        <TLCRole eId="author" href="/ontology/role/author" showAs="Author"/>
+        <TLCRole eId="approved" href="/ontology/concept/approved" showAs="Approved"/>
+        <TLCRole eId="role1" href="/ontology/role/minister" showAs="Minister"/>
+        <TLCTerm eId="term1" href="/ontology/term/day" showAs="Day"/>
+        <TLCConcept eId="inForce" href="/ontology/concept/inForce" showAs="In force"/>
+        <TLCConcept eId="dict" href="/ontology/concept/thesaurus" showAs="Thesaurus"/>
+        <TLCReference eId="ref_generic" href="/ontology/thing" showAs="Thing" name="TLCThing"/>
+      </references>
+      <notes source="#dimitrys">
+        <note eId="note_1" marker="*"><p eId="note_1__p_1">An editorial note.</p></note>
+      </notes>
+      <proprietary source="#dimitrys"/>
+      <presentation source="#dimitrys"/>
+    </meta>
+    <coverPage eId="cover">
+      <p eId="cover__p_1">Cover page paragraph.</p>
+      <longTitle eId="cover__lt_1"><p eId="cover__lt_1__p_1">The Long Title</p></longTitle>
+      <formula eId="cover__f_1" name="enactingFormula"><p eId="cover__f_1__p_1">Enacting formula.</p></formula>
+      <container eId="cover__c_1" name="box"><p eId="cover__c_1__p_1">Boxed content.</p></container>
+    </coverPage>
+    <preface eId="preface">
+      <p eId="preface__p_1">
+        <docType eId="preface__p_1__doctype_1">Law</docType>
+        <docTitle eId="preface__p_1__doctitle_1">Kitchen Sink Act</docTitle>
+        <docNumber eId="preface__p_1__docnumber_1">5300</docNumber>
+        <docProponent eId="preface__p_1__docproponent_1" as="#role1">The Minister</docProponent>
+        <docDate eId="preface__p_1__docdate_1" date="2026-01-01">1 January 2026</docDate>
+        <legislature eId="preface__p_1__legislature_1" value="19">19th</legislature>
+        <session eId="preface__p_1__session_1" value="2">2nd</session>
+        <shortTitle eId="preface__p_1__shorttitle_1">KSA</shortTitle>
+        <docAuthority eId="preface__p_1__docauthority_1">Parliament</docAuthority>
+        <docPurpose eId="preface__p_1__docpurpose_1">To test</docPurpose>
+        <docCommittee eId="preface__p_1__doccommittee_1" value="c1">Committee</docCommittee>
+        <docIntroducer eId="preface__p_1__docintroducer_1">Introducer</docIntroducer>
+        <docStage eId="preface__p_1__docstage_1">First reading</docStage>
+        <docStatus eId="preface__p_1__docstatus_1">Draft</docStatus>
+        <docJurisdiction eId="preface__p_1__docjurisdiction_1">Greece</docJurisdiction>
+        <docketNumber eId="preface__p_1__docketnumber_1">2026/1</docketNumber>
+      </p>
+    </preface>
+    <preamble eId="preamble">
+      <formula eId="preamble__f_1" name="preambleFormula"><p eId="preamble__f_1__p_1">Having regard to...</p></formula>
+      <citations eId="preamble__cits_1">
+        <intro eId="preamble__cits_1__intro_1"><p eId="preamble__cits_1__intro_1__p_1">Having regard to:</p></intro>
+        <citation eId="preamble__cits_1__cit_1"><p eId="preamble__cits_1__cit_1__p_1">the Constitution;</p></citation>
+        <wrapUp eId="preamble__cits_1__wrap_1"><p eId="preamble__cits_1__wrap_1__p_1">and more.</p></wrapUp>
+      </citations>
+      <recitals eId="preamble__recs_1">
+        <intro eId="preamble__recs_1__intro_1"><p eId="preamble__recs_1__intro_1__p_1">Whereas:</p></intro>
+        <recital eId="preamble__recs_1__rec_1"><num eId="preamble__recs_1__rec_1__num_1">(1)</num><p eId="preamble__recs_1__rec_1__p_1">a recital;</p></recital>
+        <wrapUp eId="preamble__recs_1__wrap_1"><p eId="preamble__recs_1__wrap_1__p_1">have decided.</p></wrapUp>
+      </recitals>
+      <container eId="preamble__c_1" name="preambleBox"><p eId="preamble__c_1__p_1">Preamble box.</p></container>
+    </preamble>
+    <mainBody eId="mb">
+      <componentRef eId="mb_cref_1" src="/annex.xml" showAs="Annex component"/>
+      <toc eId="mb_toc_1">
+        <tocItem eId="mb_toc_1__ti_1" href="#mb_art_1" level="1">Article 1</tocItem>
+      </toc>
+      <book eId="mb_book_1">
+        <num eId="mb_book_1__num_1">Book I</num>
+        <heading eId="mb_book_1__head_1">The First Book</heading>
+        <subheading eId="mb_book_1__subhead_1">a subheading</subheading>
+        <tome eId="mb_tome_1">
+          <num eId="mb_tome_1__num_1">Tome I</num>
+          <part eId="mb_part_1">
+            <num eId="mb_part_1__num_1">Part I</num>
+            <heading eId="mb_part_1__head_1">General</heading>
+            <title eId="mb_title_1">
+              <num eId="mb_title_1__num_1">Title I</num>
+              <crossHeading eId="mb_title_1__ch_1">Cross heading</crossHeading>
+              <chapter eId="mb_chapter_1">
+                <num eId="mb_chapter_1__num_1">Chapter I</num>
+                <subchapter eId="mb_subchapter_1">
+                  <num eId="mb_subchapter_1__num_1">Subchapter A</num>
+                  <section eId="mb_section_1">
+                    <num eId="mb_section_1__num_1">Section 1</num>
+                    <subsection eId="mb_subsection_1">
+                      <num eId="mb_subsection_1__num_1">1</num>
+                      <content eId="mb_subsection_1__content_1"><p eId="mb_subsection_1__content_1__p_1">Subsection text.</p></content>
+                    </subsection>
+                  </section>
+                </subchapter>
+              </chapter>
+            </title>
+          </part>
+        </tome>
+      </book>
+      <article eId="mb_art_1">
+        <num eId="mb_art_1__num_1">Article 1</num>
+        <heading eId="mb_art_1__head_1">Scope and definitions</heading>
+        <intro eId="mb_art_1__intro_1"><p eId="mb_art_1__intro_1__p_1">This article introduces.</p></intro>
+        <paragraph eId="mb_art_1__para_1">
+          <num eId="mb_art_1__para_1__num_1">1.</num>
+          <content eId="mb_art_1__para_1__content_1">
+            <p eId="mb_art_1__para_1__content_1__p_1">Inline showcase: <b eId="i_b">bold</b> <i eId="i_i">italic</i> <u eId="i_u">under</u> <sup eId="i_sup">sup</sup> <sub eId="i_sub">sub</sub> <abbr eId="i_abbr" title="for example">e.g.</abbr> <span eId="i_span">span</span> <a eId="i_a" href="https://example.org">link</a><br eId="i_br"/> text.</p>
+          </content>
+        </paragraph>
+        <subparagraph eId="mb_art_1__subpara_1">
+          <num eId="mb_art_1__subpara_1__num_1">a)</num>
+          <content eId="mb_art_1__subpara_1__content_1">
+            <p eId="mb_art_1__subpara_1__content_1__p_1">Semantics: <date eId="i_date" date="2026-01-01">1 Jan 2026</date> <time eId="i_time" time="12:00:00">noon</time> <person eId="i_person" refersTo="#dimitrys">Dimitrys</person> <organization eId="i_org" refersTo="#vouli">Vouli</organization> <concept eId="i_concept" refersTo="#concept1">law</concept> <object eId="i_object" refersTo="#object1">seal</object> <event eId="i_event" refersTo="#event1">enactment</event> <location eId="i_location" refersTo="#gr">Greece</location> <process eId="i_process" refersTo="#process1">legislation</process> <role eId="i_role" refersTo="#role1">minister</role> <term eId="i_term" refersTo="#term1">day</term> <quantity eId="i_quantity" refersTo="#term1" normalized="30">30 days</quantity> <def eId="i_def">definition</def> <entity eId="i_entity" refersTo="#concept1" name="thing">entity</entity>.</p>
+          </content>
+        </subparagraph>
+      </article>
+      <clause eId="mb_clause_1">
+        <num eId="mb_clause_1__num_1">Clause 1</num>
+        <content eId="mb_clause_1__content_1">
+          <p eId="mb_clause_1__content_1__p_1">References and edits: <ref eId="i_ref" href="/akn/gr/act/2026/9">Act 9</ref> <mref eId="i_mref"><ref eId="i_mref__ref_1" href="/akn/gr/act/2026/8">Act 8</ref></mref> <rref eId="i_rref" from="#mb_art_1" upTo="#mb_clause_1">Arts 1-2</rref> <ins eId="i_ins">inserted</ins> <del eId="i_del">deleted</del> <omissis eId="i_omissis">...</omissis> <embeddedText eId="i_embtext" startQuote="“" endQuote="”">quoted</embeddedText> <placeholder eId="i_placeholder" originalText="X">30</placeholder> <fillIn eId="i_fillin" width="3cm"> </fillIn> <decoration eId="i_decoration">new</decoration> <remark eId="i_remark" type="phenomenon">(applause)</remark> <recordedTime eId="i_rectime" type="startEvent" time="12:00:00">at noon</recordedTime> <vote eId="i_vote" by="#dimitrys" choice="#c_1">aye</vote> <outcome eId="i_outcome">carried</outcome> <opinion eId="i_opinion" by="#dimitrys" type="dissenting">dissent</opinion>.</p>
+          <p eId="mb_clause_1__content_1__p_2">Modifications: <mod eId="i_mod">shall insert <quotedText eId="i_mod__qt_1" startQuote="“" endQuote="”">new text</quotedText></mod> <mmod eId="i_mmod">multiple <quotedStructure eId="i_mmod__qs_1" startQuote="“"><p eId="i_mmod__qs_1__p_1">a quoted structure</p></quotedStructure></mmod> <rmod eId="i_rmod" from="#mb_art_1" upTo="#mb_clause_1">range mod</rmod>.</p>
+          <p eId="mb_clause_1__content_1__p_3">Judgment/amendment inlines: <courtType eId="i_courttype">Supreme Court</courtType> <neutralCitation eId="i_neutralcit">[2026] GR 1</neutralCitation> <party eId="i_party" refersTo="#dimitrys">Party A</party> <judge eId="i_judge" refersTo="#dimitrys" as="#role1">Judge</judge> <lawyer eId="i_lawyer" refersTo="#dimitrys" as="#role1" for="#vouli">Lawyer</lawyer> <argument eId="i_argument">argument</argument> <affectedDocument eId="i_affected" href="/akn/gr/act/2026/9">Act 9</affectedDocument> <relatedDocument eId="i_related" href="/akn/gr/act/2026/8">Act 8</relatedDocument> <change eId="i_change">the change</change> <embeddedStructure eId="i_embstruct" startQuote="“"><p eId="i_embstruct__p_1">embedded</p></embeddedStructure>.</p>
+          <p eId="mb_clause_1__content_1__p_4">Generic + markers + subflows: <inline eId="i_inline" name="custom">generic inline</inline> <marker eId="i_marker" name="pilcrow"/><noteRef eId="i_noteref" href="#note_1" marker="1"/><eol eId="i_eol"/><eop eId="i_eop"/><img eId="i_img" src="/img/seal.png" alt="seal" width="10" height="10"/> footnote<authorialNote eId="i_anote" marker="2"><p eId="i_anote__p_1">A footnote.</p></authorialNote> subflow<subFlow eId="i_subflow" name="aside"><p eId="i_subflow__p_1">An aside.</p></subFlow>.</p>
+        </content>
+      </clause>
+      <point eId="mb_point_1"><num eId="mb_point_1__num_1">(a)</num><content eId="mb_point_1__content_1"><p eId="mb_point_1__content_1__p_1">A point.</p></content></point>
+      <indent eId="mb_indent_1"><num eId="mb_indent_1__num_1">-</num><content eId="mb_indent_1__content_1"><p eId="mb_indent_1__content_1__p_1">An indent.</p></content></indent>
+      <alinea eId="mb_alinea_1"><num eId="mb_alinea_1__num_1">1</num><content eId="mb_alinea_1__content_1"><p eId="mb_alinea_1__content_1__p_1">An alinea.</p></content></alinea>
+      <rule eId="mb_rule_1"><num eId="mb_rule_1__num_1">Rule 1</num><content eId="mb_rule_1__content_1"><p eId="mb_rule_1__content_1__p_1">A rule.</p></content></rule>
+      <subrule eId="mb_subrule_1"><num eId="mb_subrule_1__num_1">1</num><content eId="mb_subrule_1__content_1"><p eId="mb_subrule_1__content_1__p_1">A subrule.</p></content></subrule>
+      <proviso eId="mb_proviso_1"><num eId="mb_proviso_1__num_1">Proviso</num><content eId="mb_proviso_1__content_1"><p eId="mb_proviso_1__content_1__p_1">Provided that.</p></content></proviso>
+      <subpart eId="mb_subpart_1"><num eId="mb_subpart_1__num_1">Subpart A</num><content eId="mb_subpart_1__content_1"><p eId="mb_subpart_1__content_1__p_1">A subpart.</p></content></subpart>
+      <subtitle eId="mb_subtitle_1"><num eId="mb_subtitle_1__num_1">Subtitle A</num><content eId="mb_subtitle_1__content_1"><p eId="mb_subtitle_1__content_1__p_1">A subtitle.</p></content></subtitle>
+      <subdivision eId="mb_subdivision_1"><num eId="mb_subdivision_1__num_1">Subdiv A</num><content eId="mb_subdivision_1__content_1"><p eId="mb_subdivision_1__content_1__p_1">A subdivision.</p></content></subdivision>
+      <division eId="mb_division_1"><num eId="mb_division_1__num_1">Division 1</num><content eId="mb_division_1__content_1"><p eId="mb_division_1__content_1__p_1">A division.</p></content></division>
+      <subclause eId="mb_subclause_1"><num eId="mb_subclause_1__num_1">i</num><content eId="mb_subclause_1__content_1"><p eId="mb_subclause_1__content_1__p_1">A subclause.</p></content></subclause>
+      <list eId="mb_list_1"><num eId="mb_list_1__num_1">List</num><intro eId="mb_list_1__intro_1"><p eId="mb_list_1__intro_1__p_1">The following:</p></intro><point eId="mb_list_1__pt_1"><num eId="mb_list_1__pt_1__num_1">(a)</num><content eId="mb_list_1__pt_1__content_1"><p eId="mb_list_1__pt_1__content_1__p_1">item a;</p></content></point><wrapUp eId="mb_list_1__wrap_1"><p eId="mb_list_1__wrap_1__p_1">end list.</p></wrapUp></list>
+      <sublist eId="mb_sublist_1"><num eId="mb_sublist_1__num_1">Sublist</num><content eId="mb_sublist_1__content_1"><p eId="mb_sublist_1__content_1__p_1">A sublist.</p></content></sublist>
+      <subparagraph eId="mb_subparagraph_2"><num eId="mb_subparagraph_2__num_1">1</num><content eId="mb_subparagraph_2__content_1"><p eId="mb_subparagraph_2__content_1__p_1">A subparagraph.</p></content></subparagraph>
+      <level eId="mb_level_1"><num eId="mb_level_1__num_1">Level</num><content eId="mb_level_1__content_1"><p eId="mb_level_1__content_1__p_1">A level.</p></content></level>
+      <transitional eId="mb_transitional_1"><num eId="mb_transitional_1__num_1">Transitional</num><content eId="mb_transitional_1__content_1"><p eId="mb_transitional_1__content_1__p_1">Transitional provision.</p></content></transitional>
+      <hcontainer eId="mb_hcontainer_1" name="preamblePart"><num eId="mb_hcontainer_1__num_1">X</num><content eId="mb_hcontainer_1__content_1"><p eId="mb_hcontainer_1__content_1__p_1">Generic hierarchical container.</p></content></hcontainer>
+      <blockContainer eId="mb_bc_1"><intro eId="mb_bc_1__intro_1"><p eId="mb_bc_1__intro_1__p_1">Block container intro.</p></intro><p eId="mb_bc_1__p_1">Body.</p><wrapUp eId="mb_bc_1__wrap_1"><p eId="mb_bc_1__wrap_1__p_1">Block container wrapup.</p></wrapUp></blockContainer>
+      <tblock eId="mb_tblock_1"><heading eId="mb_tblock_1__head_1">Titled block</heading><p eId="mb_tblock_1__p_1">Titled block body.</p></tblock>
+      <blockList eId="mb_bl_1">
+        <listIntroduction eId="mb_bl_1__li_1">The following items:</listIntroduction>
+        <item eId="mb_bl_1__item_1"><num eId="mb_bl_1__item_1__num_1">(a)</num><p eId="mb_bl_1__item_1__p_1">first item;</p></item>
+        <listWrapUp eId="mb_bl_1__lw_1">end of list.</listWrapUp>
+      </blockList>
+      <ul eId="mb_ul_1"><li eId="mb_ul_1__li_1">unordered item</li></ul>
+      <ol eId="mb_ol_1"><li eId="mb_ol_1__li_1" value="1">ordered item <ul eId="mb_ol_1__li_1__ul_1"><li eId="mb_ol_1__li_1__ul_1__li_1">nested</li></ul></li></ol>
+      <table eId="mb_table_1" border="1">
+        <caption eId="mb_table_1__cap_1">A table</caption>
+        <tr eId="mb_table_1__tr_1"><th eId="mb_table_1__tr_1__th_1" colspan="1" rowspan="1"><p eId="mb_table_1__tr_1__th_1__p_1">Head</p></th></tr>
+        <tr eId="mb_table_1__tr_2"><td eId="mb_table_1__tr_2__td_1"><p eId="mb_table_1__tr_2__td_1__p_1">Cell</p></td></tr>
+      </table>
+      <p eId="mb_p_1">A plain paragraph block.</p>
+      <block eId="mb_block_1" name="motto">A generic block.</block>
+      <foreign eId="mb_foreign_1"><math xmlns="http://www.w3.org/1998/Math/MathML"><mi>x</mi></math></foreign>
+      <div eId="mb_div_1"><p eId="mb_div_1__p_1">An HTML container div.</p></div>
+      <container eId="mb_container_1" name="genericContainer"><p eId="mb_container_1__p_1">A generic container.</p></container>
+      <debateSection eId="mb_ds_1" name="proceedings">
+        <speechGroup eId="mb_ds_1__sg_1" by="#dimitrys" as="#role1" to="#vouli">
+          <heading eId="mb_ds_1__sg_1__head_1">Debate</heading>
+          <speech eId="mb_ds_1__sg_1__sp_1" by="#dimitrys" as="#role1" startTime="2026-01-01T10:00:00" endTime="2026-01-01T10:05:00" to="#vouli">
+            <from eId="mb_ds_1__sg_1__sp_1__from_1">The Minister</from>
+            <p eId="mb_ds_1__sg_1__sp_1__p_1">I move the motion.</p>
+          </speech>
+          <question eId="mb_ds_1__sg_1__q_1" by="#dimitrys"><p eId="mb_ds_1__sg_1__q_1__p_1">A question?</p></question>
+          <answer eId="mb_ds_1__sg_1__a_1" by="#dimitrys"><p eId="mb_ds_1__sg_1__a_1__p_1">An answer.</p></answer>
+          <scene eId="mb_ds_1__sg_1__scene_1">Applause.</scene>
+          <narrative eId="mb_ds_1__sg_1__narr_1">The Minister takes the chair.</narrative>
+          <summary eId="mb_ds_1__sg_1__summ_1">Question put and agreed to.</summary>
+          <other eId="mb_ds_1__sg_1__other_1"><p eId="mb_ds_1__sg_1__other_1__p_1">Papers laid.</p></other>
+        </speechGroup>
+      </debateSection>
+      <administrationOfOath eId="mb_ss_1"><p eId="mb_ss_1__p_1">Oath.</p></administrationOfOath>
+      <rollCall eId="mb_ss_2"><p eId="mb_ss_2__p_1">Roll call.</p></rollCall>
+      <prayers eId="mb_ss_3"><p eId="mb_ss_3__p_1">Prayers.</p></prayers>
+      <oralStatements eId="mb_ss_4"><p eId="mb_ss_4__p_1">Oral.</p></oralStatements>
+      <writtenStatements eId="mb_ss_5"><p eId="mb_ss_5__p_1">Written.</p></writtenStatements>
+      <personalStatements eId="mb_ss_6"><p eId="mb_ss_6__p_1">Personal.</p></personalStatements>
+      <ministerialStatements eId="mb_ss_7"><p eId="mb_ss_7__p_1">Ministerial.</p></ministerialStatements>
+      <resolutions eId="mb_ss_8"><p eId="mb_ss_8__p_1">Resolutions.</p></resolutions>
+      <nationalInterest eId="mb_ss_9"><p eId="mb_ss_9__p_1">National interest.</p></nationalInterest>
+      <declarationOfVote eId="mb_ss_10"><p eId="mb_ss_10__p_1">Declaration of vote.</p></declarationOfVote>
+      <communication eId="mb_ss_11"><p eId="mb_ss_11__p_1">Communication.</p></communication>
+      <petitions eId="mb_ss_12"><p eId="mb_ss_12__p_1">Petitions.</p></petitions>
+      <papers eId="mb_ss_13"><p eId="mb_ss_13__p_1">Papers.</p></papers>
+      <noticesOfMotion eId="mb_ss_14"><p eId="mb_ss_14__p_1">Notices of motion.</p></noticesOfMotion>
+      <questions eId="mb_ss_15"><p eId="mb_ss_15__p_1">Questions.</p></questions>
+      <address eId="mb_ss_16"><p eId="mb_ss_16__p_1">Address.</p></address>
+      <proceduralMotions eId="mb_ss_17"><p eId="mb_ss_17__p_1">Procedural motions.</p></proceduralMotions>
+      <pointOfOrder eId="mb_ss_18"><p eId="mb_ss_18__p_1">Point of order.</p></pointOfOrder>
+      <adjournment eId="mb_ss_19"><p eId="mb_ss_19__p_1">Adjournment.</p></adjournment>
+    </mainBody>
+    <conclusions eId="concl">
+      <p eId="concl__p_1">Done at Athens. <signature eId="concl__p_1__sig_1">The Minister</signature></p>
+      <formula eId="concl__f_1" name="closingFormula"><p eId="concl__f_1__p_1">Closing.</p></formula>
+      <longTitle eId="concl__lt_1"><p eId="concl__lt_1__p_1">Concluding long title.</p></longTitle>
+      <container eId="concl__c_1" name="closingBox"><p eId="concl__c_1__p_1">Signatures.</p></container>
+    </conclusions>
+    <attachments>
+      <attachment eId="att_1"><heading eId="att_1__h_1">Interstitial attachment</heading><interstitial eId="att_1__int_1"><p eId="att_1__int_1__p_1">Between documents.</p></interstitial></attachment>
+      <attachment eId="att_2"><toc eId="att_2__toc_1"><tocItem eId="att_2__toc_1__ti_1" href="#mb_art_1" level="1">Article 1</tocItem></toc></attachment>
+      <attachment eId="att_3"><documentRef eId="att_3__dr_1" href="/akn/gr/act/2026/9" showAs="Annexed Act"/></attachment>
+    </attachments>
+  </doc>
+  <components>
+    <component eId="cmp_act">
+      <act name="act" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/act/2026/1/main"/><FRBRuri value="/akn/gr/act/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/act/2026/1/ell@/main"/><FRBRuri value="/akn/gr/act/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/act/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/act/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <body eId="cmp_act__body"><article eId="cmp_act__art_1"><num eId="cmp_act__art_1__num_1">Article 1</num><content eId="cmp_act__art_1__content_1"><p eId="cmp_act__art_1__content_1__p_1">Act body.</p></content></article></body>
+      </act>
+    </component>
+    <component eId="cmp_bill">
+      <bill name="bill" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/bill/2026/1/main"/><FRBRuri value="/akn/gr/bill/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/bill/2026/1/ell@/main"/><FRBRuri value="/akn/gr/bill/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/bill/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/bill/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <body eId="cmp_bill__body"><article eId="cmp_bill__art_1"><num eId="cmp_bill__art_1__num_1">Article 1</num><content eId="cmp_bill__art_1__content_1"><p eId="cmp_bill__art_1__content_1__p_1">Bill body.</p></content></article></body>
+      </bill>
+    </component>
+    <component eId="cmp_statement">
+      <statement name="statement" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/statement/2026/1/main"/><FRBRuri value="/akn/gr/statement/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/statement/2026/1/ell@/main"/><FRBRuri value="/akn/gr/statement/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/statement/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/statement/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <mainBody eId="cmp_statement__mb"><p eId="cmp_statement__mb__p_1">Statement body.</p></mainBody>
+      </statement>
+    </component>
+    <component eId="cmp_debatereport">
+      <debateReport name="debateReport" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/debateReport/2026/1/main"/><FRBRuri value="/akn/gr/debateReport/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/debateReport/2026/1/ell@/main"/><FRBRuri value="/akn/gr/debateReport/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/debateReport/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/debateReport/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <mainBody eId="cmp_debatereport__mb"><p eId="cmp_debatereport__mb__p_1">Debate report body.</p></mainBody>
+      </debateReport>
+    </component>
+    <component eId="cmp_debate">
+      <debate name="debate" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/debate/2026/1/main"/><FRBRuri value="/akn/gr/debate/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/debate/2026/1/ell@/main"/><FRBRuri value="/akn/gr/debate/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/debate/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/debate/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <debateBody eId="cmp_debate__db"><debateSection eId="cmp_debate__db__ds_1" name="sitting"><speech eId="cmp_debate__db__ds_1__sp_1" by="#dimitrys"><p eId="cmp_debate__db__ds_1__sp_1__p_1">Speech.</p></speech></debateSection></debateBody>
+      </debate>
+    </component>
+    <component eId="cmp_judgment">
+      <judgment name="judgment" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/judgment/2026/1/main"/><FRBRuri value="/akn/gr/judgment/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/judgment/2026/1/ell@/main"/><FRBRuri value="/akn/gr/judgment/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/judgment/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/judgment/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <header eId="cmp_judgment__header"><p eId="cmp_judgment__header__p_1">In the matter of X.</p></header>
+        <judgmentBody eId="cmp_judgment__jb">
+          <introduction eId="cmp_judgment__jb__intro"><p eId="cmp_judgment__jb__intro__p_1">Introduction.</p></introduction>
+          <background eId="cmp_judgment__jb__bg"><p eId="cmp_judgment__jb__bg__p_1">Background.</p></background>
+          <arguments eId="cmp_judgment__jb__args"><p eId="cmp_judgment__jb__args__p_1">Arguments.</p></arguments>
+          <remedies eId="cmp_judgment__jb__rem"><p eId="cmp_judgment__jb__rem__p_1">Remedies.</p></remedies>
+          <motivation eId="cmp_judgment__jb__mot"><p eId="cmp_judgment__jb__mot__p_1">Motivation.</p></motivation>
+          <decision eId="cmp_judgment__jb__dec"><p eId="cmp_judgment__jb__dec__p_1">Decision.</p></decision>
+        </judgmentBody>
+      </judgment>
+    </component>
+    <component eId="cmp_amendment">
+      <amendment name="amendment" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/amendment/2026/1/main"/><FRBRuri value="/akn/gr/amendment/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/amendment/2026/1/ell@/main"/><FRBRuri value="/akn/gr/amendment/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/amendment/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/amendment/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <amendmentBody eId="cmp_amendment__ab">
+          <amendmentHeading eId="cmp_amendment__ab__ah"><p eId="cmp_amendment__ab__ah__p_1">Amendment 1.</p></amendmentHeading>
+          <amendmentContent eId="cmp_amendment__ab__ac"><p eId="cmp_amendment__ab__ac__p_1">Replace X with Y.</p></amendmentContent>
+          <amendmentReference eId="cmp_amendment__ab__ar"><p eId="cmp_amendment__ab__ar__p_1">Ref.</p></amendmentReference>
+          <amendmentJustification eId="cmp_amendment__ab__aj"><p eId="cmp_amendment__ab__aj__p_1">Because.</p></amendmentJustification>
+        </amendmentBody>
+      </amendment>
+    </component>
+    <component eId="cmp_amendmentlist">
+      <amendmentList name="amendmentList" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/amendmentList/2026/1/main"/><FRBRuri value="/akn/gr/amendmentList/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/amendmentList/2026/1/ell@/main"/><FRBRuri value="/akn/gr/amendmentList/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/amendmentList/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/amendmentList/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <collectionBody eId="cmp_amendmentlist__cb">
+          <component eId="cmp_amendmentlist__cb__c_1"><documentRef eId="cmp_amendmentlist__cb__c_1__dr" href="/akn/gr/amendment/2026/1" showAs="Amendment"/></component>
+        </collectionBody>
+      </amendmentList>
+    </component>
+    <component eId="cmp_gazette">
+      <officialGazette name="officialGazette" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/officialGazette/2026/1/main"/><FRBRuri value="/akn/gr/officialGazette/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/officialGazette/2026/1/ell@/main"/><FRBRuri value="/akn/gr/officialGazette/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/officialGazette/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/officialGazette/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <collectionBody eId="cmp_gazette__cb">
+          <component eId="cmp_gazette__cb__c_1"><documentRef eId="cmp_gazette__cb__c_1__dr" href="/akn/gr/act/2026/1" showAs="Published act"/></component>
+        </collectionBody>
+      </officialGazette>
+    </component>
+    <component eId="cmp_collection">
+      <documentCollection name="documentCollection" contains="originalVersion">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/documentCollection/2026/1/main"/><FRBRuri value="/akn/gr/documentCollection/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/documentCollection/2026/1/ell@/main"/><FRBRuri value="/akn/gr/documentCollection/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/documentCollection/2026/1/ell@/main.xml"/><FRBRuri value="/akn/gr/documentCollection/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <collectionBody eId="cmp_collection__cb">
+          <component eId="cmp_collection__cb__c_1"><interstitial eId="cmp_collection__cb__c_1__int"><p eId="cmp_collection__cb__c_1__int__p_1">Between docs.</p></interstitial></component>
+          <component eId="cmp_collection__cb__c_2"><documentRef eId="cmp_collection__cb__c_2__dr" href="/akn/gr/act/2026/1" showAs="Collected act"/></component>
+        </collectionBody>
+      </documentCollection>
+    </component>
+    <component eId="cmp_portion">
+      <portion includedIn="#ref_orig">
+        <meta><identification source="#dimitrys">
+          <FRBRWork><FRBRthis value="/akn/gr/act/2026/1/main~art_1"/><FRBRuri value="/akn/gr/act/2026/1"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRcountry value="gr"/></FRBRWork>
+          <FRBRExpression><FRBRthis value="/akn/gr/act/2026/1/ell@/main~art_1"/><FRBRuri value="/akn/gr/act/2026/1/ell@"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/><FRBRlanguage language="ell"/></FRBRExpression>
+          <FRBRManifestation><FRBRthis value="/akn/gr/act/2026/1/ell@/main~art_1.xml"/><FRBRuri value="/akn/gr/act/2026/1/ell@.xml"/><FRBRdate date="2026-01-01" name="generation"/><FRBRauthor href="#dimitrys"/></FRBRManifestation>
+        </identification></meta>
+        <portionBody eId="cmp_portion__pb"><article eId="cmp_portion__pb__art_1"><num eId="cmp_portion__pb__art_1__num_1">Article 1</num><content eId="cmp_portion__pb__art_1__content_1"><p eId="cmp_portion__pb__art_1__content_1__p_1">A portion.</p></content></article></portionBody>
+      </portion>
+    </component>
+  </components>
+</akomaNtoso>

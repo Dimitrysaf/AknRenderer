@@ -1,11 +1,14 @@
 <?php
 /**
- * Runtime hooks: show AKN metadata on action=info, keep the index tables
- * (see Indexer) in sync on every save, remove them again on delete —
- * without onPageDeleteComplete, a deleted page's rows would stay in every
- * akn_* table forever, since nothing else notices the page is gone — and
- * expose AknVocabulary to JS (for AknEditor and any other client-side
- * tooling, so they never hand-duplicate the structural taxonomy).
+ * Runtime hooks: reject saves that don't validate against the schema
+ * (onEditFilterMergedContent — the schema in schema/akomantoso30.xsd is the
+ * source of truth for what counts as Akoma Ntoso), show AKN metadata on
+ * action=info, keep the index tables (see Indexer) in sync on every save,
+ * remove them again on delete — without onPageDeleteComplete, a deleted
+ * page's rows would stay in every akn_* table forever, since nothing else
+ * notices the page is gone — and expose AknVocabulary to JS (for AknEditor
+ * and any other client-side tooling, so they never hand-duplicate the
+ * structural taxonomy).
  *
  * @file
  * @license GPL-2.0-or-later
@@ -15,6 +18,8 @@ namespace MediaWiki\Extension\AknRenderer;
 
 use MediaWiki\Actions\Hook\InfoActionHook;
 use MediaWiki\Config\Config;
+use MediaWiki\EditPage\EditPage;
+use MediaWiki\Hook\EditFilterMergedContentHook;
 use MediaWiki\Page\Hook\PageDeleteCompleteHook;
 use MediaWiki\ResourceLoader\Hook\ResourceLoaderGetConfigVarsHook;
 use MediaWiki\Skin\Hook\SkinTemplateNavigation__UniversalHook;
@@ -24,6 +29,7 @@ use MediaWiki\Storage\Hook\PageSaveCompleteHook;
 use Wikimedia\Rdbms\IConnectionProvider;
 
 class HookHandler implements
+	EditFilterMergedContentHook,
 	InfoActionHook,
 	PageDeleteCompleteHook,
 	PageSaveCompleteHook,
@@ -40,6 +46,46 @@ class HookHandler implements
 	) {
 		$this->dbProvider = $dbProvider;
 		$this->wikiPageFactory = $wikiPageFactory;
+	}
+
+	/**
+	 * Gate saves on schema validity: an AknContent edit that does not satisfy
+	 * schema/akomantoso30.xsd is rejected with the schema's own error messages.
+	 * The schema is the single source of truth (see AknSchema), so this is the
+	 * one place that decides whether stored content is "Akoma Ntoso".
+	 *
+	 * @param \IContextSource $context
+	 * @param \MediaWiki\Content\Content $content
+	 * @param \MediaWiki\Status\Status $status
+	 * @param string $summary
+	 * @param \MediaWiki\User\User $user
+	 * @param bool $minoredit
+	 * @return bool
+	 */
+	public function onEditFilterMergedContent($context, $content, $status, $summary, $user, $minoredit)
+	{
+		if (!$content instanceof AknContent) {
+			return true;
+		}
+
+		$errors = AknSchema::validate($content->getText());
+		if ($errors === []) {
+			return true;
+		}
+
+		$limit = 10;
+		$shown = array_slice($errors, 0, $limit);
+		if (count($errors) > $limit) {
+			$shown[] = $context->msg('aknrenderer-schema-more')
+				->numParams(count($errors) - $limit)->text();
+		}
+		$list = "\n* " . implode("\n* ", $shown);
+
+		$status->fatal('aknrenderer-save-invalidschema', $list);
+		// Make the API and edit form show the schema errors instead of a
+		// generic "hook aborted" message.
+		$status->value = EditPage::AS_HOOK_ERROR_EXPECTED;
+		return false;
 	}
 
 	/**
@@ -143,10 +189,13 @@ class HookHandler implements
 	public function onResourceLoaderGetConfigVars(array &$vars, $skin, Config $config): void
 	{
 		$vars['wgAknVocabulary'] = [
-			'structureTypes' => AknVocabulary::STRUCTURE_TYPES,
+			'namespace' => AknVocabulary::NS,
+			'documentTypes' => AknVocabulary::documentTypes(),
+			'structureTypes' => AknVocabulary::structureTypes(),
+			'inlineSpans' => AknVocabulary::inlineSpans(),
+			'mainBodyContainers' => AknVocabulary::MAIN_BODY_CONTAINERS,
 			'headingLevels' => AknVocabulary::HEADING_LEVELS,
 			'hcontainerLabels' => AknVocabulary::HCONTAINER_LABELS,
-			'inlineSpans' => AknVocabulary::INLINE_SPANS,
 			'docTypes' => AknVocabulary::DOC_TYPES,
 			'countries' => AknVocabulary::COUNTRIES,
 			'languages' => AknVocabulary::LANGUAGES,

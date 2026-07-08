@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17">
+  <officialGazette name="fek" contains="originalVersion">
+    <meta>
+      <identification source="#ethnikotypografeio">
+        <FRBRWork>
+          <FRBRthis value="/akn/gr/officialGazette/2026-01-16/A-12/!main"/>
+          <FRBRuri value="/akn/gr/officialGazette/2026-01-16/A-12"/>
+          <FRBRalias name="commonName" value="ΦΕΚ Α΄ 12/2026"/>
+          <FRBRdate date="2026-01-16" name="publication"/>
+          <FRBRauthor href="#ethnikotypografeio"/>
+          <FRBRcountry value="gr"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/akn/gr/officialGazette/2026-01-16/A-12/ell@/!main"/>
+          <FRBRuri value="/akn/gr/officialGazette/2026-01-16/A-12/ell@"/>
+          <FRBRdate date="2026-01-16" name="publication"/>
+          <FRBRauthor href="#ethnikotypografeio"/>
+          <FRBRlanguage language="ell"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/akn/gr/officialGazette/2026-01-16/A-12/ell@/!main.xml"/>
+          <FRBRuri value="/akn/gr/officialGazette/2026-01-16/A-12/ell@.xml"/>
+          <FRBRdate date="2026-01-16" name="generation"/>
+          <FRBRauthor href="#ethnikotypografeio"/>
+        </FRBRManifestation>
+      </identification>
+      <publication date="2026-01-16" showAs="Εφημερίδα της Κυβερνήσεως" name="Α" number="12"/>
+      <references source="#ethnikotypografeio">
+        <TLCOrganization eId="ethnikotypografeio" href="/ontology/organization/gr/et" showAs="Εθνικό Τυπογραφείο"/>
+      </references>
+    </meta>
+    <collectionBody eId="collectionBody">
+      <component eId="collectionBody__cmp_1">
+        <documentRef eId="collectionBody__cmp_1__dr_1" href="/akn/gr/act/nomos/2026-01-15/5300" showAs="Νόμος 5300/2026 — Μέτρα για την ψηφιακή διακυβέρνηση"/>
+      </component>
+      <component eId="collectionBody__cmp_2">
+        <doc name="proedrikoDiatagma" contains="originalVersion">
+          <meta>
+            <identification source="#ethnikotypografeio">
+              <FRBRWork>
+                <FRBRthis value="/akn/gr/doc/pd/2026-01-14/3/!main"/>
+                <FRBRuri value="/akn/gr/doc/pd/2026-01-14/3"/>
+                <FRBRdate date="2026-01-14" name="generation"/>
+                <FRBRauthor href="#ethnikotypografeio"/>
+                <FRBRcountry value="gr"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/akn/gr/doc/pd/2026-01-14/3/ell@/!main"/>
+                <FRBRuri value="/akn/gr/doc/pd/2026-01-14/3/ell@"/>
+                <FRBRdate date="2026-01-14" name="generation"/>
+                <FRBRauthor href="#ethnikotypografeio"/>
+                <FRBRlanguage language="ell"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/akn/gr/doc/pd/2026-01-14/3/ell@/!main.xml"/>
+                <FRBRuri value="/akn/gr/doc/pd/2026-01-14/3/ell@.xml"/>
+                <FRBRdate date="2026-01-14" name="generation"/>
+                <FRBRauthor href="#ethnikotypografeio"/>
+              </FRBRManifestation>
+            </identification>
+          </meta>
+          <preface eId="collectionBody__cmp_2__preface">
+            <p eId="collectionBody__cmp_2__preface__p_1">
+              <docType eId="collectionBody__cmp_2__preface__p_1__doctype_1">ΠΡΟΕΔΡΙΚΟ ΔΙΑΤΑΓΜΑ</docType>
+              <docNumber eId="collectionBody__cmp_2__preface__p_1__docnumber_1">ΥΠ’ ΑΡΙΘΜ. 3</docNumber>
+            </p>
+          </preface>
+          <mainBody eId="collectionBody__cmp_2__mainBody">
+            <article eId="collectionBody__cmp_2__mainBody__art_1">
+              <num eId="collectionBody__cmp_2__mainBody__art_1__num_1">Άρθρο μόνο</num>
+              <content eId="collectionBody__cmp_2__mainBody__art_1__content_1">
+                <p eId="collectionBody__cmp_2__mainBody__art_1__content_1__p_1">Εγκρίνεται ο οργανισμός της υπηρεσίας.</p>
+              </content>
+            </article>
+          </mainBody>
+        </doc>
+      </component>
+    </collectionBody>
+  </officialGazette>
+</akomaNtoso>
