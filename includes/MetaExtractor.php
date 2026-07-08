@@ -152,7 +152,9 @@ class MetaExtractor
 	{
 		return [
 			'am_page' => $pageId,
-			'am_work_uri' => self::cut((string) $d['workUri'], 255),
+			// Canonical Work URI (see AknUri) so a <ref>/<documentRef> href
+			// resolves to this page with a plain equality match.
+			'am_work_uri' => self::cut(AknUri::work((string) $d['workUri']), 255),
 			'am_expr_uri' => self::cut((string) $d['exprUri'], 255),
 			'am_alias' => self::cut((string) $d['alias'], 255),
 			'am_doc_type' => self::cut((string) $d['docType'], 64),

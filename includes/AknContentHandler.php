@@ -322,7 +322,7 @@ class AknContentHandler extends TextContentHandler
 			return htmlspecialchars($label, ENT_QUOTES);
 		}
 
-		$resolved = $this->resolveWorkUri($this->normalizeWorkUri($href));
+		$resolved = $this->resolveWorkUri(AknUri::work($href));
 		if ($resolved === null) {
 			// Not (yet) a page in this wiki: visible but non-linking, like an unresolved <ref>.
 			return Html::rawElement('span', ['class' => 'akn-ref', 'title' => $href], htmlspecialchars($label, ENT_QUOTES));
@@ -944,7 +944,7 @@ class AknContentHandler extends TextContentHandler
 			return Html::rawElement('a', ['class' => 'akn-ref', 'href' => '#' . $fragment], $inner);
 		}
 
-		$resolved = $this->resolveWorkUri($this->normalizeWorkUri($uriPart));
+		$resolved = $this->resolveWorkUri(AknUri::work($uriPart));
 		if ($resolved === null) {
 			// Target not in the wiki (yet): visible but non-linking.
 			return Html::rawElement('span', ['class' => 'akn-ref', 'title' => $href], $inner);
@@ -974,25 +974,7 @@ class AknContentHandler extends TextContentHandler
 	}
 
 	/**
-	 * Reduce an AKN reference URI to the bare FRBR Work URI held in am_work_uri:
-	 * drop any /akn prefix and keep the first four path segments
-	 * (/{country}/{type}/{year}/{number}).
-	 *
-	 * @param string $uri
-	 * @return string
-	 */
-	private function normalizeWorkUri(string $uri): string
-	{
-		$uri = preg_replace('#^/akn/#', '/', $uri) ?? $uri;
-		$parts = array_values(array_filter(explode('/', $uri), static fn($p) => $p !== ''));
-		if (count($parts) >= 4) {
-			$parts = array_slice($parts, 0, 4);
-		}
-		return '/' . implode('/', $parts);
-	}
-
-	/**
-	 * @param string $workUri
+	 * @param string $workUri Canonical Work URI (see AknUri::work()).
 	 * @return array{0:\MediaWiki\Title\Title,1:int}|null
 	 */
 	private function resolveWorkUri(string $workUri): ?array
