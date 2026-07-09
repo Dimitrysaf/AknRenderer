@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17">
+  <act name="nomos" contains="originalVersion">
+    <meta>
+      <identification source="#syntaktis">
+        <FRBRWork>
+          <FRBRthis value="/gr/act/2026/5301/!main"/>
+          <FRBRuri value="/gr/act/2026/5301"/>
+          <FRBRalias name="commonName" value="Τροποποιήσεις του Κώδικα Ψηφιακής Διακυβέρνησης"/>
+          <FRBRdate date="2026-04-01" name="enactment"/>
+          <FRBRauthor href="#vouli"/>
+          <FRBRcountry value="gr"/>
+          <FRBRnumber value="5301"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/gr/act/2026/5301/ell@2026-04-01/!main"/>
+          <FRBRuri value="/gr/act/2026/5301/ell@2026-04-01"/>
+          <FRBRdate date="2026-04-01" name="enactment"/>
+          <FRBRauthor href="#vouli"/>
+          <FRBRlanguage language="ell"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/gr/act/2026/5301/ell@2026-04-01/!main.xml"/>
+          <FRBRuri value="/gr/act/2026/5301/ell@2026-04-01.xml"/>
+          <FRBRdate date="2026-04-01" name="generation"/>
+          <FRBRauthor href="#syntaktis"/>
+        </FRBRManifestation>
+      </identification>
+      <publication date="2026-04-01" showAs="ΦΕΚ Α΄ 40/2026" name="Α" number="40"/>
+      <classification source="#syntaktis">
+        <keyword value="artificial-intelligence" showAs="Τεχνητή Νοημοσύνη" dictionary="#eurovoc"/>
+        <keyword value="legislative-amendment" showAs="Τροποποίηση Νόμου" dictionary="#eurovoc"/>
+      </classification>
+      <lifecycle source="#syntaktis">
+        <eventRef eId="ev_gen" date="2026-04-01" source="#syntaktis" type="generation" originatingExpression="true"/>
+      </lifecycle>
+      <analysis source="#syntaktis">
+        <activeModifications>
+          <textualMod eId="am_1" type="substitution">
+            <source href="#art_1"/>
+            <destination href="/gr/act/2026/5300#art_7"/>
+            <force period="#ev_gen"/>
+          </textualMod>
+        </activeModifications>
+      </analysis>
+      <references source="#syntaktis">
+        <TLCOrganization eId="vouli" href="/ontology/organization/gr/vouli" showAs="Βουλή των Ελλήνων"/>
+        <TLCPerson eId="syntaktis" href="/ontology/person/syntaktis" showAs="Συντάκτης"/>
+        <TLCConcept eId="eurovoc" href="/ontology/concept/eurovoc" showAs="EuroVoc"/>
+      </references>
+    </meta>
+    <body eId="body">
+      <article eId="art_1"><num eId="art_1__num_1">Άρθρο 1</num>
+        <heading eId="art_1__heading_1">Τροποποίηση του άρθρου 7 του ν. 5300/2026</heading>
+        <content eId="art_1__content_1"><p eId="art_1__content_1__p_1">Το άρθρο 7 του ν. 5300/2026 αντικαθίσταται.</p></content>
+      </article>
+    </body>
+  </act>
+</akomaNtoso>

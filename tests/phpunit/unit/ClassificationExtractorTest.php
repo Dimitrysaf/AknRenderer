@@ -19,7 +19,7 @@ class ClassificationExtractorTest extends MediaWikiUnitTestCase
 			[
 				'acl_page' => 5,
 				'acl_order' => 0,
-				'acl_dictionary' => '',
+				'acl_dictionary' => '#eurovoc',
 				'acl_value' => 'artificial-intelligence',
 				'acl_showas' => 'Τεχνητή Νοημοσύνη',
 				'acl_href' => '',
@@ -27,7 +27,7 @@ class ClassificationExtractorTest extends MediaWikiUnitTestCase
 			[
 				'acl_page' => 5,
 				'acl_order' => 1,
-				'acl_dictionary' => '',
+				'acl_dictionary' => '#eurovoc',
 				'acl_value' => 'legislative-amendment',
 				'acl_showas' => 'Τροποποίηση Νόμου',
 				'acl_href' => '',

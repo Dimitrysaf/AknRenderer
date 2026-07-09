@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17">
+  <act name="nomos" contains="originalVersion">
+    <meta>
+      <identification source="#syntaktis">
+        <FRBRWork>
+          <FRBRthis value="/gr/act/2026/5300/!main"/>
+          <FRBRuri value="/gr/act/2026/5300"/>
+          <FRBRalias name="commonName" value="Κώδικας Ψηφιακής Διακυβέρνησης και Τεχνητής Νοημοσύνης"/>
+          <FRBRdate date="2026-01-10" name="enactment"/>
+          <FRBRauthor href="#vouli" as="#nomothetis"/>
+          <FRBRcountry value="gr"/>
+          <FRBRnumber value="5300"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/gr/act/2026/5300/ell@2026-01-10/!main"/>
+          <FRBRuri value="/gr/act/2026/5300/ell@2026-01-10"/>
+          <FRBRdate date="2026-01-10" name="enactment"/>
+          <FRBRauthor href="#vouli"/>
+          <FRBRlanguage language="ell"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/gr/act/2026/5300/ell@2026-01-10/!main.xml"/>
+          <FRBRuri value="/gr/act/2026/5300/ell@2026-01-10.xml"/>
+          <FRBRdate date="2026-01-10" name="generation"/>
+          <FRBRauthor href="#syntaktis"/>
+        </FRBRManifestation>
+      </identification>
+      <publication date="2026-01-12" showAs="ΦΕΚ Α΄ 15/2026" name="Α" number="15"/>
+      <classification source="#syntaktis">
+        <keyword value="digital-governance" showAs="Ψηφιακή Διακυβέρνηση" dictionary="#eurovoc"/>
+        <keyword value="artificial-intelligence" showAs="Τεχνητή Νοημοσύνη" dictionary="#eurovoc"/>
+        <keyword value="public-administration" showAs="Δημόσια Διοίκηση" dictionary="#eurovoc"/>
+        <keyword value="data-protection" showAs="Προστασία Δεδομένων" dictionary="#eurovoc"/>
+      </classification>
+      <lifecycle source="#syntaktis">
+        <eventRef eId="ev_gen" date="2026-01-10" source="#syntaktis" type="generation" originatingExpression="true"/>
+      </lifecycle>
+      <references source="#syntaktis">
+      <TLCOrganization eId="vouli" href="/ontology/organization/gr/vouli" showAs="Βουλή των Ελλήνων"/>
+      <TLCPerson eId="syntaktis" href="/ontology/person/syntaktis" showAs="Συντάκτης"/>
+      <TLCRole eId="nomothetis" href="/ontology/role/nomothetis" showAs="Νομοθέτης"/>
+      <TLCConcept eId="eurovoc" href="/ontology/concept/eurovoc" showAs="EuroVoc"/>
+    </references>
+    </meta>
+    <body eId="body"><part eId="part_a"><num eId="part_a__num_1">ΜΕΡΟΣ Α΄</num><heading eId="part_a__heading_1">ΓΕΝΙΚΕΣ ΔΙΑΤΑΞΕΙΣ</heading><chapter eId="chap_a1"><num eId="chap_a1__num_1">Κεφάλαιο Α΄</num><heading eId="chap_a1__heading_1">Αντικείμενο</heading><article eId="art_1"><num eId="art_1__num_1">Άρθρο 1</num><heading eId="art_1__heading_1">Σκοπός</heading><content eId="art_1__content_1"><p eId="art_1__content_1__p_1">Σκοπός του παρόντος Κώδικα είναι η ρύθμιση της ψηφιακής διακυβέρνησης.</p></content></article><article eId="art_2"><num eId="art_2__num_1">Άρθρο 2</num><heading eId="art_2__heading_1">Πεδίο εφαρμογής</heading><content eId="art_2__content_1"><p eId="art_2__content_1__p_1">Κείμενο της διάταξης.</p></content></article><article eId="art_3"><num eId="art_3__num_1">Άρθρο 3</num><heading eId="art_3__heading_1">Ορισμοί</heading><content eId="art_3__content_1"><p eId="art_3__content_1__p_1">Κείμενο της διάταξης.</p></content></article></chapter><chapter eId="chap_a2"><num eId="chap_a2__num_1">Κεφάλαιο Β΄</num><heading eId="chap_a2__heading_1">Αρχές</heading><article eId="art_4"><num eId="art_4__num_1">Άρθρο 4</num><content eId="art_4__content_1"><p eId="art_4__content_1__p_1">Κείμενο της διάταξης.</p></content></article><article eId="art_5"><num eId="art_5__num_1">Άρθρο 5</num><content eId="art_5__content_1"><p eId="art_5__content_1__p_1">Κείμενο της διάταξης.</p></content></article><article eId="art_6"><num eId="art_6__num_1">Άρθρο 6</num><content eId="art_6__content_1"><p eId="art_6__content_1__p_1">Κείμενο της διάταξης.</p></content></article></chapter></part><part eId="part_b"><num eId="part_b__num_1">ΜΕΡΟΣ Β΄</num><heading eId="part_b__heading_1">ΟΥΣΙΑΣΤΙΚΕΣ ΔΙΑΤΑΞΕΙΣ</heading><chapter eId="chap_b1"><num eId="chap_b1__num_1">Κεφάλαιο Γ΄</num><heading eId="chap_b1__heading_1">Υποχρεώσεις φορέων</heading><article eId="art_7"><num eId="art_7__num_1">Άρθρο 7</num><heading eId="art_7__heading_1">Ψηφιακές υπηρεσίες</heading><paragraph eId="art_7__para_1"><num eId="art_7__para_1__num_1">1.</num><content eId="art_7__para_1__content_1"><p eId="art_7__para_1__content_1__p_1">Κείμενο της παραγράφου.</p></content></paragraph><paragraph eId="art_7__para_2"><num eId="art_7__para_2__num_1">2.</num><content eId="art_7__para_2__content_1"><p eId="art_7__para_2__content_1__p_1">Κείμενο της παραγράφου.</p></content></paragraph></article><article eId="art_8"><num eId="art_8__num_1">Άρθρο 8</num><content eId="art_8__content_1"><p eId="art_8__content_1__p_1">Κείμενο της διάταξης.</p></content></article><article eId="art_9"><num eId="art_9__num_1">Άρθρο 9</num><heading eId="art_9__heading_1">Τεχνητή νοημοσύνη</heading><paragraph eId="art_9__para_1"><num eId="art_9__para_1__num_1">1.</num><content eId="art_9__para_1__content_1"><p eId="art_9__para_1__content_1__p_1">Κείμενο της παραγράφου.</p></content></paragraph><paragraph eId="art_9__para_2"><num eId="art_9__para_2__num_1">2.</num><content eId="art_9__para_2__content_1"><p eId="art_9__para_2__content_1__p_1">Κείμενο της παραγράφου.</p></content></paragraph></article></chapter></part><part eId="part_c"><num eId="part_c__num_1">ΜΕΡΟΣ Γ΄</num><heading eId="part_c__heading_1">ΤΕΛΙΚΕΣ ΔΙΑΤΑΞΕΙΣ</heading><chapter eId="chap_c1"><num eId="chap_c1__num_1">Κεφάλαιο Δ΄</num><heading eId="chap_c1__heading_1">Μεταβατικές διατάξεις</heading><article eId="art_10"><num eId="art_10__num_1">Άρθρο 10</num><content eId="art_10__content_1"><p eId="art_10__content_1__p_1">Κείμενο της διάταξης.</p></content></article><article eId="art_11"><num eId="art_11__num_1">Άρθρο 11</num><content eId="art_11__content_1"><p eId="art_11__content_1__p_1">Κείμενο της διάταξης.</p></content></article><article eId="art_12"><num eId="art_12__num_1">Άρθρο 12</num><content eId="art_12__content_1"><p eId="art_12__content_1__p_1">Κείμενο της διάταξης.</p></content></article><article eId="art_13"><num eId="art_13__num_1">Άρθρο 13</num><content eId="art_13__content_1"><p eId="art_13__content_1__p_1">Κείμενο της διάταξης.</p></content></article><article eId="art_14"><num eId="art_14__num_1">Άρθρο 14</num><content eId="art_14__content_1"><p eId="art_14__content_1__p_1">Κείμενο της διάταξης.</p></content></article></chapter></part></body>
+  </act>
+</akomaNtoso>

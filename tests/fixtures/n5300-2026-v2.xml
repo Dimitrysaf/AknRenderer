@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17">
+  <act name="nomos" contains="singleVersion">
+    <meta>
+      <identification source="#syntaktis">
+        <FRBRWork>
+          <FRBRthis value="/gr/act/2026/5300/!main"/>
+          <FRBRuri value="/gr/act/2026/5300"/>
+          <FRBRalias name="commonName" value="Κώδικας Ψηφιακής Διακυβέρνησης και Τεχνητής Νοημοσύνης"/>
+          <FRBRdate date="2026-01-10" name="enactment"/>
+          <FRBRauthor href="#vouli"/>
+          <FRBRcountry value="gr"/>
+          <FRBRnumber value="5300"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/gr/act/2026/5300/ell@2026-04-01/!main"/>
+          <FRBRuri value="/gr/act/2026/5300/ell@2026-04-01"/>
+          <FRBRdate date="2026-04-01" name="amendment"/>
+          <FRBRauthor href="#vouli"/>
+          <FRBRlanguage language="ell"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/gr/act/2026/5300/ell@2026-04-01/!main.xml"/>
+          <FRBRuri value="/gr/act/2026/5300/ell@2026-04-01.xml"/>
+          <FRBRdate date="2026-04-01" name="generation"/>
+          <FRBRauthor href="#syntaktis"/>
+        </FRBRManifestation>
+      </identification>
+      <publication date="2026-04-01" showAs="ΦΕΚ Α΄ 40/2026" name="Α" number="40"/>
+      <lifecycle source="#syntaktis">
+        <eventRef eId="ev_gen" date="2026-01-10" source="#syntaktis" type="generation" originatingExpression="true"/>
+        <eventRef eId="ev_am1" date="2026-04-01" source="#syntaktis" type="amendment"/>
+      </lifecycle>
+      <references source="#syntaktis">
+        <TLCOrganization eId="vouli" href="/ontology/organization/gr/vouli" showAs="Βουλή των Ελλήνων"/>
+        <TLCPerson eId="syntaktis" href="/ontology/person/syntaktis" showAs="Συντάκτης"/>
+      </references>
+    </meta>
+    <body eId="body">
+      <article eId="art_7"><num eId="art_7__num_1">Άρθρο 7</num>
+        <content eId="art_7__content_1"><p eId="art_7__content_1__p_1">Τροποποιημένο κείμενο (v2).</p></content>
+      </article>
+    </body>
+  </act>
+</akomaNtoso>

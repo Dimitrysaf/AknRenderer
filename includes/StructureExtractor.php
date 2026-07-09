@@ -84,10 +84,16 @@ class StructureExtractor
 		if ($root === null) {
 			return null;
 		}
-		foreach (AknVocabulary::MAIN_BODY_CONTAINERS as $tag) {
-			$n = $root->getElementsByTagName($tag)->item(0);
-			if ($n instanceof \DOMElement) {
-				return $n;
+		// The main body is always a DIRECT child of the document root in the
+		// schema. Must not be a subtree search: a whole-document search would
+		// descend into a <collectionBody> component's embedded document and
+		// wrongly extract its body (e.g. a gazette would report a tree).
+		foreach ($root->childNodes as $child) {
+			if (
+				$child instanceof \DOMElement
+				&& in_array($child->localName, AknVocabulary::MAIN_BODY_CONTAINERS, true)
+			) {
+				return $child;
 			}
 		}
 		return null;

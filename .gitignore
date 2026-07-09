@@ -1,0 +1,8 @@
+# Local-only fixtures used to import demo pages into a running wiki
+# (their filenames are namespace:title, e.g. "Law:Kitchen Sink.xml").
+# The source-code unit-test fixtures (n*.xml, fek-*.xml) are tracked.
+/tests/fixtures/*:*.xml
+
+# Python bytecode caches from local scratch tooling
+__pycache__/
+*.pyc

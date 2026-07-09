@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<akomaNtoso xmlns="http://docs.oasis-open.org/legaldocml/ns/akn/3.0/WD17">
+  <officialGazette name="fek" contains="originalVersion">
+    <meta>
+      <identification source="#et">
+        <FRBRWork>
+          <FRBRthis value="/gr/officialGazette/2026/A/15/!main"/>
+          <FRBRuri value="/gr/officialGazette/2026/A/15"/>
+          <FRBRalias name="commonName" value="ΦΕΚ Α΄ 15/2026"/>
+          <FRBRdate date="2026-01-10" name="publication"/>
+          <FRBRauthor href="#et"/>
+          <FRBRcountry value="gr"/>
+        </FRBRWork>
+        <FRBRExpression>
+          <FRBRthis value="/gr/officialGazette/2026/A/15/ell@2026-01-10/!main"/>
+          <FRBRuri value="/gr/officialGazette/2026/A/15/ell@2026-01-10"/>
+          <FRBRdate date="2026-01-10" name="publication"/>
+          <FRBRauthor href="#et"/>
+          <FRBRlanguage language="ell"/>
+        </FRBRExpression>
+        <FRBRManifestation>
+          <FRBRthis value="/gr/officialGazette/2026/A/15/ell@2026-01-10/!main.xml"/>
+          <FRBRuri value="/gr/officialGazette/2026/A/15/ell@2026-01-10.xml"/>
+          <FRBRdate date="2026-01-10" name="generation"/>
+          <FRBRauthor href="#et"/>
+        </FRBRManifestation>
+      </identification>
+      <publication date="2026-01-10" showAs="Εφημερίδα της Κυβερνήσεως" name="Α" number="15"/>
+      <references source="#et">
+        <TLCOrganization eId="et" href="/ontology/organization/gr/et" showAs="Εθνικό Τυπογραφείο"/>
+      </references>
+    </meta>
+    <collectionBody eId="cb">
+      <component eId="cb__cmp_1">
+        <doc name="apofasi" contains="originalVersion">
+          <meta>
+            <identification source="#et">
+              <FRBRWork>
+                <FRBRthis value="/gr/doc/apofasi/2026/7/!main"/>
+                <FRBRuri value="/gr/doc/apofasi/2026/7"/>
+                <FRBRdate date="2026-01-08" name="generation"/>
+                <FRBRauthor href="#et"/>
+                <FRBRcountry value="gr"/>
+              </FRBRWork>
+              <FRBRExpression>
+                <FRBRthis value="/gr/doc/apofasi/2026/7/ell@2026-01-08/!main"/>
+                <FRBRuri value="/gr/doc/apofasi/2026/7/ell@2026-01-08"/>
+                <FRBRdate date="2026-01-08" name="generation"/>
+                <FRBRauthor href="#et"/>
+                <FRBRlanguage language="ell"/>
+              </FRBRExpression>
+              <FRBRManifestation>
+                <FRBRthis value="/gr/doc/apofasi/2026/7/ell@2026-01-08/!main.xml"/>
+                <FRBRuri value="/gr/doc/apofasi/2026/7/ell@2026-01-08.xml"/>
+                <FRBRdate date="2026-01-08" name="generation"/>
+                <FRBRauthor href="#et"/>
+              </FRBRManifestation>
+            </identification>
+            <publication date="2026-01-10" showAs="Εφημερίδα της Κυβερνήσεως" name="Β" number="99"/>
+          </meta>
+          <mainBody eId="cb__cmp_1__mb">
+            <article eId="cb__cmp_1__mb__art_1">
+              <num eId="cb__cmp_1__mb__art_1__num_1">Άρθρο μόνο</num>
+              <content eId="cb__cmp_1__mb__art_1__content_1">
+                <p eId="cb__cmp_1__mb__art_1__content_1__p_1">Εγκρίνεται ο οργανισμός της υπηρεσίας.</p>
+              </content>
+            </article>
+          </mainBody>
+        </doc>
+      </component>
+    </collectionBody>
+  </officialGazette>
+</akomaNtoso>

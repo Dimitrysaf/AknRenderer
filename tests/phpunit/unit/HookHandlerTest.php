@@ -31,10 +31,13 @@ class HookHandlerTest extends MediaWikiUnitTestCase
 		$handler->onResourceLoaderGetConfigVars($vars, 'vector', new HashConfig());
 
 		$this->assertArrayHasKey('wgAknVocabulary', $vars);
-		$this->assertSame(AknVocabulary::STRUCTURE_TYPES, $vars['wgAknVocabulary']['structureTypes']);
+		$this->assertSame(AknVocabulary::NS, $vars['wgAknVocabulary']['namespace']);
+		$this->assertSame(AknVocabulary::documentTypes(), $vars['wgAknVocabulary']['documentTypes']);
+		$this->assertSame(AknVocabulary::structureTypes(), $vars['wgAknVocabulary']['structureTypes']);
+		$this->assertSame(AknVocabulary::inlineSpans(), $vars['wgAknVocabulary']['inlineSpans']);
+		$this->assertSame(AknVocabulary::MAIN_BODY_CONTAINERS, $vars['wgAknVocabulary']['mainBodyContainers']);
 		$this->assertSame(AknVocabulary::HEADING_LEVELS, $vars['wgAknVocabulary']['headingLevels']);
 		$this->assertSame(AknVocabulary::HCONTAINER_LABELS, $vars['wgAknVocabulary']['hcontainerLabels']);
-		$this->assertSame(AknVocabulary::INLINE_SPANS, $vars['wgAknVocabulary']['inlineSpans']);
 		$this->assertSame(AknVocabulary::DOC_TYPES, $vars['wgAknVocabulary']['docTypes']);
 		$this->assertSame(AknVocabulary::COUNTRIES, $vars['wgAknVocabulary']['countries']);
 		$this->assertSame(AknVocabulary::LANGUAGES, $vars['wgAknVocabulary']['languages']);
