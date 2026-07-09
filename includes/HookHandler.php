@@ -190,6 +190,11 @@ class HookHandler implements
 	{
 		$vars['wgAknVocabulary'] = [
 			'namespace' => AknVocabulary::NS,
+			// The exact XML namespace URI every AKN element MUST carry, read
+			// straight from the schema (AknSchema::NS). Client tooling builds
+			// new nodes with this so it can never drift from the .xsd — the
+			// single source of truth — the way a hand-copied constant would.
+			'ns' => AknSchema::NS,
 			'documentTypes' => AknVocabulary::documentTypes(),
 			'structureTypes' => AknVocabulary::structureTypes(),
 			'inlineSpans' => AknVocabulary::inlineSpans(),
