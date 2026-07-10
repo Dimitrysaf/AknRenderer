@@ -30,25 +30,40 @@ class AknSkeletonTest extends MediaWikiUnitTestCase
 		);
 	}
 
-	public function testEveryProfileSeedIsSchemaValid(): void
+	public function testSupportedRootsAreRealXsdDocumentTypes(): void
 	{
-		foreach (AknSkeleton::supportedProfiles() as $type) {
-			$xml = AknSkeleton::fromProfile($type, [
+		$roots = AknSkeleton::supportedRoots();
+		$this->assertNotSame([], $roots);
+		// Every root the builder offers must be a genuine schema documentType.
+		$this->assertSame([], array_diff($roots, AknSchema::documentTypes()));
+		// The three structure families we cover.
+		$this->assertContains('act', $roots);
+		$this->assertContains('doc', $roots);
+		$this->assertContains('officialGazette', $roots);
+	}
+
+	public function testEverySupportedRootSeedIsSchemaValid(): void
+	{
+		foreach (AknSkeleton::supportedRoots() as $root) {
+			$xml = AknSkeleton::build([
+				'root' => $root,
 				'number' => '5300',
 				'enacted' => '2026-01-15',
-				'alias' => 'Test ' . $type,
+				'alias' => 'Test ' . $root,
 				'fekSeries' => 'Α',
 				'fekNumber' => '12',
 				'fekDate' => '2026-01-16',
 			]);
-			$this->assertStringContainsString(AknSchema::NS, $xml, "$type seed must use the schema namespace");
+			$this->assertStringContainsString(AknSchema::NS, $xml, "$root seed must use the schema namespace");
 			$this->assertSchemaValid($xml);
 		}
 	}
 
-	public function testNomosSeedRoundTripsThroughMetaExtractor(): void
+	public function testActNomosSeedRoundTripsThroughMetaExtractor(): void
 	{
-		$xml = AknSkeleton::fromProfile('nomos', [
+		$xml = AknSkeleton::build([
+			'root' => 'act',
+			'name' => 'nomos',
 			'number' => '5300',
 			'enacted' => '2026-01-15',
 			'alias' => 'Νόμος 5300/2026',
@@ -77,7 +92,8 @@ class AknSkeletonTest extends MediaWikiUnitTestCase
 
 	public function testGazetteSeedIsValidAndIsAGazette(): void
 	{
-		$xml = AknSkeleton::fromProfile('fek', [
+		$xml = AknSkeleton::build([
+			'root' => 'officialGazette',
 			'number' => '12',
 			'enacted' => '2026-01-16',
 			'alias' => 'ΦΕΚ Α΄ 12/2026',
@@ -90,11 +106,20 @@ class AknSkeletonTest extends MediaWikiUnitTestCase
 		$this->assertSame('fek', $data['docType'], 'officialGazette must be recognised as a root');
 	}
 
+	public function testUnsupportedRootFallsBackToAct(): void
+	{
+		// judgment has a distinct body model we do not seed; build() must fall
+		// back to a valid <act> rather than emit an invalid judgment.
+		$xml = AknSkeleton::build(['root' => 'judgment', 'number' => '1', 'enacted' => '2026-01-15']);
+		$this->assertSchemaValid($xml);
+		$this->assertStringContainsString('<act', $xml);
+	}
+
 	public function testSeedWithoutDateStillValidatesUsingToday(): void
 	{
 		// The schema forbids an empty @date; a seed with no enactment date must
 		// still be valid (build() falls back to today's date).
-		$xml = AknSkeleton::fromProfile('nomos', ['number' => '1']);
+		$xml = AknSkeleton::build(['root' => 'act', 'name' => 'nomos', 'number' => '1']);
 		$this->assertSchemaValid($xml);
 	}
 
@@ -102,7 +127,7 @@ class AknSkeletonTest extends MediaWikiUnitTestCase
 	{
 		// publication/@name/@date/@showAs are all required; a half-known ΦΕΚ
 		// must not emit a (would-be invalid) <publication>.
-		$xml = AknSkeleton::fromProfile('nomos', ['number' => '1', 'enacted' => '2026-01-15']);
+		$xml = AknSkeleton::build(['root' => 'act', 'name' => 'nomos', 'number' => '1', 'enacted' => '2026-01-15']);
 		$this->assertSchemaValid($xml);
 		$this->assertStringNotContainsString('<publication', $xml);
 	}

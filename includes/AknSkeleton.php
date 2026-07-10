@@ -11,14 +11,17 @@
  * schema's own namespace (AknSchema::NS). Getting any of that wrong means the
  * save is rejected by HookHandler::onEditFilterMergedContent.
  *
- * Rather than hand-write that XML (twice, and drift), it is built here in one
- * place, in PHP, next to the schema that defines validity — and asserted valid
- * by AknSkeletonTest against AknSchema::isValid(). Attribute names match
- * MetaExtractor exactly, so a seeded document also indexes correctly.
+ * The set of document types it can seed is NOT hand-listed: it is the schema's
+ * own documentType roots (AknSchema::documentTypes()) whose content-model
+ * structure (AknSchema::documentStructures()) is one this builder knows how to
+ * fill — hierarchical (<body>), open (<mainBody>) or collection
+ * (<collectionBody>). So the wizard only ever offers real XSD document types.
  *
- * The output follows the same Greek /akn/gr/... URI and metadata conventions
- * as the existing corpus (see tests/fixtures) — plain OASIS AKN 3.0, with no
- * LEOS-specific attributes, profiles or namespaces.
+ * The output follows the same Greek /akn/gr/... URI and metadata conventions as
+ * the existing corpus (see tests/fixtures) — plain OASIS AKN 3.0, with no
+ * LEOS-specific attributes, profiles or namespaces. Asserted valid by
+ * AknSkeletonTest against AknSchema::isValid(); attribute names match
+ * MetaExtractor so a seed also indexes correctly.
  *
  * @file
  * @license GPL-2.0-or-later
@@ -33,58 +36,50 @@ class AknSkeleton
 	private const NS = AknSchema::NS;
 
 	/**
-	 * Greek instrument type → the AKN root element and @name it maps to. A
-	 * νόμος is a hierarchicalStructure <act>; a προεδρικό διάταγμα / υπουργική
-	 * απόφαση is an openStructure <doc>; a ΦΕΚ issue is a collectionStructure
-	 * <officialGazette>. Kept here, beside the builder, so the wizard and any
-	 * other caller resolve a type the same way.
+	 * The schema structure types this builder can fill, each mapped to the body
+	 * element that structure requires. Any documentType root whose structure
+	 * (per AknSchema::documentStructures()) is one of these can be seeded; the
+	 * rest (debate/judgment/amendment/portion, with their own body models) are
+	 * not offered until explicitly supported.
 	 *
-	 * @var array<string,array{root:string,name:string}>
+	 * @var array<string,string>
 	 */
-	private const PROFILES = [
-		'nomos' => ['root' => 'act', 'name' => 'nomos'],
-		'pnp' => ['root' => 'act', 'name' => 'pnp'],
-		'nomosplaisio' => ['root' => 'act', 'name' => 'nomosplaisio'],
-		'constitution' => ['root' => 'act', 'name' => 'constitution'],
-		'pd' => ['root' => 'doc', 'name' => 'pd'],
-		'ya' => ['root' => 'doc', 'name' => 'ya'],
-		'kya' => ['root' => 'doc', 'name' => 'kya'],
-		'fek' => ['root' => 'officialGazette', 'name' => 'fek'],
+	private const STRUCTURE_BODY = [
+		'hierarchicalStructure' => 'body',
+		'openStructure' => 'mainBody',
+		'collectionStructure' => 'collectionBody',
 	];
 
-	/** The document roots this builder can seed. */
-	public static function supportedProfiles(): array
-	{
-		return array_keys(self::PROFILES);
-	}
-
 	/**
-	 * Build a seed for a known Greek instrument type ('nomos', 'pd', 'fek', …),
-	 * merging the profile's root/@name into $spec. Unknown types fall back to a
-	 * νόμος (<act>).
+	 * The XSD document-type roots this builder can seed — the schema's own
+	 * documentType list, filtered to the structures we know how to fill.
 	 *
-	 * @param string $type
-	 * @param array<string,mixed> $spec See build().
-	 * @return string
+	 * @return list<string>
 	 */
-	public static function fromProfile(string $type, array $spec = []): string
+	public static function supportedRoots(): array
 	{
-		$profile = self::PROFILES[$type] ?? self::PROFILES['nomos'];
-		return self::build($spec + $profile);
+		$roots = [];
+		foreach (AknSchema::documentStructures() as $root => $structure) {
+			if (isset(self::STRUCTURE_BODY[$structure])) {
+				$roots[] = $root;
+			}
+		}
+		return $roots;
 	}
 
 	/**
 	 * Build a schema-valid AKN document.
 	 *
 	 * @param array<string,mixed> $spec Recognised keys (all optional):
-	 *   root      'act'|'doc'|'officialGazette' (default 'act')
-	 *   name      the root's @name, e.g. 'nomos'/'pd'/'fek'
-	 *   subtype   FRBRsubtype value (defaults to name for act/doc)
+	 *   root      an XSD documentType root, e.g. 'act'/'doc'/'officialGazette'
+	 *             (default 'act'; unsupported roots fall back to 'act')
+	 *   name      the root's @name / Greek subtype, e.g. 'nomos'/'pd'/'fek'
+	 *   subtype   FRBRsubtype value (defaults to name for non-collection roots)
 	 *   country   ISO code, default 'gr'
 	 *   language  ISO 639 code, default 'ell'
 	 *   number    document number, e.g. '5300'
 	 *   enacted   YYYY-MM-DD; defaults to today (the schema forbids an empty date)
-	 *   alias     human title, e.g. 'Νόμος 5300/2026'
+	 *   alias     human title (the number-form citation, e.g. 'Νόμος 5300/2026')
 	 *   author    issuing body's display name
 	 *   authorEid internal anchor eId for the author reference
 	 *   authorHref ontology IRI for the author
@@ -96,19 +91,27 @@ class AknSkeleton
 	 */
 	public static function build(array $spec): string
 	{
+		$structures = AknSchema::documentStructures();
+
 		$root = (string)($spec['root'] ?? 'act');
-		if (!in_array($root, ['act', 'doc', 'officialGazette'], true)) {
+		if (!in_array($root, self::supportedRoots(), true)) {
 			$root = 'act';
 		}
+		$structure = $structures[$root] ?? 'hierarchicalStructure';
+		$bodyElement = self::STRUCTURE_BODY[$structure] ?? 'body';
+		$isCollection = $structure === 'collectionStructure';
 		$isGazette = $root === 'officialGazette';
 
 		$str = static fn($key, $default = '') => trim((string)($spec[$key] ?? $default));
 
-		$name = $str('name', $isGazette ? 'fek' : 'nomos');
+		// @name is required on the document root (some roots, e.g. amendmentList,
+		// have it as a mandatory attribute). Default to a Greek subtype where we
+		// have one, else the root's own name.
+		$name = $str('name', $isGazette ? 'fek' : ($root === 'act' ? 'nomos' : $root));
 		$country = $str('country', 'gr') ?: 'gr';
 		$language = $str('language', 'ell') ?: 'ell';
 		$number = $str('number');
-		$subtype = $str('subtype', $isGazette ? '' : $name);
+		$subtype = $str('subtype', $isCollection ? '' : $name);
 		// The schema types @date as xsd:date|xsd:dateTime — an empty value is
 		// invalid, so a seed always carries a real date (today, if unset).
 		$enacted = self::normaliseDate($str('enacted')) ?: date('Y-m-d');
@@ -234,10 +237,10 @@ class AknSkeleton
 		$meta->appendChild($references);
 
 		// --- body -----------------------------------------------------------
-		if ($isGazette) {
+		if ($isCollection) {
 			// collectionBody requires ≥1 component; seed one placeholder
 			// documentRef the editor's gazette workspace then replaces.
-			$body = $make('collectionBody', ['eId' => 'collectionBody']);
+			$body = $make($bodyElement, ['eId' => 'collectionBody']);
 			$component = $make('component', ['eId' => 'collectionBody__cmp_1']);
 			$component->appendChild($make('documentRef', [
 				'eId' => 'collectionBody__cmp_1__dr_1',
@@ -247,7 +250,7 @@ class AknSkeleton
 			$body->appendChild($component);
 			$rootEl->appendChild($body);
 		} else {
-			$body = $make($root === 'doc' ? 'mainBody' : 'body');
+			$body = $make($bodyElement);
 			$article = $make('article', ['eId' => 'art_1']);
 			$article->appendChild($make('num', [], 'Άρθρο 1'));
 			$paragraph = $make('paragraph', ['eId' => 'art_1__para_1']);

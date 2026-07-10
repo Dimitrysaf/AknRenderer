@@ -53,6 +53,36 @@ class AknSchema
 	}
 
 	/**
+	 * Each document-type root mapped to the name of its content-model structure
+	 * — read from the root element's own @type in the schema (e.g. act/bill →
+	 * hierarchicalStructure, doc → openStructure, officialGazette →
+	 * collectionStructure). This is the schema's own statement of how each
+	 * document is built, so callers (the skeleton builder) never hard-code it.
+	 *
+	 * @return array<string,string> root localName => structure type name
+	 */
+	public static function documentStructures(): array
+	{
+		$dom = self::schemaDom();
+		if ($dom === null) {
+			return [];
+		}
+		$byName = [];
+		foreach ($dom->documentElement->getElementsByTagNameNS(self::XSD_NS, 'element') as $el) {
+			if ($el instanceof \DOMElement && $el->getAttribute('name') !== '' && $el->getAttribute('type') !== '') {
+				$byName[$el->getAttribute('name')] = self::localName($el->getAttribute('type'));
+			}
+		}
+		$out = [];
+		foreach (self::documentTypes() as $root) {
+			if (isset($byName[$root])) {
+				$out[$root] = $byName[$root];
+			}
+		}
+		return $out;
+	}
+
+	/**
 	 * Native hierarchical elements (the schema's ANhier group): the elements
 	 * that make up the AKN legislative hierarchy (article, chapter, point,
 	 * ...). The generic <hcontainer> is deliberately not in this list — the
