@@ -43,5 +43,18 @@ class SchemaHooks implements LoadExtensionSchemaUpdatesHook
 		$updater->addExtensionTable('akn_amendment', __DIR__ . '/../sql/amendment.sql');
 		$updater->addExtensionTable('akn_gazette', __DIR__ . '/../sql/gazette.sql');
 		$updater->addExtensionTable('akn_classification', __DIR__ . '/../sql/classification.sql');
+
+		// --- Consolidation pipeline (Instructions.md §1) ---
+		// akn_amendment_tag is the AUTHORED amendment-tagging workflow store. It
+		// is deliberately a NEW table, kept separate from the derived
+		// akn_amendment index above: the Indexer rebuilds akn_amendment wholesale
+		// on every save, which would clobber the pending/applied/rejected rows.
+		$updater->addExtensionTable('akn_amendment_tag', __DIR__ . '/../sql/amendment_tag.sql');
+		// agz_doc_type (act|pd|other) — derivable, populated by GazetteExtractor.
+		$updater->addExtensionField('akn_gazette', 'agz_doc_type', __DIR__ . '/../sql/patch-agz_doc_type.sql');
+		// Consolidation metadata on akn_revision (applied tag + in-force window),
+		// set during approval, not by the per-save rebuild. Guarded on the last
+		// of the three columns the patch adds.
+		$updater->addExtensionField('akn_revision', 'ar_in_force_to', __DIR__ . '/../sql/patch-akn_revision-consolidation.sql');
 	}
 }

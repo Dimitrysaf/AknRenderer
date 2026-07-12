@@ -64,6 +64,9 @@ class AknContentHandler extends TextContentHandler
 	/** @var array<string,\MediaWiki\Title\Title> Internal links to register on the ParserOutput. */
 	private array $pageLinks = [];
 
+	/** @var array<string,array<string,mixed>> Per-render target eId → latest applied amendment (provenance). */
+	private array $provenance = [];
+
 	public function __construct(string $modelId = CONTENT_MODEL_AKN)
 	{
 		parent::__construct($modelId, [CONTENT_FORMAT_XML, CONTENT_FORMAT_TEXT]);
@@ -95,6 +98,7 @@ class AknContentHandler extends TextContentHandler
 		$this->refCache = [];
 		$this->eidSetCache = [];
 		$this->pageLinks = [];
+		$this->provenance = $this->loadProvenance($cpoParams);
 
 		$dom = new \DOMDocument();
 		$dom->preserveWhiteSpace = false;
@@ -160,6 +164,46 @@ class AknContentHandler extends TextContentHandler
 			$parserOutput->setTOCData($this->tocData);
 			$parserOutput->setOutputFlag(ParserOutputFlags::SHOW_TOC);
 		}
+	}
+
+	/**
+	 * Applied-amendment provenance for the page being rendered, keyed by target
+	 * eId. Empty for gazettes and for pages with no applied amendments. Feeds the
+	 * per-provision "last amended by …" footnote.
+	 *
+	 * @param ContentParseParams $cpoParams
+	 * @return array<string,array<string,mixed>>
+	 */
+	private function loadProvenance(ContentParseParams $cpoParams): array
+	{
+		$page = $cpoParams->getPage();
+		if (!$page instanceof \MediaWiki\Page\PageIdentity || !$page->canExist() || !$page->exists()) {
+			return [];
+		}
+		$store = new AmendmentTagStore(MediaWikiServices::getInstance()->getConnectionProvider());
+		return $store->appliedForPage($page->getId());
+	}
+
+	/**
+	 * The "last amended by …, in force from …" footnote for a provision eId, or
+	 * '' when that provision has no recorded amendment. The gazette citation is a
+	 * link to its page.
+	 */
+	private function provenanceFootnote(string $eId): string
+	{
+		if ($eId === '' || !isset($this->provenance[$eId])) {
+			return '';
+		}
+		$p = $this->provenance[$eId];
+		$title = MediaWikiServices::getInstance()->getTitleFactory()->newFromID((int)$p['source_page']);
+		$link = $title !== null
+			? Html::element('a', ['href' => $title->getLocalURL()], $title->getPrefixedText())
+			: htmlspecialchars((string)$p['source_page']);
+		$text = wfMessage('aknrenderer-provenance')
+			->rawParams($link)
+			->params((string)($p['effective'] ?? ''))
+			->inContentLanguage()->parse();
+		return Html::rawElement('div', ['class' => 'akn-provenance'], $text);
 	}
 
 	/**
@@ -684,6 +728,7 @@ class AknContentHandler extends TextContentHandler
 				$out .= Html::rawElement('div', ['class' => 'akn-rubric'], $rubric);
 			}
 			$out .= $this->renderChildrenExcept($el, ['num', 'heading']);
+			$out .= $this->provenanceFootnote($eId);
 
 			$attrs['class'] .= ' akn-block';
 			return Html::rawElement('section', $attrs, $out);
@@ -703,6 +748,7 @@ class AknContentHandler extends TextContentHandler
 				$body = Html::rawElement('p', ['class' => 'akn-p'], $this->pendingNum) . $body;
 				$this->pendingNum = null;
 			}
+			$body .= $this->provenanceFootnote($eId);
 			return Html::rawElement('section', $attrs, $body);
 		}
 

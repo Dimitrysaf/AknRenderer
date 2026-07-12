@@ -47,6 +47,22 @@
 			"subpages": true,
 			"content": false,
 			"defaultcontentmodel": "wikitext"
+		},
+		{
+			"id": 3004,
+			"constant": "NS_DECREE",
+			"name": "Decree",
+			"subpages": false,
+			"content": true,
+			"defaultcontentmodel": "akn-xml"
+		},
+		{
+			"id": 3005,
+			"constant": "NS_DECREE_TALK",
+			"name": "Decree_talk",
+			"subpages": true,
+			"content": false,
+			"defaultcontentmodel": "wikitext"
 		}
 	],
 	"ContentHandlers": {
@@ -68,7 +84,22 @@
 		]
 	},
 	"ExtensionMessagesFiles": {
-		"AknRendererNamespaces": "AknRenderer.namespaces.php"
+		"AknRendererNamespaces": "AknRenderer.namespaces.php",
+		"AknRendererAliases": "AknRenderer.alias.php"
+	},
+	"SpecialPages": {
+		"LawsAmendedBy": {
+			"class": "MediaWiki\\Extension\\AknRenderer\\SpecialLawsAmendedBy",
+			"services": [
+				"ConnectionProvider"
+			]
+		},
+		"InForceStatus": {
+			"class": "MediaWiki\\Extension\\AknRenderer\\SpecialInForceStatus",
+			"services": [
+				"ConnectionProvider"
+			]
+		}
 	},
 	"ResourceFileModulePaths": {
 		"localBasePath": "resources",

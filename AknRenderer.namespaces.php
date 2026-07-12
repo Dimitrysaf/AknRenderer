@@ -27,6 +27,12 @@ if (!defined('NS_GAZETTE')) {
 if (!defined('NS_GAZETTE_TALK')) {
 	define('NS_GAZETTE_TALK', 3003);
 }
+if (!defined('NS_DECREE')) {
+	define('NS_DECREE', 3004);
+}
+if (!defined('NS_DECREE_TALK')) {
+	define('NS_DECREE_TALK', 3005);
+}
 
 $namespaceNames = [];
 
@@ -36,6 +42,8 @@ $namespaceNames['en'] = [
 	NS_LAW_TALK => 'Law_talk',
 	NS_GAZETTE => 'Gazette',
 	NS_GAZETTE_TALK => 'Gazette_talk',
+	NS_DECREE => 'Decree',
+	NS_DECREE_TALK => 'Decree_talk',
 ];
 
 // Greek — shown when $wgLanguageCode = 'el'.
@@ -44,4 +52,6 @@ $namespaceNames['el'] = [
 	NS_LAW_TALK => 'Συζήτηση_Νόμου',
 	NS_GAZETTE => 'ΦΕΚ',
 	NS_GAZETTE_TALK => 'Συζήτηση_ΦΕΚ',
+	NS_DECREE => 'Διάταγμα',
+	NS_DECREE_TALK => 'Συζήτηση_Διατάγματος',
 ];

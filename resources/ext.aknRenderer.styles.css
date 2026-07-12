@@ -210,3 +210,17 @@
 .akn-gazette-component {
 	margin-top: 0.2em;
 }
+
+/* Per-provision "last amended by …" provenance footnote (read-side). */
+.akn-provenance {
+	margin: 0.3em 0 0.6em;
+	padding-left: 0.6em;
+	border-left: 3px solid #c8ccd1;
+	color: #54595d;
+	font-size: 0.85em;
+	font-style: italic;
+}
+
+.akn-provenance p {
+	margin: 0;
+}

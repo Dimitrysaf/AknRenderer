@@ -20,7 +20,21 @@ class GazetteExtractorTest extends MediaWikiUnitTestCase
 			'agz_series' => 'Α',
 			'agz_number' => '15',
 			'agz_date' => '2026-01-10',
+			// This issue publishes only a ministerial decision («απόφαση»),
+			// which is neither a law nor a decree → 'other'.
+			'agz_doc_type' => 'other',
 		], $row);
+	}
+
+	/**
+	 * agz_doc_type reflects the first published document. This ΦΕΚ leads with
+	 * a law (a <documentRef> to /akn/gr/act/nomos/…), so → 'act', even though
+	 * it also embeds a presidential decree further down.
+	 */
+	public function testDocTypeFromLeadingLaw(): void
+	{
+		$row = GazetteExtractor::fromXml($this->fixture('Gazette:ΦΕΚ Α΄ 12-2026'), 7);
+		$this->assertSame('act', $row['agz_doc_type']);
 	}
 
 	/**
